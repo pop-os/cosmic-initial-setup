@@ -51,7 +51,21 @@ impl Page for WelcomePage {
     }
 
     fn view(&self) -> Element<Message> {
-        widget::text::body("TODO").into()
+        let mut section = widget::settings::section();
+        section = section.add(
+            widget::settings::item::builder(fl!("screen-reader")).toggler(false, |_| Message::None),
+        );
+        section = section.add(
+            widget::settings::item::builder(fl!("interface-size")).control(widget::dropdown(
+                &[
+                    "50%", "75%", "100%", "125%", "150%", "175%", "200%", "225%", "250%", "275%",
+                    "300%",
+                ],
+                Some(2),
+                |_| Message::None,
+            )),
+        );
+        section.into()
     }
 }
 
@@ -63,7 +77,21 @@ impl Page for LocationPage {
     }
 
     fn view(&self) -> Element<Message> {
-        widget::text::body("TODO").into()
+        let cosmic_theme::Spacing { space_m, .. } = theme::active().cosmic().spacing;
+
+        let mut section = widget::settings::section();
+        for hour in 0..12 {
+            section = section.add(
+                widget::settings::item::builder(format!("Example {}", hour))
+                    .control(widget::text::body(format!("+{}:00 UTC", hour))),
+            );
+        }
+        widget::column::with_children(vec![
+            widget::search_input(fl!("search-the-closest-major-city"), String::new()).into(),
+            widget::Space::with_height(space_m).into(),
+            widget::scrollable(section).into(),
+        ])
+        .into()
     }
 }
 
@@ -213,6 +241,7 @@ impl Application for App {
     fn view(&self) -> Element<Self::Message> {
         let cosmic_theme::Spacing {
             space_xxs,
+            space_m,
             space_xl,
             ..
         } = theme::active().cosmic().spacing;
@@ -245,8 +274,8 @@ impl Application for App {
                     .width(Length::Fill)
                     .into(),
                 widget::Space::with_height(space_xl).into(),
-                page.view(),
-                widget::vertical_space().into(),
+                widget::container(page.view()).height(406.0).into(),
+                widget::Space::with_height(space_m).into(),
                 button_row.into(),
                 widget::Space::with_height(space_xl).into(),
             ])

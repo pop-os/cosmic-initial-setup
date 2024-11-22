@@ -5,9 +5,12 @@ skip-setup-and-close = Skip setup and close
 
 # WelcomePage
 welcome = Welcome
+screen-reader = Screen reader
+interface-size = Interface size
 
 # LocationPage
 timezone-and-location = Timezone and Location
+search-the-closest-major-city = Search the closest major city...
 
 # AppearancePage
 personalize-appearance = Personalize Appearance
