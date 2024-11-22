@@ -1,0 +1,8 @@
+/.cargo/
+/debian/*debhelper*
+/debian/cosmic-initial-setup.substvars
+/debian/cosmic-initial-setup/
+/debian/files
+/target/
+/vendor.tar
+/vendor/
