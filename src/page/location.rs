@@ -46,12 +46,40 @@ impl page::Page for LocationPage {
         self.selected_opt.is_some()
     }
 
+    fn update(&mut self, page_message: page::Message) -> Task<page::Message> {
+        let message = match page_message {
+            page::Message::Open => {
+                return widget::text_input::focus(self.search_id.clone());
+            }
+            page::Message::Location(message) => message,
+            _ => return Task::none(),
+        };
+        match message {
+            Message::Search(search) => {
+                self.selected_opt = None;
+                self.search = search;
+                self.regex_opt = None;
+                if !self.search.is_empty() {
+                    let pattern = regex::escape(&self.search);
+                    match regex::RegexBuilder::new(&pattern)
+                        .case_insensitive(true)
+                        .build()
+                    {
+                        Ok(regex) => self.regex_opt = Some(regex),
+                        Err(err) => {
+                            log::warn!("failed to parse regex {:?}: {}", pattern, err);
+                        }
+                    };
+                }
+            }
+            Message::Select(selected) => self.selected_opt = Some(selected),
+        }
+        Task::none()
+    }
+
     fn view(&self) -> Element<page::Message> {
         let cosmic_theme::Spacing {
-            space_xxs,
-            space_s,
-            space_m,
-            ..
+            space_xxs, space_m, ..
         } = theme::active().cosmic().spacing;
 
         let mut section = widget::settings::section();
@@ -127,44 +155,13 @@ impl page::Page for LocationPage {
         }
         let element: Element<_> = widget::column::with_children(vec![
             search_input.into(),
-            widget::Space::with_height(space_s).into(),
-            //TODO: fix layout issues and move below list
-            widget::text::caption(fl!("geonames-attribution")).into(),
             widget::Space::with_height(space_m).into(),
-            widget::scrollable(section).into(),
+            //TODO: manual height used due to layout issues
+            widget::scrollable(section).height(286).into(),
+            widget::Space::with_height(space_m).into(),
+            widget::text::body(fl!("geonames-attribution")).into(),
         ])
         .into();
         element.map(page::Message::Location)
-    }
-
-    fn update(&mut self, page_message: page::Message) -> Task<page::Message> {
-        let message = match page_message {
-            page::Message::Open => {
-                return widget::text_input::focus(self.search_id.clone());
-            }
-            page::Message::Location(message) => message,
-            _ => return Task::none(),
-        };
-        match message {
-            Message::Search(search) => {
-                self.selected_opt = None;
-                self.search = search;
-                self.regex_opt = None;
-                if !self.search.is_empty() {
-                    let pattern = regex::escape(&self.search);
-                    match regex::RegexBuilder::new(&pattern)
-                        .case_insensitive(true)
-                        .build()
-                    {
-                        Ok(regex) => self.regex_opt = Some(regex),
-                        Err(err) => {
-                            log::warn!("failed to parse regex {:?}: {}", pattern, err);
-                        }
-                    };
-                }
-            }
-            Message::Select(selected) => self.selected_opt = Some(selected),
-        }
-        Task::none()
     }
 }

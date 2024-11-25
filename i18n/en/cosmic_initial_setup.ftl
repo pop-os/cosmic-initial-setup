@@ -24,6 +24,7 @@ your-workflow-your-way = Your workflow, your way
 
 # LauncherPage
 fast-and-efficient = Fast and Efficient
+launcher-description = Press the Super (or Windows) key to activate the Launcher. Search and press enter to open an app or switch to it. You can also jump to settings or system functions like suspend. Type “?” to learn about the Launcher's advanced features.
 
 # WirelessPage
 get-connected = Get connected
