@@ -6,8 +6,10 @@ rust-version = "1.80"
 
 [dependencies]
 env_logger = "0.10"
+geonames = { path = "geonames" }
 lazy_static = "1"
 log = "0.4"
+regex = "1"
 tokio = { version = "1", features = ["sync"] }
 # Internationalization
 i18n-embed = { version = "0.13", features = ["fluent-system", "desktop-requester"] }
@@ -29,6 +31,9 @@ wgpu = ["libcosmic/wgpu"]
 [profile.release-with-debug]
 inherits = "release"
 debug = true
+
+[workspace]
+members = ["geonames"]
 
 # [patch.'https://github.com/pop-os/libcosmic.git']
 # libcosmic = { path = "../libcosmic" }

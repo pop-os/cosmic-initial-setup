@@ -11,6 +11,7 @@ interface-size = Interface size
 # LocationPage
 timezone-and-location = Timezone and Location
 search-the-closest-major-city = Search the closest major city...
+geonames-attribution = The list is sorted by the city population. Data: geonames.org (licensed CC-BY-4.0).
 
 # AppearancePage
 personalize-appearance = Personalize Appearance
