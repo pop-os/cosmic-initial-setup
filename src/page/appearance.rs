@@ -1,4 +1,9 @@
-use cosmic::{cosmic_theme, iced::Alignment, theme, widget, Element, Task};
+use cosmic::{
+    cosmic_config::{Config, CosmicConfigEntry},
+    cosmic_theme::{self, ThemeMode},
+    iced::Alignment,
+    theme, widget, Element, Task,
+};
 
 use crate::{fl, page};
 
@@ -16,13 +21,37 @@ pub enum Message {
 }
 
 pub struct AppearancePage {
+    theme_mode_config: Option<Config>,
+    theme_mode: ThemeMode,
     themes: Vec<Theme>,
     selected: usize,
 }
 
 impl AppearancePage {
     pub fn new() -> Self {
+        let mut theme_mode = ThemeMode::default();
+        let theme_mode_config = match ThemeMode::config() {
+            Ok(config) => {
+                match ThemeMode::get_entry(&config) {
+                    Ok(entry) => {
+                        theme_mode = entry;
+                    }
+                    Err((err, entry)) => {
+                        log::warn!("errors while loading theme mode: {:?}", err);
+                        theme_mode = entry;
+                    }
+                }
+                Some(config)
+            }
+            Err(err) => {
+                log::warn!("failed to get theme mode config: {}", err);
+                None
+            }
+        };
+
         Self {
+            theme_mode_config,
+            theme_mode,
             themes: vec![
                 Theme {
                     name: "COSMIC dark".to_string(),
@@ -33,7 +62,7 @@ impl AppearancePage {
                     handle: widget::svg::Handle::from_memory(COSMIC_LIGHT_SVG),
                 },
             ],
-            selected: 0,
+            selected: if theme_mode.is_dark { 0 } else { 1 },
         }
     }
 }
@@ -50,7 +79,17 @@ impl page::Page for AppearancePage {
         };
         match message {
             Message::Select(index) => {
-                self.selected = index;
+                if let Some(config) = &self.theme_mode_config {
+                    match self.theme_mode.set_is_dark(config, index == 0) {
+                        Ok(_) => {
+                            //TODO: read current config from disk, do not track here
+                            self.selected = index;
+                        }
+                        Err(err) => {
+                            log::warn!("failed to set theme mode: {}", err);
+                        }
+                    }
+                }
             }
         }
         Task::none()
