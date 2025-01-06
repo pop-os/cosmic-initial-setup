@@ -20,7 +20,7 @@ personalize-appearance = Weergave personaliseren
 layout-configuration = Indelingsconfiguratie
 
 # WorkflowPage
-your-workflow-your-way = Jouw werkwijze, jij bepaald!
+your-workflow-your-way = Jouw werkwijze, jij bepaalt!
 
 # LauncherPage
 fast-and-efficient = Snel en Efficiënt
