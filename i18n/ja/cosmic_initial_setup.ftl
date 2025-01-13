@@ -11,7 +11,7 @@ interface-size = インタフェースの大きさ
 # LocationPage
 timezone-and-location = 当時帯と場所
 search-the-closest-major-city = 最も近い主都を検索...
-geonames-attribution = リスト都市の人口より並べ替えられています。 情報： geonames.org (CC-BY-4.0ライセンス)
+geonames-attribution = リストは都市の人口より並べ替えられています。 情報： geonames.org (CC-BY-4.0ライセンス)
 
 # AppearancePage
 personalize-appearance = 外観をカストマイズ
