@@ -1,7 +1,7 @@
 back = Terug
 next = Volgende
 finish = Voltooid
-skip-setup-and-close = Overslaan en sluiten
+skip-setup-and-close = Setup overslaan en sluiten
 
 # WelcomePage
 welcome = Welkom
@@ -20,11 +20,11 @@ personalize-appearance = Weergave personaliseren
 layout-configuration = Indelingsconfiguratie
 
 # WorkflowPage
-your-workflow-your-way = Jouw werkwijze, jij bepaald!
+your-workflow-your-way = Jouw werkwijze, jij bepaalt!
 
 # LauncherPage
 fast-and-efficient = Snel en Efficiënt
 launcher-description = Druk op de Supertoets (Windowstoets) om de Snelstarter te openen. Zoek en druk op Enter om een app te starten of om er heen te gaan. U kunt ook direct naar instellingen of systeemfuncties zoals slaapstand gaan. Typ '?' om meer te weten te kome over de geavanceerde mogelijkheden van de Snelstarter!
 
 # WirelessPage
-get-connected = Maak verbinding
+get-connected = Verbinding maken
