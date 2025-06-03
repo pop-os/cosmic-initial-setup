@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=COSMIC Initial Setup
+Exec=cosmic-initial-Setup
+ExecCondition=unless-exists ./config/cosmic-initial-setup-done
+NoDisplay=true
+OnlyShowIn=COSMIC

@@ -4,27 +4,26 @@ finish = Voltooid
 skip-setup-and-close = Setup overslaan en sluiten
 
 # WelcomePage
-welcome = Welkom
-screen-reader = Schermverteller
-interface-size = Interfacegrootte
+welcome-page = Welkom
+    .screen-reader = Schermverteller
+    .interface-size = Interfacegrootte
 
 # LocationPage
-timezone-and-location = Tijdzone en Locatie
-search-the-closest-major-city = Naar de dichtstbijzijnde grote stad zoeken...
-geonames-attribution = De lijst is gesorteerd op de bevolkingsgrootte van de stad. Gegevens: geonames.org (gelicenseerd onder CC-BY-4.0).
+timezone-and-location-page = Tijdzone en Locatie
+    .search-the-closest-major-city = Naar de dichtstbijzijnde grote stad zoeken...
+    .geonames-attribution = De lijst is gesorteerd op de bevolkingsgrootte van de stad. Gegevens: geonames.org (gelicenseerd onder CC-BY-4.0).
 
 # AppearancePage
-personalize-appearance = Weergave personaliseren
+appearance-page = Weergave personaliseren
 
 # LayoutPage
-layout-configuration = Indelingsconfiguratie
+layout-configuration-page = Indelingsconfiguratie
 
 # WorkflowPage
-your-workflow-your-way = Jouw werkwijze, jij bepaalt!
 
 # LauncherPage
-fast-and-efficient = Snel en Efficiënt
-launcher-description = Druk op de Supertoets (Windowstoets) om de Snelstarter te openen. Zoek en druk op Enter om een app te starten of om er heen te gaan. U kunt ook direct naar instellingen of systeemfuncties zoals slaapstand gaan. Typ '?' om meer te weten te kome over de geavanceerde mogelijkheden van de Snelstarter!
+launcher-page = Snel en Efficiënt
+    .explain = Druk op de Supertoets (Windowstoets) om de Snelstarter te openen. Zoek en druk op Enter om een app te starten of om er heen te gaan. U kunt ook direct naar instellingen of systeemfuncties zoals slaapstand gaan. Typ '?' om meer te weten te kome over de geavanceerde mogelijkheden van de Snelstarter!
 
 # WirelessPage
-get-connected = Verbinding maken
+wireless-page = Verbinding maken

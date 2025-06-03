@@ -1,18 +1,53 @@
 use cosmic::{
-    cosmic_config::{Config, CosmicConfigEntry},
-    cosmic_theme::{self, ThemeMode},
-    iced::Alignment,
-    theme, widget, Element, Task,
+    Apply, Element, Task,
+    cosmic_config::{Config, ConfigSet, CosmicConfigEntry},
+    cosmic_theme::{self, ThemeBuilder, ThemeMode},
+    iced::{Alignment, Length},
+    theme::{self, ThemeType},
+    widget,
 };
+use heck::ToTitleCase;
+use std::{collections::BTreeSet, sync::Arc};
+use std::{ffi::OsStr, io::Read};
 
 use crate::{fl, page};
 
-static COSMIC_DARK_SVG: &'static [u8] = include_bytes!("../../res/cosmic-dark.svg");
-static COSMIC_LIGHT_SVG: &'static [u8] = include_bytes!("../../res/cosmic-light.svg");
+static COSMIC_DARK_PNG: &'static [u8] = include_bytes!("../../res/cosmic-dark.png");
+static COSMIC_LIGHT_PNG: &'static [u8] = include_bytes!("../../res/cosmic-light.png");
+
+fn dark_icon() -> widget::image::Handle {
+    widget::image::Handle::from_bytes(COSMIC_DARK_PNG)
+}
+
+fn light_icon() -> widget::image::Handle {
+    widget::image::Handle::from_bytes(COSMIC_LIGHT_PNG)
+}
 
 struct Theme {
     name: String,
-    handle: widget::svg::Handle,
+    builder: ThemeBuilder,
+    handle: widget::image::Handle,
+    is_dark: bool,
+}
+
+impl PartialEq for Theme {
+    fn eq(&self, other: &Self) -> bool {
+        self.name.eq(&other.name)
+    }
+}
+
+impl PartialOrd for Theme {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        self.name.partial_cmp(&other.name)
+    }
+}
+
+impl Eq for Theme {}
+
+impl Ord for Theme {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.name.cmp(&other.name)
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -20,84 +55,171 @@ pub enum Message {
     Select(usize),
 }
 
-pub struct AppearancePage {
+impl From<Message> for super::Message {
+    fn from(message: Message) -> Self {
+        super::Message::Appearance(message)
+    }
+}
+
+pub struct Page {
     theme_mode_config: Option<Config>,
-    theme_mode: ThemeMode,
+    light_theme_config: Option<Config>,
+    light_theme_builder_config: Option<Config>,
+    dark_theme_config: Option<Config>,
+    dark_theme_builder_config: Option<Config>,
     themes: Vec<Theme>,
     selected: usize,
 }
 
-impl AppearancePage {
+impl Page {
     pub fn new() -> Self {
-        let mut theme_mode = ThemeMode::default();
         let theme_mode_config = match ThemeMode::config() {
-            Ok(config) => {
-                match ThemeMode::get_entry(&config) {
-                    Ok(entry) => {
-                        theme_mode = entry;
-                    }
-                    Err((err, entry)) => {
-                        log::warn!("errors while loading theme mode: {:?}", err);
-                        theme_mode = entry;
-                    }
-                }
-                Some(config)
-            }
+            Ok(config) => Some(config),
             Err(err) => {
-                log::warn!("failed to get theme mode config: {}", err);
+                tracing::warn!(err = err.to_string(), "failed to get theme mode config");
                 None
             }
         };
 
+        let mut themes = vec![
+            Theme {
+                name: "COSMIC Dark".to_string(),
+                handle: dark_icon(),
+                builder: ThemeBuilder::dark(),
+                is_dark: true,
+            },
+            Theme {
+                name: "COSMIC Light".to_string(),
+                handle: light_icon(),
+                builder: ThemeBuilder::light(),
+                is_dark: false,
+            },
+        ];
+
+        if let Ok(directory) = std::fs::read_dir("/usr/share/cosmic/cosmic-themes/") {
+            let mut extra_themes = BTreeSet::new();
+            let mut buffer = Vec::with_capacity(8 * 1024);
+            for entry in directory.filter_map(Result::ok) {
+                let path = entry.path();
+
+                if path.extension() != Some(OsStr::new("ron")) {
+                    continue;
+                }
+
+                let file_stem = path.file_stem();
+
+                let Some(name) = file_stem.and_then(|x| x.to_str()) else {
+                    continue;
+                };
+
+                let Ok(mut file) = std::fs::File::open(&path) else {
+                    continue;
+                };
+
+                buffer.clear();
+                let Ok(read) = file.read_to_end(&mut buffer) else {
+                    continue;
+                };
+
+                match ron::de::from_bytes::<ThemeBuilder>(&buffer[..read]) {
+                    Ok(builder) => {
+                        let is_dark = name.ends_with("dark");
+                        extra_themes.insert(Theme {
+                            name: name.replace('-', " ").to_title_case(),
+                            handle: widget::image::Handle::from_path({
+                                let mut icon_path = path.clone();
+                                icon_path.set_extension("png");
+                                icon_path
+                            }),
+                            builder,
+                            is_dark,
+                        });
+                    }
+
+                    Err(why) => {
+                        tracing::error!(?why, "failed to parse theme");
+                    }
+                }
+            }
+
+            themes.extend(extra_themes.into_iter());
+        }
+
         Self {
             theme_mode_config,
-            theme_mode,
-            themes: vec![
-                Theme {
-                    name: "COSMIC dark".to_string(),
-                    handle: widget::svg::Handle::from_memory(COSMIC_DARK_SVG),
-                },
-                Theme {
-                    name: "COSMIC light".to_string(),
-                    handle: widget::svg::Handle::from_memory(COSMIC_LIGHT_SVG),
-                },
-            ],
-            selected: if theme_mode.is_dark { 0 } else { 1 },
+            dark_theme_config: cosmic::cosmic_theme::Theme::dark_config().ok(),
+            dark_theme_builder_config: ThemeBuilder::dark_config().ok(),
+            light_theme_config: cosmic::cosmic_theme::Theme::light_config().ok(),
+            light_theme_builder_config: ThemeBuilder::light_config().ok(),
+            themes,
+            selected: if ThemeMode::default().is_dark { 0 } else { 1 },
+        }
+    }
+
+    pub fn update(&mut self, message: Message) -> Task<page::Message> {
+        match message {
+            Message::Select(index) => {
+                let Some(selected_theme) = self.themes.get(index) else {
+                    return Task::none();
+                };
+
+                let theme = selected_theme.builder.clone().build();
+                self.selected = index;
+
+                let (builder_config, theme_config) = if selected_theme.is_dark {
+                    (
+                        self.dark_theme_builder_config.as_ref(),
+                        self.dark_theme_config.as_ref(),
+                    )
+                } else {
+                    (
+                        self.light_theme_builder_config.as_ref(),
+                        self.light_theme_config.as_ref(),
+                    )
+                };
+
+                if let Some(builder_config) = builder_config {
+                    _ = selected_theme.builder.write_entry(builder_config);
+                }
+
+                if let Some(theme_config) = theme_config {
+                    _ = theme.write_entry(theme_config);
+                }
+
+                if let Some(theme_mode_config) = &self.theme_mode_config {
+                    if let Err(why) = theme_mode_config.set("is_dark", selected_theme.is_dark) {
+                        tracing::warn!(why = why.to_string(), "failed to set theme mode");
+                    }
+                }
+
+                return cosmic::Task::done(page::Message::SetTheme(cosmic::Theme {
+                    theme_type: ThemeType::Custom(Arc::new(theme)),
+                    ..cosmic::Theme::default()
+                }));
+            }
         }
     }
 }
 
-impl page::Page for AppearancePage {
-    fn title(&self) -> String {
-        fl!("personalize-appearance")
+impl page::Page for Page {
+    fn as_any(&mut self) -> &mut dyn std::any::Any {
+        self
     }
 
-    fn update(&mut self, page_message: page::Message) -> Task<page::Message> {
-        let message = match page_message {
-            page::Message::Appearance(message) => message,
-            _ => return Task::none(),
-        };
-        match message {
-            Message::Select(index) => {
-                if let Some(config) = &self.theme_mode_config {
-                    match self.theme_mode.set_is_dark(config, index == 0) {
-                        Ok(_) => {
-                            //TODO: read current config from disk, do not track here
-                            self.selected = index;
-                        }
-                        Err(err) => {
-                            log::warn!("failed to set theme mode: {}", err);
-                        }
-                    }
-                }
-            }
-        }
-        Task::none()
+    fn title(&self) -> String {
+        fl!("appearance-page")
+    }
+
+    fn skippable(&self) -> bool {
+        true
     }
 
     fn view(&self) -> Element<page::Message> {
         let cosmic_theme::Spacing {
-            space_xxs, space_m, ..
+            space_s,
+            space_m,
+            space_xl,
+            ..
         } = theme::active().cosmic().spacing;
 
         let mut grid = widget::grid().column_spacing(space_m).row_spacing(space_m);
@@ -105,21 +227,33 @@ impl page::Page for AppearancePage {
             if i > 0 && i % 3 == 0 {
                 grid = grid.insert_row();
             }
-            grid = grid.push(
-                widget::column::with_children(vec![
-                    widget::button::custom(widget::svg(theme.handle.clone()).width(144).height(81))
-                        .class(theme::Button::Image)
-                        .selected(i == self.selected)
-                        .on_press(Message::Select(i))
-                        .into(),
-                    widget::text::body(&theme.name).into(),
-                ])
-                .spacing(space_xxs)
-                .align_x(Alignment::Center),
-            );
+
+            let thumbnail = widget::image(theme.handle.clone()).width(144).height(81);
+
+            let button = widget::button::custom_image_button(thumbnail, None)
+                .class(theme::Button::Image)
+                .selected(i == self.selected)
+                .on_press(Message::Select(i).into());
+
+            let selection = widget::column::with_capacity(2)
+                .push(button)
+                .push(widget::text::body(&theme.name))
+                .spacing(space_s)
+                .align_x(Alignment::Center);
+
+            grid = grid.push(selection);
         }
 
-        let element: Element<_> = grid.into();
-        element.map(page::Message::Appearance)
+        let description = widget::text::body(fl!("appearance-page", "description"))
+            .align_x(cosmic::iced::Alignment::Center)
+            .apply(widget::container)
+            .width(Length::Fill);
+
+        widget::column::with_capacity(2)
+            .push(widget::scrollable(grid))
+            .push(description)
+            .align_x(Alignment::Center)
+            .spacing(space_xl)
+            .into()
     }
 }
