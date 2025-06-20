@@ -269,7 +269,7 @@ impl Page {
 }
 
 #[derive(Clone, Debug)]
-enum ScaleAdjustResult {
+pub enum ScaleAdjustResult {
     Success,
     FailureCode(Option<i32>),
     SpawnFailure(Arc<std::io::Error>),

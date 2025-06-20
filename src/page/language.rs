@@ -62,7 +62,7 @@ impl Page {
             language: None,
             region: None,
             available_languages: SlotMap::default(),
-            system_locales: BTreeMap::default(),
+            system_locales: BTreeMap::new(),
         }
     }
 

@@ -313,8 +313,6 @@ impl page::Page for Page {
                     });
 
                 list = list.add(input_source);
-
-                // list = list.add(self.input_source_item(id, description, !variant.is_empty()));
             }
         }
 

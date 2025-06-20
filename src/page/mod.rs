@@ -1,7 +1,6 @@
-use std::any::{Any, TypeId};
-
 use cosmic::{Element, widget};
 use indexmap::IndexMap;
+use std::any::{Any, TypeId};
 
 pub mod appearance;
 pub mod keyboard;
@@ -32,22 +31,22 @@ pub fn pages(mode: AppMode) -> IndexMap<TypeId, Box<dyn Page>> {
         Box::new(welcome::Page::new()),
     );
 
-    if matches!(mode, AppMode::NewInstall { .. }) {
-        pages.insert(
-            TypeId::of::<language::Page>(),
-            Box::new(language::Page::new()),
-        );
+    // if matches!(mode, AppMode::NewInstall { .. }) {
+    pages.insert(
+        TypeId::of::<language::Page>(),
+        Box::new(language::Page::new()),
+    );
 
-        pages.insert(
-            TypeId::of::<location::Page>(),
-            Box::new(location::Page::new()),
-        );
+    pages.insert(
+        TypeId::of::<location::Page>(),
+        Box::new(location::Page::new()),
+    );
 
-        pages.insert(
-            TypeId::of::<keyboard::Page>(),
-            Box::new(keyboard::Page::new()),
-        );
-    }
+    pages.insert(
+        TypeId::of::<keyboard::Page>(),
+        Box::new(keyboard::Page::new()),
+    );
+    // }
 
     if matches!(mode, AppMode::NewInstall { create_user: true }) {
         pages.insert(TypeId::of::<user::Page>(), Box::new(user::Page::default()));

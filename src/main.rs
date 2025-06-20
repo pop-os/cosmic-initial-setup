@@ -15,7 +15,7 @@ use indexmap::IndexMap;
 use tracing_subscriber::prelude::*;
 
 mod accessibility;
-mod getent;
+mod greeter;
 mod localize;
 
 use self::page::Page;
@@ -27,6 +27,13 @@ const GNOME_SETUP_DONE_PATH: &str = ".config/gnome-initial-setup-done";
 /// Runs application with these settings
 #[rustfmt::skip]
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    #[allow(deprecated)]
+    let home_dir = std::env::home_dir().unwrap();
+
+    if home_dir.join(COSMIC_SETUP_DONE_PATH).exists() {
+        return Ok(());
+    }
+
     let log_level = std::env::var("RUST_LOG")
         .ok()
         .and_then(|level| level.parse::<tracing::Level>().ok())
@@ -46,7 +53,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_filter(tracing_subscriber::filter::filter_fn(move |metadata| {
             let target = metadata.target();
             metadata.level() == &tracing::Level::ERROR
-                || ((target.starts_with("cosmic_settings") || target.starts_with("cosmic_bg"))
+                || (target.starts_with("cosmic_initial_setup")
                     && metadata.level() <= &log_level)
         }));
 
@@ -54,15 +61,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     localize::localize();
 
-    #[allow(deprecated)]
-    let home_dir = std::env::home_dir().unwrap();
-
     // Decide which pages to display.
     let mode = if home_dir.join(GNOME_SETUP_DONE_PATH).exists() {
         page::AppMode::GnomeTransition
     } else {
-        // If being run by root (OEM mode), create a new admin account.
-        page::AppMode::NewInstall { create_user: rustix::process::getuid().as_raw() == 0 }
+        // If being run by the cosmic-initial-setup user, we are in OEM mode.
+        page::AppMode::NewInstall { create_user: pwd::Passwd::current_user().map_or(false, |current_user| current_user.name == "cosmic-initial-setup") }
     };
 
     let mut settings = Settings::default();
@@ -88,6 +92,7 @@ pub struct App {
     core: Core,
     pages: IndexMap<TypeId, Box<dyn Page + 'static>>,
     page_i: usize,
+    oem_mode: bool,
     wifi_exists: bool,
 }
 
@@ -122,6 +127,7 @@ impl Application for App {
 
         let mut app = App {
             core,
+            oem_mode: matches!(mode, page::AppMode::NewInstall { create_user: true }),
             pages: page::pages(mode),
             page_i: 0,
             wifi_exists: true, // TODO: Detect
@@ -278,7 +284,7 @@ impl Application for App {
                 })
                 .discard();
 
-                return self
+                let mut tasks = self
                     .pages
                     .values_mut()
                     .filter_map(|page| {
@@ -290,8 +296,21 @@ impl Application for App {
                     })
                     .chain(std::iter::once(mark_initial_setup_finish))
                     .collect::<Vec<_>>()
-                    .apply(Task::batch)
-                    .chain(cosmic::Task::done(Message::Exit.into()));
+                    .apply(Task::batch);
+
+                if self.oem_mode {
+                    // Automatically log out from the OEM mode after tasks are finished.
+                    tasks = tasks.chain(
+                        cosmic::Task::future(async {
+                            _ = std::process::Command::new("loginctl")
+                                .args(&["terminate-user", "cosmic-initial-setup"])
+                                .status();
+                        })
+                        .discard(),
+                    );
+                }
+
+                return tasks.chain(cosmic::Task::done(Message::Exit.into()));
             }
 
             Message::Exit => {

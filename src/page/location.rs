@@ -1,6 +1,6 @@
+use crate::fl;
+use crate::page;
 use cosmic::{Element, Task, cosmic_theme, iced::Alignment, theme, widget};
-
-use crate::{fl, page};
 
 static CITIES: &'static [u8] = include_bytes!("../../res/cities.bitcode-v0-6");
 
@@ -64,6 +64,13 @@ impl Page {
 
                 if let Some(city) = self.cities.get(selected) {
                     eprintln!("selected {city:#?}");
+                    let timezone = city.timezone.clone();
+                    tokio::spawn(async move {
+                        _ = tokio::process::Command::new("timedatectl")
+                            .args(&["set-timezone", &timezone])
+                            .status()
+                            .await;
+                    });
                 }
             }
         }

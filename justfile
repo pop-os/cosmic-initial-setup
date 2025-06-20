@@ -10,6 +10,17 @@ cargo-target-dir := env('CARGO_TARGET_DIR', 'target')
 bin-src := cargo-target-dir / 'release' / name
 bin-dst := base-dir / 'bin' / name
 
+polkit-rules-src := 'res' / '20-cosmic-initial-setup.rules'
+polkit-rules-dst := base-dir / 'share' / 'polkit-1' / 'rules.d' / '20-cosmic-initial-setup.rules'
+
+desktop-entry := APPID + '.desktop'
+desktop-src := 'res' / desktop-entry
+desktop-dst := base-dir / 'share' / 'applications' / desktop-entry
+
+autostart-entry := APPID + '.Autostart.desktop'
+autostart-src := 'res' / autostart-entry
+autostart-dst := rootdir / 'etc' / 'xdg' / 'autostart' / desktop-entry
+
 # Default recipe which runs `just build-release`
 default: build-release
 
@@ -56,10 +67,13 @@ run *args:
 # Installs files
 install:
     install -Dm0755 {{bin-src}} {{bin-dst}}
+    install -Dm0644 {{desktop-src}} {{desktop-dst}}
+    install -Dm0644 {{autostart-src}} {{autostart-dst}}
+    install -Dm0644 {{polkit-rules-src}} {{polkit-rules-dst}}
 
 # Uninstalls installed files
 uninstall:
-    rm {{bin-dst}}
+    rm {{bin-dst}} {{desktop-dst}} {{polkit-rules-dst}}
 
 # Vendor dependencies locally
 vendor:

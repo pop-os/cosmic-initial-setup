@@ -27,11 +27,12 @@ itoa = "1.0.15"
 lazy_static = "1"
 num-derive = "0.4.2"
 num-traits = "0.2.19"
+pwd = "1.4.0"
 pwhash = "1.0.0"
 regex = "1"
 ron = "0.10.1"
 rust-embed = "8"
-rustix = { version = "1.0.7", features = ["process"]}
+rustix = { version = "1.0.7", features = ["process"] }
 secure-string = "0.3.0"
 serde = { version = "1.0.219", features = ["derive"] }
 slab = "0.4.9"
@@ -55,6 +56,7 @@ git = "https://github.com/pop-os/cosmic-randr"
 
 [dependencies.cosmic-settings-subscriptions]
 git = "https://github.com/pop-os/cosmic-settings-subscriptions"
+default-features = false
 features = ["accessibility", "network_manager"]
 
 [dependencies.image]
@@ -86,15 +88,18 @@ wgpu = ["libcosmic/wgpu"]
 inherits = "release"
 debug = true
 
+[profile.release]
+lto = "thin"
+
 [workspace]
 members = ["geonames"]
 
 [patch."https://github.com/smithay/client-toolkit.git"]
 sctk = { package = "smithay-client-toolkit", version = "=0.19.2" }
 
-# [patch.'https://github.com/pop-os/cosmic-protocols']
-# cosmic-protocols = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "67df697" }
-# cosmic-client-toolkit = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "67df697" }
+[patch.'https://github.com/pop-os/cosmic-protocols']
+cosmic-protocols = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "4f05331" }
+cosmic-client-toolkit = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "4f05331" }
 
 # [patch.'https://github.com/pop-os/libcosmic.git']
 # libcosmic = { path = "../libcosmic" }

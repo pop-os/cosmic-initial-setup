@@ -1,8 +1,6 @@
 // Copyright 2025 System76 <info@system76.com>
 // SPDX-License-Identifier: GPL-3.0-only
 
-use crate::getent;
-
 use crate::fl;
 use cosmic::{
     Apply, Element,
@@ -26,19 +24,6 @@ use zbus_polkit::policykit1::CheckAuthorizationFlags;
 const DEFAULT_ICON_FILE: &str = "/usr/share/pixmaps/faces/pop-robot.png";
 const USERS_ADMIN_POLKIT_POLICY_ID: &str = "com.system76.CosmicSettings.Users.Admin";
 
-#[derive(Clone, Debug, Default)]
-pub struct User {
-    id: u64,
-    profile_icon: Option<icon::Handle>,
-    full_name: String,
-    username: String,
-    password: String,
-    password_confirm: String,
-    full_name_edit: bool,
-    username_edit: bool,
-    is_admin: bool,
-}
-
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum EditorField {
     FullName,
@@ -49,7 +34,6 @@ pub enum EditorField {
 
 #[derive(Clone, Debug)]
 pub struct Page {
-    users: Vec<User>,
     default_icon: icon::Handle,
     profile_icon: Option<icon::Handle>,
     profile_icon_path: PathBuf,
@@ -69,7 +53,6 @@ pub struct Page {
 impl Default for Page {
     fn default() -> Self {
         Self {
-            users: Vec::default(),
             default_icon: icon::from_path(PathBuf::from(DEFAULT_ICON_FILE)),
             password_label: fl!("password"),
             password_confirm_label: fl!("password-confirm"),
@@ -87,10 +70,10 @@ impl Default for Page {
         }
     }
 }
+
 #[derive(Clone, Debug)]
 pub enum Message {
     Edit(EditorField, String),
-    LoadPage(Vec<User>),
     SelectedProfileImage(Arc<Result<Url, file_chooser::Error>>),
     SelectProfileImage,
     TogglePasswordConfirmVisibility,
@@ -226,6 +209,11 @@ impl super::Page for Page {
                     _ = user.set_password(&password_hashed, "").await;
                     _ = user.set_icon_file(&icon_file).await;
                     _ = user.set_account_type(1).await;
+
+                    // Ask the greeter to move account files to the new user's home directory.
+                    if let Ok(mut client) = crate::greeter::GreeterProxy::new(&conn).await {
+                        _ = client.initial_setup_end(username).await;
+                    }
                 }
 
                 Err(why) => {
@@ -238,49 +226,6 @@ impl super::Page for Page {
 }
 
 impl Page {
-    pub async fn reload() -> Message {
-        let passwd_users = getent::passwd(uid_range());
-        let mut users = Vec::with_capacity(passwd_users.len());
-        let groups = getent::group();
-
-        let admin_group = groups.iter().find(|g| &*g.name == "sudo");
-
-        let Ok(conn) = zbus::Connection::system().await else {
-            tracing::error!("unable to access dbus system service");
-            return Message::LoadPage(Vec::new());
-        };
-
-        for user in passwd_users {
-            let Ok(user_proxy) = accounts_zbus::UserProxy::from_uid(&conn, user.uid).await else {
-                continue;
-            };
-
-            users.push(User {
-                id: user.uid,
-                profile_icon: user_proxy
-                    .icon_file()
-                    .await
-                    .ok()
-                    .map(|path| icon::from_path(PathBuf::from(path))),
-                is_admin: match user_proxy.account_type().await {
-                    Ok(1) => true,
-                    Ok(_) => false,
-                    Err(_) => {
-                        admin_group.map_or(false, |group| group.users.contains(&user.username))
-                    }
-                },
-                username: String::from(user.username),
-                full_name: String::from(user.full_name),
-                password: String::new(),
-                password_confirm: String::new(),
-                full_name_edit: false,
-                username_edit: false,
-            });
-        }
-
-        Message::LoadPage(users)
-    }
-
     pub fn update(&mut self, message: Message) -> cosmic::Task<super::Message> {
         match message {
             Message::SelectProfileImage => {
@@ -352,10 +297,6 @@ impl Page {
             Message::TogglePasswordConfirmVisibility => {
                 self.password_confirm_hidden = !self.password_confirm_hidden;
             }
-
-            Message::LoadPage(users) => {
-                self.users = users;
-            }
         };
 
         cosmic::Task::none()
@@ -375,44 +316,6 @@ async fn check_authorization(conn: &zbus::Connection) -> eyre::Result<()> {
         )
         .await?;
     Ok(())
-}
-
-fn uid_range() -> (u64, u64) {
-    let (mut min, mut max) = (1000, 60000);
-    let Ok(file) = std::fs::File::open("/etc/login.defs") else {
-        return (min, max);
-    };
-
-    let mut reader = BufReader::new(file);
-    let mut line = String::new();
-
-    loop {
-        line.clear();
-        match reader.read_line(&mut line) {
-            Ok(0) | Err(_) => break,
-            _ => (),
-        }
-
-        let line = line.trim();
-
-        let variable = if line.starts_with("UID_MIN ") {
-            &mut min
-        } else if line.starts_with("UID_MAX ") {
-            &mut max
-        } else {
-            continue;
-        };
-
-        if let Some(value) = line
-            .split_ascii_whitespace()
-            .nth(1)
-            .and_then(|value| value.parse::<u64>().ok())
-        {
-            *variable = value;
-        }
-    }
-
-    (min, max)
 }
 
 async fn request_permission_on_denial<T, Fun, Fut>(
