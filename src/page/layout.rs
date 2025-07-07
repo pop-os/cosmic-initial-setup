@@ -191,7 +191,7 @@ impl super::Page for Page {
 
     fn view(&self) -> cosmic::Element<super::Message> {
         let cosmic_theme::Spacing {
-            space_xxs,
+            space_s,
             space_m,
             space_xl,
             ..
@@ -207,7 +207,7 @@ impl super::Page for Page {
             Message::BottomPanel,
             fl!("layout-page", "bottom-panel"),
             &*BOTTOM_PANEL_IMAGE,
-            space_xxs,
+            space_s,
         );
 
         let top_panel_and_dock = layout_button(
@@ -215,7 +215,7 @@ impl super::Page for Page {
             Message::TopPanelAndDock,
             fl!("layout-page", "top-panel-and-dock"),
             &*TOP_PANEL_AND_DOCK_IMAGE,
-            space_xxs,
+            space_s,
         );
 
         let layout_selector = widget::row::with_capacity(2)

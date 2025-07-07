@@ -31,25 +31,27 @@ pub fn pages(mode: AppMode) -> IndexMap<TypeId, Box<dyn Page>> {
         Box::new(welcome::Page::new()),
     );
 
-    // if matches!(mode, AppMode::NewInstall { .. }) {
-    pages.insert(
-        TypeId::of::<language::Page>(),
-        Box::new(language::Page::new()),
-    );
+    if let AppMode::NewInstall { create_user } = mode {
+        pages.insert(TypeId::of::<wifi::Page>(), Box::new(wifi::Page::default()));
 
-    pages.insert(
-        TypeId::of::<location::Page>(),
-        Box::new(location::Page::new()),
-    );
+        pages.insert(
+            TypeId::of::<language::Page>(),
+            Box::new(language::Page::new()),
+        );
 
-    pages.insert(
-        TypeId::of::<keyboard::Page>(),
-        Box::new(keyboard::Page::new()),
-    );
-    // }
+        pages.insert(
+            TypeId::of::<keyboard::Page>(),
+            Box::new(keyboard::Page::new()),
+        );
 
-    if matches!(mode, AppMode::NewInstall { create_user: true }) {
-        pages.insert(TypeId::of::<user::Page>(), Box::new(user::Page::default()));
+        if create_user {
+            pages.insert(TypeId::of::<user::Page>(), Box::new(user::Page::default()));
+        }
+
+        pages.insert(
+            TypeId::of::<location::Page>(),
+            Box::new(location::Page::new()),
+        );
     }
 
     pages.insert(
@@ -74,21 +76,17 @@ pub fn pages(mode: AppMode) -> IndexMap<TypeId, Box<dyn Page>> {
         Box::new(workflow::Page::default()),
     );
 
-    if matches!(mode, AppMode::GnomeTransition) {
-        pages.insert(
-            TypeId::of::<new_shortcuts::Page>(),
-            Box::new(new_shortcuts::Page::default()),
-        );
-    } else {
-        pages.insert(
-            TypeId::of::<launcher::Page>(),
-            Box::new(launcher::Page::new()),
-        );
-    }
-
-    if matches!(mode, AppMode::NewInstall { .. }) {
-        pages.insert(TypeId::of::<wifi::Page>(), Box::new(wifi::Page::default()));
-    }
+    // if matches!(mode, AppMode::GnomeTransition) {
+    pages.insert(
+        TypeId::of::<new_shortcuts::Page>(),
+        Box::new(new_shortcuts::Page::default()),
+    );
+    // } else {
+    pages.insert(
+        TypeId::of::<launcher::Page>(),
+        Box::new(launcher::Page::new()),
+    );
+    // }
 
     pages
 }
@@ -100,10 +98,10 @@ pub enum Message {
     Language(language::Message),
     Layout(layout::Message),
     Location(location::Message),
+    SetTheme(cosmic::Theme),
     User(user::Message),
     Welcome(welcome::Message),
     WiFi(wifi::Message),
-    Todo,
 }
 
 impl From<Message> for super::Message {

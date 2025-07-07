@@ -201,11 +201,7 @@ impl page::Page for Page {
                     }
                 });
 
-                eprintln!("\n\n");
-
                 for (layout, source) in sorted_layouts {
-                    eprintln!("description: {}", layout.description());
-
                     self.keyboard_layouts.insert((
                         layout.name().to_owned(),
                         String::new(),
@@ -231,7 +227,6 @@ impl page::Page for Page {
                         });
 
                         for (layout_name, name, description, source) in variants {
-                            eprintln!("\t variant description: {}", layout.description());
                             self.keyboard_layouts
                                 .insert((layout_name, name, description, source));
                         }
@@ -261,6 +256,8 @@ impl page::Page for Page {
                         }
                     }
                 }
+
+                self.selected_opt = self.active_layouts.first().cloned();
             }
             (Err(why), _) | (_, Err(why)) => {
                 tracing::error!(?why, "failed to get keyboard layouts");
@@ -285,7 +282,7 @@ impl page::Page for Page {
 
         let mut list = widget::list_column();
 
-        for (id, (_locale, variant, description, source)) in &self.keyboard_layouts {
+        for (id, (_locale, variant, description, _source)) in &self.keyboard_layouts {
             if self.search.is_empty() || description.to_lowercase().contains(&self.search) {
                 let selected = Some(id) == self.selected_opt;
                 let item = widget::settings::item::builder(description).control(
@@ -323,8 +320,7 @@ impl page::Page for Page {
         let element: Element<_> = widget::column::with_children(vec![
             search_input.into(),
             widget::Space::with_height(space_m).into(),
-            //TODO: manual height used due to layout issues
-            widget::scrollable(list).height(286).into(),
+            widget::scrollable(list).into(),
         ])
         .into();
         element.map(page::Message::Keyboard)

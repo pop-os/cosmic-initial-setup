@@ -30,12 +30,11 @@ keyboard-layout-page = Select Keyboard Layout
 create-account-page = Create Your account
     .full-name = Full name
     .user-name = User name
-    .user-name-note = This will be used to name your home folder; and can't be changed.
+    .user-name-note = This will be used to name your home folder, and can't be changed.
     .dialog-add = Add
     .profile-add = Choose profile image
     .invalid-username = Invalid username.
     .password-mismatch = Password and confirmation must match.
-
 
 # LocationPage
 timezone-and-location-page = Timezone and Location
@@ -44,7 +43,7 @@ timezone-and-location-page = Timezone and Location
 
 # AppearancePage
 appearance-page = Personalize Appearance
-    .description = You can further customize accent colors—and the look of your desktop—in Appearance settings.
+    .description = You can further customize accent colors and the look of your desktop in Appearance settings.
 
 # LayoutPage
 layout-page = Layout Configuration
@@ -54,16 +53,16 @@ layout-page = Layout Configuration
 
 # SystemAppsPage
 new-apps-page = New System Applications
-    .description = Enjoy an array of new system applications that come with the COSMIC desktop environment; including Settings, COSMIC App Store, Files, Text Editor, and Terminal.
+    .description = Enjoy an array of new system applications that come with the COSMIC desktop environment. Including Settings, COSMIC App Store, Files, Text Editor, and Terminal.
 
 # NewKeyboardShortcutsPage
 new-shortcuts-page = New Keyboard Shortcuts
-    .description = Use Shift+Super+arrows—or drag with the pointer—to move windows. Take advantage of the visual hints when using automatic window tiling.
+    .description = Use Shift+Super+arrows, or drag with the pointer, to move windows. Take advantage of the visual hints when using automatic window tiling.
 
 # WorkflowPage
 workflow-page = Workspaces for Your Workflow
     .description = Float or automatically tile windows per-workspace using the tiling applet.
-        You can select vertical or horizontal workspaces; and pin them in the overview to make them static.
+        You can select vertical or horizontal workspaces, and pin them in the overview to make them static.
 
 # LauncherPage
 launcher-page = Fast and Efficient

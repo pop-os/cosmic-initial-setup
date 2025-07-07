@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Initial Setup
-Icon=preferences-system
+Icon=com.system76.CosmicInitialSetup
 Exec=cosmic-initial-setup
 Terminal=false
 Type=Application

@@ -25,7 +25,7 @@ impl super::Page for Page {
     }
 
     fn view(&self) -> cosmic::Element<super::Message> {
-        let cosmic_theme::Spacing { space_xl, .. } = cosmic::theme::active().cosmic().spacing;
+        let cosmic_theme::Spacing { space_s, .. } = cosmic::theme::active().cosmic().spacing;
 
         let description = widget::text::body(fl!("new-shortcuts-page", "description"))
             .align_x(cosmic::iced::Alignment::Center)
@@ -38,7 +38,7 @@ impl super::Page for Page {
             .push(description)
             .push(screenshot)
             .align_x(Alignment::Center)
-            .spacing(space_xl)
+            .spacing(space_s)
             .into()
     }
 }

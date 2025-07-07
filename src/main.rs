@@ -70,7 +70,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
 
     let mut settings = Settings::default();
-    settings = settings.size_limits(Limits::NONE.width(900.0).height(650.0));
+    settings = settings.size_limits(Limits::NONE.max_width(900.0).max_height(650.0));
 
     cosmic::app::run::<App>(settings, mode)?;
 
@@ -155,6 +155,10 @@ impl Application for App {
 
             Message::PageMessage(page_message) => {
                 match page_message {
+                    page::Message::SetTheme(theme) => {
+                        return cosmic::command::set_theme(theme);
+                    }
+
                     page::Message::Appearance(message) => {
                         if let Some(page) =
                             self.pages.get_mut(&TypeId::of::<page::appearance::Page>())
@@ -261,8 +265,6 @@ impl Application for App {
                                 .map(cosmic::Action::App);
                         }
                     }
-
-                    page::Message::Todo => (),
                 }
             }
 
@@ -331,6 +333,7 @@ impl Application for App {
         let cosmic_theme::Spacing {
             space_xxs,
             space_m,
+            space_l,
             space_xl,
             ..
         } = theme::active().cosmic().spacing;
@@ -383,11 +386,11 @@ impl Application for App {
         widget::column::with_capacity(7)
             .push(widget::Space::with_height(space_xl))
             .push(title)
-            .push(widget::Space::with_height(space_xl))
+            .push(widget::Space::with_height(space_l))
             .push(content)
             .push(widget::Space::with_height(space_m))
             .push(button_row)
-            .push(widget::Space::with_height(space_xl))
+            .push(widget::Space::with_height(space_l))
             .max_width(page.width())
             .align_x(Alignment::Center)
             .apply(widget::container)

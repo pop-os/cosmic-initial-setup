@@ -63,7 +63,6 @@ impl Page {
                 self.selected_opt = Some(selected);
 
                 if let Some(city) = self.cities.get(selected) {
-                    eprintln!("selected {city:#?}");
                     let timezone = city.timezone.clone();
                     tokio::spawn(async move {
                         _ = tokio::process::Command::new("timedatectl")

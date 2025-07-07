@@ -33,6 +33,7 @@ pub struct PageRefresh {
     region: Option<SystemLocale>,
     available_languages: SlotMap<DefaultKey, SystemLocale>,
     system_locales: BTreeMap<String, SystemLocale>,
+    selected: DefaultKey,
 }
 
 pub struct Page {
@@ -115,6 +116,7 @@ impl Page {
                         self.language = page_refresh.language;
                         self.region = page_refresh.region;
                         self.registry = Some(page_refresh.registry.0);
+                        self.selected = page_refresh.selected;
                     }
 
                     Err(why) => {
@@ -206,9 +208,19 @@ impl super::Page for Page {
                 .await
                 .expect("Failed to run localectl");
 
+            let mut available_languages = SlotMap::new();
+            let mut selected = DefaultKey::null();
+
+            let current_lang = std::env::var("LANG").ok();
+            if let Some(lang) = current_lang.as_ref() {
+                if let Some(locale) = registry.locale(&lang) {
+                    selected = available_languages.insert(localized_locale(&locale, lang.clone()));
+                }
+            }
+
             let output = String::from_utf8(output.stdout).unwrap_or_default();
             for line in output.lines() {
-                if line == "C.UTF-8" {
+                if line == "C.UTF-8" || Some(line) == current_lang.as_deref() {
                     continue;
                 }
 
@@ -217,7 +229,6 @@ impl super::Page for Page {
                 }
             }
 
-            let mut available_languages = SlotMap::new();
             for language in available_languages_set {
                 available_languages.insert(language);
             }
@@ -229,6 +240,7 @@ impl super::Page for Page {
                 region,
                 available_languages,
                 system_locales,
+                selected,
             })
         };
 
@@ -300,8 +312,7 @@ impl super::Page for Page {
         let element: Element<_> = widget::column::with_children(vec![
             search_input.into(),
             widget::Space::with_height(space_m).into(),
-            //TODO: manual height used due to layout issues
-            widget::scrollable(section).height(286).into(),
+            widget::scrollable(section).into(),
         ])
         .into();
         element.map(page::Message::Language)
