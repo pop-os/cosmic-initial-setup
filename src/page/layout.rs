@@ -1,47 +1,31 @@
 use crate::fl;
-use bytes::Bytes;
 use cosmic::{
     Apply, cosmic_theme,
     iced::{Alignment, Length},
     widget::{self, image},
 };
-use serde::Serialize;
-use std::{any::Any, sync::LazyLock};
+use kdl::{KdlDocument, KdlValue};
+use std::any::Any;
+use std::collections::BTreeMap;
+use std::io::Read;
+use std::path::{Path, PathBuf};
 
-/// Lazy-loaded image handle for the bottom layout.
-static BOTTOM_PANEL_IMAGE: LazyLock<image::Handle> = LazyLock::new(|| {
-    let embedded_bytes = include_bytes!("../../res/layout-bottom-panel.png");
-    image::Handle::from_bytes(Bytes::from_static(embedded_bytes))
-});
-
-/// Lazy-loaded image handle for the top panel and dock layout.
-static TOP_PANEL_AND_DOCK_IMAGE: LazyLock<image::Handle> = LazyLock::new(|| {
-    let embedded_bytes = include_bytes!("../../res/layout-top-panel-and-dock.png");
-    image::Handle::from_bytes(Bytes::from_static(embedded_bytes))
-});
-
-#[derive(Serialize)]
-enum Anchor {
-    Bottom,
-    Top,
-}
-
-#[derive(Serialize)]
-enum Size {
-    S,
-    M,
+struct Layout {
+    names: BTreeMap<String, String>,
+    path: PathBuf,
+    icon_path: PathBuf,
 }
 
 #[derive(Default)]
 pub struct Page {
-    state: Message,
+    locale: String,
+    layouts: Vec<Layout>,
+    selected: usize,
 }
 
-#[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum Message {
-    #[default]
-    TopPanelAndDock,
-    BottomPanel,
+    Selected(usize),
 }
 
 impl From<Message> for super::Message {
@@ -51,130 +35,15 @@ impl From<Message> for super::Message {
 }
 
 impl Page {
-    pub fn update(&mut self, new_state: Message) -> cosmic::Task<super::Message> {
-        self.state = new_state;
-
-        std::thread::spawn(move || {
-            let mut dock_config = None;
-
-            let (entries, size, anchor, anchor_gap, plugins_center, plugins_wings) = match new_state
-            {
-                Message::BottomPanel => (
-                    vec!["Panel"],
-                    Size::M,
-                    Anchor::Bottom,
-                    true,
-                    Some(vec![
-                        "com.system76.CosmicPanelAppButton",
-                        "com.system76.CosmicAppList",
-                        "com.system76.CosmicAppletMinimize",
-                    ]),
-                    Some((
-                        vec!["com.system76.CosmicAppletWorkspaces"],
-                        vec![
-                            "com.system76.CosmicAppletStatusArea",
-                            "com.system76.CosmicAppletTiling",
-                            "com.system76.CosmicAppletNotifications",
-                            "com.system76.CosmicAppletNetwork",
-                            "com.system76.CosmicAppletBattery",
-                            "com.system76.CosmicAppletBluetooth",
-                            "com.system76.CosmicAppletA11y",
-                            "com.system76.CosmicAppletInputSources",
-                            "com.system76.CosmicAppletTime",
-                            "com.system76.CosmicAppletPower",
-                        ],
-                    )),
-                ),
-
-                Message::TopPanelAndDock => {
-                    dock_config = Some((
-                        Size::M,
-                        Anchor::Bottom,
-                        false,
-                        Some(vec![
-                            "com.system76.CosmicPanelAppButton",
-                            "com.system76.CosmicAppList",
-                            "com.system76.CosmicAppletMinimize",
-                        ]),
-                        None::<(Vec<String>, Vec<String>)>,
-                    ));
-
-                    (
-                        vec!["Panel", "Dock"],
-                        Size::S,
-                        Anchor::Top,
-                        true,
-                        Some(vec!["com.system76.CosmicAppletTime"]),
-                        Some((
-                            vec!["com.system76.CosmicAppletWorkspaces"],
-                            vec![
-                                "com.system76.CosmicAppletStatusArea",
-                                "com.system76.CosmicAppletTiling",
-                                "com.system76.CosmicAppletNotifications",
-                                "com.system76.CosmicAppletNetwork",
-                                "com.system76.CosmicAppletBattery",
-                                "com.system76.CosmicAppletBluetooth",
-                                "com.system76.CosmicAppletA11y",
-                                "com.system76.CosmicAppletInputSources",
-                                "com.system76.CosmicAppletTime",
-                                "com.system76.CosmicAppletPower",
-                            ],
-                        )),
-                    )
+    pub fn update(&mut self, message: Message) -> cosmic::Task<super::Message> {
+        match message {
+            Message::Selected(id) => {
+                if let Some(layout) = self.layouts.get(id) {
+                    self.selected = id;
+                    apply_layout(&layout.path);
                 }
-            };
-
-            fn pretty_print<T: ?Sized + Serialize>(value: &T) -> String {
-                ron::ser::to_string_pretty(value, ron::ser::PrettyConfig::new()).unwrap()
             }
-
-            #[allow(deprecated)]
-            let home_dir = std::env::home_dir().unwrap();
-
-            let applet_config = home_dir.join(".config/cosmic/com.system76.CosmicPanel/v1/");
-            _ = std::fs::create_dir_all(&applet_config);
-            _ = std::fs::write(&applet_config.join("entries"), pretty_print(&entries));
-
-            let panel_config = home_dir.join(".config/cosmic/com.system76.CosmicPanel.Panel/v1/");
-            _ = std::fs::create_dir_all(&panel_config);
-            _ = std::fs::write(&panel_config.join("size"), pretty_print(&size));
-            _ = std::fs::write(&panel_config.join("anchor"), pretty_print(&anchor));
-            _ = std::fs::write(&panel_config.join("anchor_gap"), pretty_print(&anchor_gap));
-            _ = std::fs::write(
-                &panel_config.join("plugins_center"),
-                pretty_print(&plugins_center),
-            );
-            _ = std::fs::write(
-                &panel_config.join("plugins_wings"),
-                pretty_print(&plugins_wings),
-            );
-
-            if let Some((
-                dock_size,
-                dock_anchor,
-                dock_anchor_gap,
-                dock_plugins_center,
-                dock_plugins_wings,
-            )) = dock_config
-            {
-                let dock_config = home_dir.join(".config/cosmic/com.system76.CosmicPanel.Dock/v1/");
-                _ = std::fs::create_dir_all(&dock_config);
-                _ = std::fs::write(&dock_config.join("size"), pretty_print(&dock_size));
-                _ = std::fs::write(&dock_config.join("anchor"), pretty_print(&dock_anchor));
-                _ = std::fs::write(
-                    &dock_config.join("anchor_gap"),
-                    pretty_print(&dock_anchor_gap),
-                );
-                _ = std::fs::write(
-                    &dock_config.join("plugins_center"),
-                    pretty_print(&dock_plugins_center),
-                );
-                _ = std::fs::write(
-                    &dock_config.join("plugins_wings"),
-                    pretty_print(&dock_plugins_wings),
-                );
-            }
-        });
+        }
 
         cosmic::Task::none()
     }
@@ -187,6 +56,73 @@ impl super::Page for Page {
 
     fn as_any(&mut self) -> &mut dyn Any {
         self
+    }
+
+    fn init(&mut self) -> cosmic::Task<super::Message> {
+        let Ok(layouts_dir) = std::fs::read_dir("/usr/share/cosmic-layouts/") else {
+            return cosmic::Task::none();
+        };
+
+        self.layouts.clear();
+        let mut buffer = String::new();
+        for entry in layouts_dir.filter_map(Result::ok) {
+            let path = entry.path();
+
+            let metadata_path = path.join("layout.kdl");
+            let Ok(mut metadata) = std::fs::File::open(&metadata_path) else {
+                tracing::error!(?metadata_path, "failed to open layout file");
+                continue;
+            };
+
+            buffer.clear();
+            if metadata.read_to_string(&mut buffer).is_err() {
+                tracing::error!(?metadata_path, "failed to read layout file");
+                continue;
+            }
+
+            let document = match buffer.parse::<KdlDocument>() {
+                Ok(document) => document,
+                Err(why) => {
+                    tracing::error!(?metadata_path, ?why, "failed to parse layout file");
+                    continue;
+                }
+            };
+
+            let mut names = BTreeMap::new();
+
+            for node in document.nodes() {
+                if node.name().value() == "name" {
+                    for entry in node.entries() {
+                        let locale = entry.name().map_or("en", |ident| ident.value());
+                        if let KdlValue::String(name) = entry.value() {
+                            names.insert(locale.to_owned(), name.to_owned());
+                        }
+                    }
+                }
+            }
+
+            let icon_path = path.join("icon.png");
+            if !icon_path.exists() {
+                tracing::error!(?metadata_path, "missing icon.png in layout dir");
+                continue;
+            }
+
+            self.layouts.push(Layout {
+                names,
+                path,
+                icon_path,
+            })
+        }
+
+        cosmic::Task::none()
+    }
+
+    fn open(&mut self) -> cosmic::Task<super::Message> {
+        if let Ok(lang) = std::env::var("LANG") {
+            self.locale = lang.split('.').next().unwrap_or("en").to_owned();
+        }
+
+        cosmic::Task::none()
     }
 
     fn view(&self) -> cosmic::Element<super::Message> {
@@ -202,30 +138,24 @@ impl super::Page for Page {
             .apply(widget::container)
             .width(Length::Fill);
 
-        let bottom_panel = layout_button(
-            self.state,
-            Message::BottomPanel,
-            fl!("layout-page", "bottom-panel"),
-            &*BOTTOM_PANEL_IMAGE,
-            space_s,
-        );
+        let mut grid = widget::grid().column_spacing(space_m).row_spacing(space_m);
 
-        let top_panel_and_dock = layout_button(
-            self.state,
-            Message::TopPanelAndDock,
-            fl!("layout-page", "top-panel-and-dock"),
-            &*TOP_PANEL_AND_DOCK_IMAGE,
-            space_s,
-        );
+        for (id, layout) in self.layouts.iter().enumerate() {
+            if id > 0 && id % 3 == 0 {
+                grid = grid.insert_row();
+            }
 
-        let layout_selector = widget::row::with_capacity(2)
-            .push(top_panel_and_dock)
-            .push(bottom_panel)
-            .spacing(space_m)
-            .apply(widget::container);
+            grid = grid.push(layout_button(
+                &self.locale,
+                layout,
+                id,
+                self.selected,
+                space_s,
+            ));
+        }
 
         widget::column::with_capacity(2)
-            .push(layout_selector)
+            .push(widget::container(grid))
             .push(description)
             .align_x(Alignment::Center)
             .spacing(space_xl)
@@ -233,26 +163,75 @@ impl super::Page for Page {
     }
 }
 
-fn layout_button(
-    current: Message,
-    value: Message,
-    label: String,
-    image_handle: &'static image::Handle,
+fn layout_button<'a>(
+    locale: &str,
+    layout: &'a Layout,
+    id: usize,
+    current: usize,
     spacing: u16,
-) -> cosmic::Element<'static, super::Message> {
-    let button = widget::button::image(image_handle)
-        .width(192)
-        .selected(current == value)
-        .on_press(value.into());
+) -> cosmic::Element<'a, super::Message> {
+    let name = layout
+        .names
+        .get(locale)
+        .or_else(|| {
+            locale
+                .split('_')
+                .next()
+                .and_then(|short| layout.names.get(short))
+                .or_else(|| layout.names.get("en"))
+        })
+        .expect("layout does not have a name");
 
-    let label = widget::text::body(label)
-        .align_x(Alignment::Center)
-        .apply(widget::container);
+    let thumbnail = widget::image(&layout.icon_path).width(144).height(81);
+
+    let button = widget::button::custom_image_button(thumbnail, None)
+        .class(cosmic::theme::Button::Image)
+        .selected(current == id)
+        .on_press(Message::Selected(id).into());
 
     widget::column::with_capacity(2)
         .push(button)
-        .push(label)
+        .push(widget::text::body(name.as_str()))
         .spacing(spacing)
         .align_x(Alignment::Center)
         .into()
+}
+
+fn apply_layout(path: &Path) {
+    let Ok(layout_dir) = path.read_dir() else {
+        tracing::error!(?path, "failed to read layout directory");
+        return;
+    };
+
+    for entry in layout_dir.filter_map(Result::ok) {
+        let Ok(meta) = entry.metadata() else {
+            continue;
+        };
+
+        if meta.is_dir() {
+            let path = entry.path();
+            let Some(config_name) = path.file_name() else {
+                continue;
+            };
+
+            let config_dest_path = std::env::home_dir()
+                .unwrap()
+                .join(".config/cosmic")
+                .join(config_name);
+
+            // Delete any existing config
+            _ = std::fs::remove_dir_all(&config_dest_path);
+
+            // Copy layout to local config
+            _ = std::process::Command::new("cp")
+                .arg("-r")
+                .arg(&path)
+                .arg(&config_dest_path)
+                .status();
+        }
+    }
+
+    _ = std::process::Command::new("killall")
+        .arg("cosmic-panel")
+        .status();
 }

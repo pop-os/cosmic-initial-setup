@@ -25,6 +25,7 @@ icu_collator = "1.5"
 icu_provider = { version = "1.5", features = ["sync"] }
 indexmap = "2.9.0"
 itoa = "1.0.15"
+kdl = "6.3.4"
 lazy_static = "1"
 num-derive = "0.4.2"
 num-traits = "0.2.19"

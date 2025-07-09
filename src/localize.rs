@@ -70,6 +70,10 @@ pub fn localize() {
 }
 
 pub fn set_locale(locale: &str) {
+    unsafe {
+        std::env::set_var("LANG", locale);
+    }
+
     if let Ok(locale) = LanguageIdentifier::from_str(locale) {
         let localizer = localizer();
         let mut lang_requester = i18n_embed::DesktopLanguageRequester::new();

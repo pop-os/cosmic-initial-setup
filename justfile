@@ -24,7 +24,8 @@ autostart-entry := APPID + '.Autostart.desktop'
 autostart-src := 'res' / autostart-entry
 autostart-dst := rootdir / 'etc' / 'xdg' / 'autostart' / desktop-entry
 
-layouts-dst := base-dir / 'share' / 'cosmic' / 'cosmic-layouts'
+layouts-src := 'res' / 'layouts'
+layouts-dst := base-dir / 'share' / 'cosmic-layouts'
 
 themes-src := 'res' / 'themes'
 themes-dst := base-dir / 'share' / 'cosmic' / 'cosmic-themes'
@@ -73,12 +74,17 @@ run *args:
     env RUST_LOG=cosmic_initial_setup=info RUST_BACKTRACE=full cargo run --release {{args}}
 
 # Installs files
-install: install-themes
+install: install-themes install-layouts
     install -Dm0755 {{bin-src}} {{bin-dst}}
     install -Dm0644 {{icon-src}} {{icon-dst}}
     install -Dm0644 {{desktop-src}} {{desktop-dst}}
     install -Dm0644 {{autostart-src}} {{autostart-dst}}
     install -Dm0644 {{polkit-rules-src}} {{polkit-rules-dst}}
+
+
+install-layouts:
+    rm -rf {{layouts-dst}}
+    cp -rp {{layouts-src}} {{layouts-dst}}
 
 install-themes:
     #!/bin/sh
@@ -90,7 +96,7 @@ install-themes:
 
 # Uninstalls installed files
 uninstall:
-    rm {{desktop-dst}} {{polkit-rules-dst}} {{icon-dst}} {{bin-dst}}
+    rm -rf {{desktop-dst}} {{polkit-rules-dst}} {{icon-dst}} {{themes-dst}} {{layouts-dst}} {{bin-dst}}
 
 # Vendor dependencies locally
 vendor:

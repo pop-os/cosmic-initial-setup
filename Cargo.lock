@@ -1169,6 +1169,7 @@ dependencies = [
  "image",
  "indexmap",
  "itoa",
+ "kdl",
  "lazy_static",
  "libcosmic",
  "locale1",
