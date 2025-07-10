@@ -6,6 +6,7 @@ next = Next
 password = Password
 password-confirm = Confirm Password
 settings = Settings
+skip = Skip
 skip-setup-and-close = Skip setup and close
 type-to-search = Type to search…
 wifi = Wi-Fi

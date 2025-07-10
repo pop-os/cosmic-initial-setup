@@ -340,13 +340,18 @@ impl Application for App {
 
         let page = &self.pages[self.page_i];
 
-        let skip_setup_and_close = page
-            .skippable()
-            .then(|| widget::button::link(fl!("skip-setup-and-close")).on_press(Message::Finish));
+        let skip_button = page
+            .optional()
+            .then(|| widget::button::link(fl!("skip")).on_press(Message::PageOpen(self.page_i + 1)))
+            .or_else(|| {
+                page.skippable().then(|| {
+                    widget::button::link(fl!("skip-setup-and-close")).on_press(Message::Finish)
+                })
+            });
 
         let mut button_row = widget::row::with_capacity(4)
             .spacing(space_xxs)
-            .push_maybe(skip_setup_and_close)
+            .push_maybe(skip_button)
             .push(widget::horizontal_space());
 
         if let Some(page_i) = self.page_i.checked_sub(1) {

@@ -20,7 +20,7 @@ struct Layout {
 pub struct Page {
     locale: String,
     layouts: Vec<Layout>,
-    selected: usize,
+    selected: Option<usize>,
 }
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
@@ -39,7 +39,7 @@ impl Page {
         match message {
             Message::Selected(id) => {
                 if let Some(layout) = self.layouts.get(id) {
-                    self.selected = id;
+                    self.selected = Some(id);
                     apply_layout(&layout.path);
                 }
             }
@@ -56,6 +56,10 @@ impl super::Page for Page {
 
     fn as_any(&mut self) -> &mut dyn Any {
         self
+    }
+
+    fn skippable(&self) -> bool {
+        true
     }
 
     fn init(&mut self) -> cosmic::Task<super::Message> {
@@ -167,7 +171,7 @@ fn layout_button<'a>(
     locale: &str,
     layout: &'a Layout,
     id: usize,
-    current: usize,
+    current: Option<usize>,
     spacing: u16,
 ) -> cosmic::Element<'a, super::Message> {
     let name = layout
@@ -186,7 +190,7 @@ fn layout_button<'a>(
 
     let button = widget::button::custom_image_button(thumbnail, None)
         .class(cosmic::theme::Button::Image)
-        .selected(current == id)
+        .selected(current.map_or(false, |current| current == id))
         .on_press(Message::Selected(id).into());
 
     widget::column::with_capacity(2)

@@ -15,6 +15,14 @@ use crate::{fl, page};
 static COSMIC_DARK_SVG: &'static [u8] = include_bytes!("../../res/cosmic-dark.svg");
 static COSMIC_LIGHT_SVG: &'static [u8] = include_bytes!("../../res/cosmic-light.svg");
 
+fn dark_icon() -> widget::svg::Handle {
+    widget::svg::Handle::from_memory(COSMIC_DARK_SVG)
+}
+
+fn light_icon() -> widget::svg::Handle {
+    widget::svg::Handle::from_memory(COSMIC_LIGHT_SVG)
+}
+
 struct Theme {
     name: String,
     builder: ThemeBuilder,
@@ -56,13 +64,13 @@ impl Page {
         let mut themes = vec![
             Theme {
                 name: "COSMIC Dark".to_string(),
-                handle: widget::svg::Handle::from_memory(COSMIC_DARK_SVG),
+                handle: dark_icon(),
                 builder: ThemeBuilder::dark(),
                 is_dark: true,
             },
             Theme {
                 name: "COSMIC Light".to_string(),
-                handle: widget::svg::Handle::from_memory(COSMIC_LIGHT_SVG),
+                handle: light_icon(),
                 builder: ThemeBuilder::light(),
                 is_dark: false,
             },
@@ -89,11 +97,12 @@ impl Page {
 
                 match ron::de::from_bytes::<ThemeBuilder>(&buffer[..read]) {
                     Ok(builder) => {
+                        let is_dark = name.ends_with("dark");
                         themes.push(Theme {
                             name: name.replace('-', " ").to_title_case(),
-                            handle: widget::svg::Handle::from_memory(COSMIC_DARK_SVG),
+                            handle: if is_dark { dark_icon() } else { light_icon() },
                             builder,
-                            is_dark: name.ends_with("dark"),
+                            is_dark,
                         });
                     }
 

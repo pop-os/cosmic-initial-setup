@@ -24,6 +24,10 @@ impl super::Page for Page {
         self
     }
 
+    fn skippable(&self) -> bool {
+        true
+    }
+
     fn view(&self) -> cosmic::Element<super::Message> {
         let cosmic_theme::Spacing { space_xl, .. } = cosmic::theme::active().cosmic().spacing;
 

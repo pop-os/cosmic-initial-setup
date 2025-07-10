@@ -50,7 +50,7 @@ impl super::Page for Page {
         connection_settings()
     }
 
-    fn skippable(&self) -> bool {
+    fn optional(&self) -> bool {
         true
     }
 

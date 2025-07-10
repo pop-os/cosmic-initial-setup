@@ -135,6 +135,10 @@ pub trait Page {
         true
     }
 
+    fn optional(&self) -> bool {
+        false
+    }
+
     fn skippable(&self) -> bool {
         false
     }
