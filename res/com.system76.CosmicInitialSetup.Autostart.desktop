@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=COSMIC Initial Setup
+Name[hu]=COSMIC Első Beállítás
 Exec=cosmic-initial-Setup
 ExecCondition=unless-exists ./config/cosmic-initial-setup-done
 NoDisplay=true
