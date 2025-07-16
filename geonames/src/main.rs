@@ -83,17 +83,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             continue;
         };
         let city = City {
-            name: name.to_string(),
-            alternate_names: alternate_names.split(',').map(|x| x.to_string()).collect(),
-            latitude: latitude.parse()?,
-            longitude: longitude.parse()?,
-            population: population.parse()?,
-            timezone: timezone.to_string(),
+            name: Box::from(name),
+            alternate_names: alternate_names.split(',').map(Box::from).collect(),
+            timezone: Box::from(timezone),
         };
-        cities.push(city);
+        cities.push((population.parse::<u64>()?, city));
     }
 
-    cities.sort_by(|a, b| b.population.cmp(&a.population));
+    cities.sort_by(|(pop_a, _a), (pop_b, _b)| pop_b.cmp(pop_a));
+
+    let cities = cities
+        .into_iter()
+        .map(|(_pop, city)| city)
+        .collect::<Vec<City>>();
+
     println!("cities: {}", cities.len());
 
     let bitcode = bitcode::encode(&cities);

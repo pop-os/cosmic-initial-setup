@@ -1,27 +1,85 @@
 [package]
 name = "cosmic-initial-setup"
 version = "0.1.0"
-edition = "2021"
-rust-version = "1.80"
+edition = "2024"
+rust-version = "1.85"
 
 [dependencies]
-env_logger = "0.10"
+bytes = "1.10.1"
+cosmic-protocols = { git = "https://github.com/pop-os/cosmic-protocols" }
+crabtime = "1.1.3"
+eyre = "0.6.12"
+futures = "0.3.31"
+futures-util = "0.3.31"
 geonames = { path = "geonames" }
-lazy_static = "1"
-log = "0.4"
-regex = "1"
-tokio = { version = "1", features = ["sync"] }
+gettext-rs = { version = "0.7.2", features = ["gettext-system"] }
+heck = "0.5.0"
 # Internationalization
-i18n-embed = { version = "0.13", features = ["fluent-system", "desktop-requester"] }
-i18n-embed-fl = "0.6"
-rust-embed = "6"
+i18n-embed = { version = "0.15", features = [
+    "fluent-system",
+    "desktop-requester",
+] }
+i18n-embed-fl = "0.9"
+
 icu_collator = "1.5"
 icu_provider = { version = "1.5", features = ["sync"] }
+indexmap = "2.9.0"
+itoa = "1.0.15"
+kdl = "6.3.4"
+lazy_static = "1"
+num-derive = "0.4.2"
+num-traits = "0.2.19"
+pwd = "1.4.0"
+pwhash = "1.0.0"
+regex = "1"
+ron = "0.10.1"
+rust-embed = "8"
+rustix = { version = "1.0.7", features = ["process"] }
+secure-string = "0.3.0"
+serde = { version = "1.0.219", features = ["derive"] }
+slab = "0.4.9"
+slotmap = "1.0.7"
+tokio = { version = "1", features = ["sync"] }
+tracing = "0.1.41"
+tracing-subscriber = "0.3.19"
+url = "2.5.4"
+xkb-data = "0.2.1"
+zbus = "5"
+zbus_polkit = "5.0.0"
+
+[dependencies.accounts-zbus]
+git = "https://github.com/pop-os/dbus-settings-bindings"
+
+[dependencies.cosmic-comp-config]
+git = "https://github.com/pop-os/cosmic-comp"
+
+[dependencies.cosmic-randr-shell]
+git = "https://github.com/pop-os/cosmic-randr"
+
+[dependencies.cosmic-settings-subscriptions]
+git = "https://github.com/pop-os/cosmic-settings-subscriptions"
+default-features = false
+features = ["accessibility", "network_manager"]
+
+[dependencies.image]
+version = "0.25.6"
+default-features = false
+features = ["png"]
 
 [dependencies.libcosmic]
 git = "https://github.com/pop-os/libcosmic.git"
 default-features = false
-features = ["tokio", "winit"]
+features = ["tokio", "winit", "xdg-portal"]
+
+[dependencies.locale1]
+git = "https://github.com/pop-os/dbus-settings-bindings"
+
+[dependencies.locales-rs]
+git = "https://github.com/AerynOS/locales-rs"
+
+[dependencies.sctk]
+git = "https://github.com/smithay/client-toolkit/"
+package = "smithay-client-toolkit"
 
 [features]
 default = ["a11y", "wgpu"]
@@ -32,8 +90,18 @@ wgpu = ["libcosmic/wgpu"]
 inherits = "release"
 debug = true
 
+[profile.release]
+lto = "thin"
+
 [workspace]
 members = ["geonames"]
+
+[patch."https://github.com/smithay/client-toolkit.git"]
+sctk = { package = "smithay-client-toolkit", version = "=0.19.2" }
+
+[patch.'https://github.com/pop-os/cosmic-protocols']
+cosmic-protocols = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "4f05331" }
+cosmic-client-toolkit = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "4f05331" }
 
 # [patch.'https://github.com/pop-os/libcosmic.git']
 # libcosmic = { path = "../libcosmic" }
