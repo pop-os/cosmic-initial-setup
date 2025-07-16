@@ -11,6 +11,7 @@ use std::io::Read;
 use std::path::{Path, PathBuf};
 
 struct Layout {
+    id: i32,
     names: BTreeMap<String, String>,
     path: PathBuf,
     icon_path: PathBuf,
@@ -93,15 +94,26 @@ impl super::Page for Page {
             };
 
             let mut names = BTreeMap::new();
+            let mut id = -1;
 
             for node in document.nodes() {
-                if node.name().value() == "name" {
-                    for entry in node.entries() {
-                        let locale = entry.name().map_or("en", |ident| ident.value());
-                        if let KdlValue::String(name) = entry.value() {
-                            names.insert(locale.to_owned(), name.to_owned());
+                match node.name().value() {
+                    "name" => {
+                        for entry in node.entries() {
+                            let locale = entry.name().map_or("en", |ident| ident.value());
+                            if let KdlValue::String(name) = entry.value() {
+                                names.insert(locale.to_owned(), name.to_owned());
+                            }
                         }
                     }
+
+                    "id" => {
+                        if let Some(KdlValue::Integer(value)) = node.get(0) {
+                            id = *value as i32;
+                        }
+                    }
+
+                    _ => (),
                 }
             }
 
@@ -112,11 +124,14 @@ impl super::Page for Page {
             }
 
             self.layouts.push(Layout {
+                id,
                 names,
                 path,
                 icon_path,
             })
         }
+
+        self.layouts.sort_by(|a, b| a.id.cmp(&b.id));
 
         cosmic::Task::none()
     }
