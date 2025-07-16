@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+getent passwd cosmic-initial-setup >/dev/null || adduser --system --force-badname --quiet \
+    --home /run/cosmic-initial-setup/ --no-create-home --shell /bin/bash cosmic-initial-setup
+#DEBHELPER#
+exit 0

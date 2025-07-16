@@ -5,12 +5,30 @@ rootdir := ''
 prefix := '/usr'
 
 base-dir := absolute_path(clean(rootdir / prefix))
-
-export INSTALL_DIR := base-dir / 'share'
-
 cargo-target-dir := env('CARGO_TARGET_DIR', 'target')
 bin-src := cargo-target-dir / 'release' / name
 bin-dst := base-dir / 'bin' / name
+icons-dir := base-dir / 'share' / 'icons' / 'hicolor' / 'scalable' / 'apps'
+
+polkit-rules-src := 'res' / '20-cosmic-initial-setup.rules'
+polkit-rules-dst := base-dir / 'share' / 'polkit-1' / 'rules.d' / '20-cosmic-initial-setup.rules'
+
+desktop-entry := APPID + '.desktop'
+desktop-src := 'res' / desktop-entry
+desktop-dst := base-dir / 'share' / 'applications' / desktop-entry
+
+icon-src := 'res' / 'icon.svg'
+icon-dst := icons-dir / APPID + '.svg'
+
+autostart-entry := APPID + '.Autostart.desktop'
+autostart-src := 'res' / autostart-entry
+autostart-dst := rootdir / 'etc' / 'xdg' / 'autostart' / desktop-entry
+
+layouts-src := 'res' / 'layouts'
+layouts-dst := base-dir / 'share' / 'cosmic-layouts'
+
+themes-src := 'res' / 'themes'
+themes-dst := base-dir / 'share' / 'cosmic' / 'cosmic-themes'
 
 # Default recipe which runs `just build-release`
 default: build-release
@@ -56,12 +74,29 @@ run *args:
     env RUST_LOG=cosmic_initial_setup=info RUST_BACKTRACE=full cargo run --release {{args}}
 
 # Installs files
-install:
+install: install-themes install-layouts
     install -Dm0755 {{bin-src}} {{bin-dst}}
+    install -Dm0644 {{icon-src}} {{icon-dst}}
+    install -Dm0644 {{desktop-src}} {{desktop-dst}}
+    install -Dm0644 {{autostart-src}} {{autostart-dst}}
+    install -Dm0644 {{polkit-rules-src}} {{polkit-rules-dst}}
+
+
+install-layouts:
+    rm -rf {{layouts-dst}}
+    cp -rp {{layouts-src}} {{layouts-dst}}
+
+install-themes:
+    #!/bin/sh
+    set -ex
+    mkdir -p {{themes-dst}}
+    for theme in $(find {{themes-src}} -type f); do
+        install -Dm0644 ${theme} {{themes-dst}}
+    done
 
 # Uninstalls installed files
 uninstall:
-    rm {{bin-dst}}
+    rm -rf {{desktop-dst}} {{polkit-rules-dst}} {{icon-dst}} {{themes-dst}} {{layouts-dst}} {{bin-dst}}
 
 # Vendor dependencies locally
 vendor:
