@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Initial Setup
+Name[hu]=Első Beállítás
 Icon=com.system76.CosmicInitialSetup
 Exec=cosmic-initial-setup
 Terminal=false
