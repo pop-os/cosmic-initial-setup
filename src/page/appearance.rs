@@ -246,7 +246,6 @@ impl page::Page for Page {
 
         let description = widget::text::body(fl!("appearance-page", "description"))
             .align_x(cosmic::iced::Alignment::Center)
-            .apply(widget::container)
             .width(Length::Fill);
 
         widget::column::with_capacity(2)

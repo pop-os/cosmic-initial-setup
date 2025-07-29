@@ -33,16 +33,18 @@ impl super::Page for Page {
 
         let description = widget::text::body(fl!("new-apps-page", "description"))
             .align_x(cosmic::iced::Alignment::Center)
-            .apply(widget::container)
             .width(Length::Fill);
 
-        let screenshot = widget::image(&*SCREENSHOT);
+        let screenshot = widget::image(&*SCREENSHOT)
+            .width(Length::Fill)
+            .filter_method(image::FilterMethod::Nearest);
 
         widget::column::with_capacity(2)
             .push(description)
             .push(screenshot)
             .align_x(Alignment::Center)
             .spacing(space_s)
+            .padding(0)
             .into()
     }
 }

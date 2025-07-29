@@ -128,7 +128,7 @@ pub trait Page {
     }
 
     fn width(&self) -> f32 {
-        480.0
+        640.0
     }
 
     fn completed(&self) -> bool {

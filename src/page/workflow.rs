@@ -29,20 +29,21 @@ impl super::Page for Page {
     }
 
     fn view(&self) -> cosmic::Element<super::Message> {
-        let cosmic_theme::Spacing { space_xl, .. } = cosmic::theme::active().cosmic().spacing;
+        let cosmic_theme::Spacing { space_s, .. } = cosmic::theme::active().cosmic().spacing;
 
         let description = widget::text::body(fl!("workflow-page", "description"))
             .align_x(cosmic::iced::Alignment::Center)
-            .apply(widget::container)
             .width(Length::Fill);
 
-        let screenshot = widget::image(&*SCREENSHOT);
+        let screenshot = widget::image(&*SCREENSHOT)
+            .width(Length::Fill)
+            .filter_method(image::FilterMethod::Nearest);
 
         widget::column::with_capacity(2)
             .push(description)
             .push(screenshot)
             .align_x(Alignment::Center)
-            .spacing(space_xl)
+            .spacing(space_s)
             .into()
     }
 }

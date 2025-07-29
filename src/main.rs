@@ -386,7 +386,7 @@ impl Application for App {
             .view()
             .map(Message::PageMessage)
             .apply(widget::container)
-            .height(406.0);
+            .height(Length::Fill);
 
         widget::column::with_capacity(7)
             .push(widget::Space::with_height(space_xl))
@@ -397,6 +397,7 @@ impl Application for App {
             .push(button_row)
             .push(widget::Space::with_height(space_l))
             .max_width(page.width())
+            .width(page.width())
             .align_x(Alignment::Center)
             .apply(widget::container)
             .center_x(Length::Fill)
