@@ -35,9 +35,7 @@ impl super::Page for Page {
             .align_x(cosmic::iced::Alignment::Center)
             .width(Length::Fill);
 
-        let screenshot = widget::image(&*SCREENSHOT)
-            .width(Length::Fill)
-            .filter_method(image::FilterMethod::Nearest);
+        let screenshot = widget::image(&*SCREENSHOT).filter_method(image::FilterMethod::Linear);
 
         widget::column::with_capacity(2)
             .push(description)

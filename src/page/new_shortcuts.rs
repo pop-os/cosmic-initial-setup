@@ -37,7 +37,7 @@ impl super::Page for Page {
 
         let screenshot = widget::image(&*SCREENSHOT)
             .width(Length::Fill)
-            .filter_method(image::FilterMethod::Nearest);
+            .filter_method(image::FilterMethod::Linear);
 
         widget::column::with_capacity(2)
             .push(description)
