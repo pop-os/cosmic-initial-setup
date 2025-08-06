@@ -1,19 +1,24 @@
 use crate::fl;
-use bytes::Bytes;
 use cosmic::{
-    Apply, cosmic_theme,
+    cosmic_theme,
     iced::{Alignment, Length},
-    widget::{self, image},
+    widget,
 };
-use std::{any::Any, sync::LazyLock};
+use std::any::Any;
 
-static SCREENSHOT: LazyLock<image::Handle> = LazyLock::new(|| {
-    let embedded_bytes = include_bytes!("../../res/new-shortcuts.png");
-    image::Handle::from_bytes(Bytes::from_static(embedded_bytes))
-});
+static SCREENSHOT: &'static [u8] = include_bytes!("../../res/new-shortcuts.svg");
 
-#[derive(Default)]
-pub struct Page;
+pub struct Page {
+    handle: widget::svg::Handle,
+}
+
+impl Default for Page {
+    fn default() -> Self {
+        Self {
+            handle: widget::svg::Handle::from_memory(SCREENSHOT),
+        }
+    }
+}
 
 impl super::Page for Page {
     fn title(&self) -> String {
@@ -35,13 +40,9 @@ impl super::Page for Page {
             .align_x(cosmic::iced::Alignment::Center)
             .width(Length::Fill);
 
-        let screenshot = widget::image(&*SCREENSHOT)
-            .width(Length::Fill)
-            .filter_method(image::FilterMethod::Linear);
-
         widget::column::with_capacity(2)
             .push(description)
-            .push(screenshot)
+            .push(widget::svg(self.handle.clone()).width(Length::Fill))
             .align_x(Alignment::Center)
             .spacing(space_s)
             .into()
