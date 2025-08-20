@@ -20,7 +20,6 @@ i18n-embed = { version = "0.15", features = [
     "desktop-requester",
 ] }
 i18n-embed-fl = "0.9"
-
 icu_collator = "1.5"
 icu_provider = { version = "1.5", features = ["sync"] }
 indexmap = "2.9.0"
@@ -69,7 +68,7 @@ features = ["png"]
 [dependencies.libcosmic]
 git = "https://github.com/pop-os/libcosmic.git"
 default-features = false
-features = ["tokio", "winit", "xdg-portal"]
+features = ["dbus-config", "single-instance", "tokio", "winit", "xdg-portal"]
 
 [dependencies.locale1]
 git = "https://github.com/pop-os/dbus-settings-bindings"
@@ -99,9 +98,9 @@ members = ["geonames"]
 [patch."https://github.com/smithay/client-toolkit.git"]
 sctk = { package = "smithay-client-toolkit", version = "=0.19.2" }
 
-[patch.'https://github.com/pop-os/cosmic-protocols']
-cosmic-protocols = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "4f05331" }
-cosmic-client-toolkit = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "4f05331" }
+# [patch.'https://github.com/pop-os/cosmic-protocols']
+# cosmic-protocols = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "4f05331" }
+# cosmic-client-toolkit = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "4f05331" }
 
 # [patch.'https://github.com/pop-os/libcosmic.git']
 # libcosmic = { path = "../libcosmic" }
