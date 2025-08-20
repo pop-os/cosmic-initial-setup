@@ -2,7 +2,8 @@
 Type=Application
 Name=COSMIC Initial Setup
 Name[hu]=COSMIC Első Beállítás
-Exec=cosmic-initial-Setup
-ExecCondition=unless-exists ./config/cosmic-initial-setup-done
+Exec=cosmic-initial-setup
 NoDisplay=true
+Terminal=false
+StartupNotify=true
 OnlyShowIn=COSMIC
