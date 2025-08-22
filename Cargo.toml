@@ -77,7 +77,7 @@ git = "https://github.com/pop-os/dbus-settings-bindings"
 git = "https://github.com/AerynOS/locales-rs"
 
 [dependencies.sctk]
-git = "https://github.com/smithay/client-toolkit/"
+version = "0.19.2"
 package = "smithay-client-toolkit"
 
 [features]
@@ -95,12 +95,12 @@ lto = "thin"
 [workspace]
 members = ["geonames"]
 
-[patch."https://github.com/smithay/client-toolkit.git"]
-sctk = { package = "smithay-client-toolkit", version = "=0.19.2" }
+# [patch."https://github.com/smithay/client-toolkit.git"]
+# sctk = { package = "smithay-client-toolkit", version = "=0.19.2" }
 
-# [patch.'https://github.com/pop-os/cosmic-protocols']
-# cosmic-protocols = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "4f05331" }
-# cosmic-client-toolkit = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "4f05331" }
+[patch.'https://github.com/pop-os/cosmic-protocols']
+cosmic-protocols = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "8e84152f" }
+cosmic-client-toolkit = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "8e84152f" }
 
 # [patch.'https://github.com/pop-os/libcosmic.git']
 # libcosmic = { path = "../libcosmic" }

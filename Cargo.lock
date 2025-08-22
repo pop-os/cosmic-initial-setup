@@ -1063,9 +1063,10 @@ dependencies = [
 [[package]]
 name = "cosmic-client-toolkit"
 version = "0.1.0"
-source = "git+https://github.com/pop-os/cosmic-protocols?rev=178eb0b#178eb0b14a0e5c192f64f6dee6c40341a8e5ee51"
+source = "git+https://github.com/pop-os/cosmic-protocols//?rev=8e84152f#8e84152fedf350d2756a2c1c90e07313acb9cdf6"
 dependencies = [
- "cosmic-protocols 0.1.0 (git+https://github.com/pop-os/cosmic-protocols?rev=178eb0b)",
+ "bitflags 2.9.3",
+ "cosmic-protocols",
  "libc",
  "smithay-client-toolkit",
  "wayland-client",
@@ -1075,7 +1076,7 @@ dependencies = [
 [[package]]
 name = "cosmic-comp-config"
 version = "0.1.0"
-source = "git+https://github.com/pop-os/cosmic-comp#e54f4b4963294cf11891dc3c8bf983d39d1aedf8"
+source = "git+https://github.com/pop-os/cosmic-comp#4a385d55354f3b3ca3a994d24d165e127dad8179"
 dependencies = [
  "cosmic-config",
  "input",
@@ -1155,7 +1156,7 @@ dependencies = [
  "accounts-zbus",
  "bytes",
  "cosmic-comp-config",
- "cosmic-protocols 0.1.0 (git+https://github.com/pop-os/cosmic-protocols)",
+ "cosmic-protocols",
  "cosmic-randr-shell",
  "cosmic-settings-subscriptions",
  "crabtime",
@@ -1202,21 +1203,7 @@ dependencies = [
 [[package]]
 name = "cosmic-protocols"
 version = "0.1.0"
-source = "git+https://github.com/pop-os/cosmic-protocols?rev=178eb0b#178eb0b14a0e5c192f64f6dee6c40341a8e5ee51"
-dependencies = [
- "bitflags 2.9.3",
- "wayland-backend",
- "wayland-client",
- "wayland-protocols",
- "wayland-protocols-wlr",
- "wayland-scanner",
- "wayland-server",
-]
-
-[[package]]
-name = "cosmic-protocols"
-version = "0.1.0"
-source = "git+https://github.com/pop-os/cosmic-protocols#8e84152fedf350d2756a2c1c90e07313acb9cdf6"
+source = "git+https://github.com/pop-os/cosmic-protocols//?rev=8e84152f#8e84152fedf350d2756a2c1c90e07313acb9cdf6"
 dependencies = [
  "bitflags 2.9.3",
  "wayland-backend",
