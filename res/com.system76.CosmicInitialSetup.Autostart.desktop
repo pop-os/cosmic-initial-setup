@@ -2,6 +2,7 @@
 Type=Application
 Name=COSMIC Initial Setup
 Name[hu]=COSMIC Első Beállítás
+Name[pt]=Ajustes Iniciais do COSMIC
 Exec=cosmic-initial-setup
 NoDisplay=true
 Terminal=false
