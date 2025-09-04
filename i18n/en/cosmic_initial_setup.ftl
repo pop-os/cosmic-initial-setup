@@ -63,7 +63,7 @@ new-shortcuts-page = New Keyboard Shortcuts
 # WorkflowPage
 workflow-page = Workspaces for Your Workflow
     .description = Float or automatically tile windows per-workspace using the tiling applet.
-        You can select vertical or horizontal workspaces, and pin them in the overview to make them static.
+        You can select vertical or horizontal workspaces. You can also pin workspaces to make them static.
 
 # LauncherPage
 launcher-page = Fast and Efficient
