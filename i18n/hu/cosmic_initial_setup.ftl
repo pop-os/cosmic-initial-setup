@@ -22,13 +22,13 @@ welcome-page = Üdvözlünk
         Super + egérgörgő
 
 # SelectLanguagePage
-select-language-page = Válassz egy nyelvet
+select-language-page = Válassz nyelvet
 
 # SelectKeyboardLayoutPage
-keyboard-layout-page = Válassz egy billentyűzetkiosztást
+keyboard-layout-page = Válassz billentyűzetkiosztást
 
 # CreateAccountPage
-create-account-page = Fiók létrehozása
+create-account-page = Hozd létre a fiókodat
     .full-name = Teljes név
     .user-name = Felhasználónév
     .user-name-note = Ez lesz a saját mappád neve, ez később nem módosítható.
@@ -49,7 +49,7 @@ appearance-page = Megjelenés testreszabása
 # LayoutPage
 layout-page = Elrendezés beállítása
     .bottom-panel = Alsó panel
-    .top-panel-and-dock = Felső panel és a dokkoló
+    .top-panel-and-dock = Felső panel és a dokk
     .description = Helyezd át a panelt vagy a dokkot bármelyik képernyőszélre, módosítsd méretüket, és állítsd be az automatikus elrejtést a Beállításokban.
 
 # SystemAppsPage
@@ -61,9 +61,9 @@ new-shortcuts-page = Új billentyűparancsok
     .description = Használd a Shift+Super+nyilakat, vagy húzd az egeret az ablakok mozgatásához. Használd ki az automatikus ablakcsempézés vizuális segítségeit.
 
 # WorkflowPage
-workflow-page = Munkaterületek a munkafolyamatához
+workflow-page = Munkaterületek a munkafolyamatodhoz
     .description = Lebegtesd vagy automatikusan csempézd az ablakokat munkaterületenként a csempézés kisalkalmazással.
-        Választhatsz függőleges vagy vízszintes munkaterületeket is, és rögzítheted azokat az áttekintésben, hogy statikussá váljanak.
+        Választhatsz függőleges vagy vízszintes munkaterületeket. Rögzítheted azokat az áttekintésben, hogy statikussá váljanak.
 
 # LauncherPage
 launcher-page = Gyors és hatékony
@@ -71,19 +71,19 @@ launcher-page = Gyors és hatékony
 
 # WirelessPage
 
-wireless-page = Csatlakozás a hálózathoz
-   .explain = Ha csatlakozol egy hálózathoz, megkapod a legfrissebb rendszer- és biztonsági frissítéseket.
+wireless-page = Csatlakozz a hálózathoz
+    .explain = Ha csatlakozol egy hálózathoz, megkapod a legfrissebb rendszer- és biztonsági frissítéseket.
     .airplane-mode = A repülőgép üzemmód be van kapcsolva.
     .connect = Kapcsolódás
     .connected = Kapcsolódva
     .connecting = Kapcsolódás...
-    .disconnect = Lecsatlakozás
+    .disconnect = Szétkapcsolás
     .forget = Elfelejtés
     .no-networks = Nem található hálózat.
     .known-networks = Ismert hálózatok
     .visible-networks = Látható hálózatok
 
-auth-dialog = Azonosítás szükséges
+auth-dialog = Hitelesítés szükséges
     .wifi-description = Írd be a jelszót vagy a titkosítókulcsot. A router „WPS” gombjának megnyomásával is csatlakozhatsz.
 
 forget-dialog = El akarod felejteni ezt a Wi-Fi hálózatot?
