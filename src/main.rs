@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 use std::any::TypeId;
+use std::path::Path;
 
 use cosmic::{
     Application, Apply, Element,
@@ -27,6 +28,12 @@ const GNOME_SETUP_DONE_PATH: &str = ".config/gnome-initial-setup-done";
 /// Runs application with these settings
 #[rustfmt::skip]
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    if let Some(file_path) = option_env!("DISABLE_IF_EXISTS") {
+        if Path::new(file_path).exists() {
+            return Ok(());
+        }
+    }
+
     #[allow(deprecated)]
     let home_dir = std::env::home_dir().unwrap();
 
