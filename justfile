@@ -1,6 +1,6 @@
 name := 'cosmic-initial-setup'
 export APPID := 'com.system76.CosmicInitialSetup'
-export DISABLE_IF_EXISTS := '/cdrom/casper/filesystem.squashfs'
+export DISABLE_IF_EXISTS := env('DISABLE_IF_EXISTS', '/cdrom/casper/filesystem.squashfs')
 
 rootdir := ''
 prefix := '/usr'
