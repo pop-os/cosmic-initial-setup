@@ -89,7 +89,7 @@ impl page::Page for Page {
         cosmic::task::batch(tasks)
     }
 
-    fn view(&self) -> Element<page::Message> {
+    fn view(&self) -> Element<'_, page::Message> {
         let screen_reader = widget::settings::item::builder(fl!("welcome-page", "screen-reader"))
             .toggler(self.reader_enabled, |enable| {
                 Message::ScreenReaderEnabled(enable).into()

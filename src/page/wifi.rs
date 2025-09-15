@@ -54,7 +54,7 @@ impl super::Page for Page {
         true
     }
 
-    fn view(&self) -> Element<super::Message> {
+    fn view(&self) -> Element<'_, super::Message> {
         let Some(NmState { ref state, .. }) = self.nm_state else {
             return cosmic::widget::column().into();
         };
@@ -233,7 +233,7 @@ impl super::Page for Page {
             .map(super::Message::WiFi)
     }
 
-    fn dialog(&self) -> Option<Element<super::Message>> {
+    fn dialog(&self) -> Option<Element<'_, super::Message>> {
         self.dialog.as_ref().map(|dialog| match dialog {
             WiFiDialog::Password {
                 password,

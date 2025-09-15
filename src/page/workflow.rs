@@ -33,7 +33,7 @@ impl super::Page for Page {
         true
     }
 
-    fn view(&self) -> cosmic::Element<super::Message> {
+    fn view(&self) -> cosmic::Element<'_, super::Message> {
         let cosmic_theme::Spacing { space_s, .. } = cosmic::theme::active().cosmic().spacing;
 
         let description = widget::text::body(fl!("workflow-page", "description"))

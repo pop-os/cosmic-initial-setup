@@ -1,5 +1,5 @@
 use cosmic::{
-    Apply, Element, Task,
+    Element, Task,
     cosmic_config::{Config, ConfigSet, CosmicConfigEntry},
     cosmic_theme::{self, ThemeBuilder, ThemeMode},
     iced::{Alignment, Length},
@@ -214,7 +214,7 @@ impl page::Page for Page {
         true
     }
 
-    fn view(&self) -> Element<page::Message> {
+    fn view(&self) -> Element<'_, page::Message> {
         let cosmic_theme::Spacing {
             space_s,
             space_m,

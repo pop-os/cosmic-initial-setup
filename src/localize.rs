@@ -1,48 +1,27 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-use std::str::FromStr;
-
 use i18n_embed::{
     DefaultLocalizer, LanguageLoader, LanguageRequester, Localizer,
     fluent::{FluentLanguageLoader, fluent_language_loader},
     unic_langid::LanguageIdentifier,
 };
-use icu_collator::{Collator, CollatorOptions, Numeric};
-use icu_provider::DataLocale;
 use rust_embed::RustEmbed;
+use std::str::FromStr;
+use std::sync::LazyLock;
 
 #[derive(RustEmbed)]
 #[folder = "i18n/"]
 struct Localizations;
 
-lazy_static::lazy_static! {
-    pub static ref LANGUAGE_LOADER: FluentLanguageLoader = {
-        let loader: FluentLanguageLoader = fluent_language_loader!();
+pub static LANGUAGE_LOADER: LazyLock<FluentLanguageLoader> = LazyLock::new(|| {
+    let loader: FluentLanguageLoader = fluent_language_loader!();
 
-        loader
-            .load_fallback_language(&Localizations)
-            .expect("Error while loading fallback language");
+    loader
+        .load_fallback_language(&Localizations)
+        .expect("Error while loading fallback language");
 
-        loader
-    };
-}
-
-lazy_static::lazy_static! {
-    pub static ref LANGUAGE_SORTER: Collator = {
-    let mut options = CollatorOptions::new();
-    options.numeric = Some(Numeric::On);
-
-    DataLocale::from_str(&LANGUAGE_LOADER.current_language().to_string())
-            .or_else(|_| DataLocale::from_str(&LANGUAGE_LOADER.fallback_language().to_string()))
-            .ok()
-            .and_then(|locale| Collator::try_new(&locale, options).ok())
-            .or_else(|| {
-                let locale = DataLocale::from_str("en-US").expect("en-US is a valid BCP-47 tag");
-                Collator::try_new(&locale, options).ok()
-            })
-            .expect("Creating a collator from the system's current language, the fallback language, or American English should succeed")
-        };
-}
+    loader
+});
 
 #[macro_export]
 macro_rules! fl {

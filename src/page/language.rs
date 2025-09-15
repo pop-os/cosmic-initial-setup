@@ -255,7 +255,7 @@ impl super::Page for Page {
         !self.selected.is_null()
     }
 
-    fn view(&self) -> Element<page::Message> {
+    fn view(&self) -> Element<'_, page::Message> {
         let cosmic_theme::Spacing {
             space_xxs, space_m, ..
         } = theme::active().cosmic().spacing;

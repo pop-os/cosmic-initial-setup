@@ -1,5 +1,5 @@
 use cosmic::{
-    Apply, Element, cosmic_theme,
+    Element, cosmic_theme,
     iced::{Alignment, Length},
     theme, widget,
 };
@@ -33,7 +33,7 @@ impl page::Page for Page {
         true
     }
 
-    fn view(&self) -> Element<page::Message> {
+    fn view(&self) -> Element<'_, page::Message> {
         let cosmic_theme::Spacing { space_s, .. } = theme::active().cosmic().spacing;
 
         widget::column::with_children(vec![
