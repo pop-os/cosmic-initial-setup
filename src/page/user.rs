@@ -105,7 +105,7 @@ impl super::Page for Page {
         self.user_info_complete
     }
 
-    fn view(&self) -> Element<super::Message> {
+    fn view(&self) -> Element<'_, super::Message> {
         let profile_image_selector = {
             let profile_icon_handle = self
                 .profile_icon

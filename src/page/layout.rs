@@ -1,8 +1,8 @@
 use crate::fl;
 use cosmic::{
-    Apply, cosmic_theme,
+    cosmic_theme,
     iced::{Alignment, Length},
-    widget::{self, image},
+    widget,
 };
 use kdl::{KdlDocument, KdlValue};
 use std::any::Any;
@@ -144,7 +144,7 @@ impl super::Page for Page {
         cosmic::Task::none()
     }
 
-    fn view(&self) -> cosmic::Element<super::Message> {
+    fn view(&self) -> cosmic::Element<'_, super::Message> {
         let cosmic_theme::Spacing {
             space_s, space_m, ..
         } = cosmic::theme::active().cosmic().spacing;

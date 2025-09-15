@@ -329,14 +329,14 @@ impl Application for App {
         Task::none()
     }
 
-    fn dialog(&self) -> Option<Element<Self::Message>> {
+    fn dialog(&self) -> Option<Element<'_, Self::Message>> {
         self.pages[self.page_i]
             .dialog()
             .map(|dialog| dialog.map(Message::PageMessage))
     }
 
     /// Creates a view after each update.
-    fn view(&self) -> Element<Message> {
+    fn view(&self) -> Element<'_, Message> {
         let cosmic_theme::Spacing {
             space_xxs,
             space_m,
