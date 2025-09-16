@@ -81,11 +81,6 @@ impl page::Page for Page {
             page::Message::from(Message::UpdateDisplayList(Arc::new(list)))
         }));
 
-        // Enable the screen reader on startup.
-        tasks.push(cosmic::Task::done(
-            Message::ScreenReaderEnabled(true).into(),
-        ));
-
         cosmic::task::batch(tasks)
     }
 
