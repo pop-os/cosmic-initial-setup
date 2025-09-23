@@ -21,9 +21,10 @@ desktop-dst := base-dir / 'share' / 'applications' / desktop-entry
 icon-src := 'res' / 'icon.svg'
 icon-dst := icons-dir / APPID + '.svg'
 
+xdg-dir := env('XDG_INSTALL_DIR', 'etc' / 'xdg')
 autostart-entry := APPID + '.Autostart.desktop'
 autostart-src := 'res' / autostart-entry
-autostart-dst := rootdir / 'etc' / 'xdg' / 'autostart' / desktop-entry
+autostart-dst := rootdir / xdg-dir / 'autostart' / desktop-entry
 
 layouts-src := 'res' / 'layouts'
 layouts-dst := base-dir / 'share' / 'cosmic-layouts'
