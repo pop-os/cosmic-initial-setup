@@ -6,3 +6,4 @@
 /target/
 /vendor.tar
 /vendor/
+.distro_config.env

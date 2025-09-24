@@ -64,7 +64,8 @@ impl super::Page for Page {
     }
 
     fn init(&mut self) -> cosmic::Task<super::Message> {
-        let Ok(layouts_dir) = std::fs::read_dir("/usr/share/cosmic-layouts/") else {
+        let build_time_dir: Option<&'static str> = option_env!("COSMIC_LAYOUTS_DIR");
+        let Ok(layouts_dir) = std::fs::read_dir(build_time_dir.unwrap_or("/usr/share/cosmic-layouts/")) else {
             return cosmic::Task::none();
         };
 

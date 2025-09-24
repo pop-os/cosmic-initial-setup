@@ -1,35 +1,50 @@
+set dotenv-load
+set dotenv-filename := ".distro_config.env"
+
 name := 'cosmic-initial-setup'
 export APPID := 'com.system76.CosmicInitialSetup'
 export DISABLE_IF_EXISTS := env('DISABLE_IF_EXISTS', '/cdrom/casper/filesystem.squashfs')
 
-rootdir := ''
 prefix := '/usr'
 
-base-dir := absolute_path(clean(rootdir / prefix))
+# Settings that can be overridden/managed by configure.py
+build-jobs := if env('DISTRO_JOBS') == '0' { 'default' } else { env('DISTRO_JOBS') }
+install-dir := env('DISTRO_INSTALLDIR', '')
+bin-dir := env('DISTRO_BINDIR', prefix / 'bin')
+data-dir := env('DISTRO_DATADIR', prefix / 'share')
+sysconf-dir := env('DISTRO_SYSCONFDIR', 'etc')
+xdg-dir := env('DISTRO_XDGDIR', sysconf-dir / 'xdg')
+polkit-dir := env('DISTRO_POLKITDIR', data-dir / 'polkit-1')
+
 cargo-target-dir := env('CARGO_TARGET_DIR', 'target')
 bin-src := cargo-target-dir / 'release' / name
-bin-dst := base-dir / 'bin' / name
-icons-dir := base-dir / 'share' / 'icons' / 'hicolor' / 'scalable' / 'apps'
+bin-dst := install-dir / bin-dir / name
+icons-dir := data-dir / 'icons' / 'hicolor' / 'scalable' / 'apps'
 
 polkit-rules-src := 'res' / '20-cosmic-initial-setup.rules'
-polkit-rules-dst := base-dir / 'share' / 'polkit-1' / 'rules.d' / '20-cosmic-initial-setup.rules'
+polkit-rules-dst := install-dir / polkit-dir / 'rules.d' / '20-cosmic-initial-setup.rules'
 
 desktop-entry := APPID + '.desktop'
 desktop-src := 'res' / desktop-entry
-desktop-dst := base-dir / 'share' / 'applications' / desktop-entry
+desktop-dst := install-dir / data-dir / 'applications' / desktop-entry
 
 icon-src := 'res' / 'icon.svg'
-icon-dst := icons-dir / APPID + '.svg'
+icon-dst := install-dir / icons-dir / APPID + '.svg'
 
 autostart-entry := APPID + '.Autostart.desktop'
 autostart-src := 'res' / autostart-entry
-autostart-dst := rootdir / 'etc' / 'xdg' / 'autostart' / desktop-entry
+autostart-dst := install-dir / xdg-dir / 'autostart' / desktop-entry
 
 layouts-src := 'res' / 'layouts'
-layouts-dst := base-dir / 'share' / 'cosmic-layouts'
+layouts-dir := data-dir / 'cosmic-layouts'
+layouts-dst := install-dir / layouts-dir
+
+export COSMIC_LAYOUTS_DIR := layouts-dir
 
 themes-src := 'res' / 'themes'
-themes-dst := base-dir / 'share' / 'cosmic' / 'cosmic-themes'
+themes-dst := install-dir / data-dir / 'cosmic' / 'cosmic-themes'
+
+export CARGO_BUILD_JOBS := build-jobs
 
 # Default recipe which runs `just build-release`
 default: build-release
