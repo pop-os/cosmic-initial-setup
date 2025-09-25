@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-export DESTDIR = debian/cosmic-initial-setup
+export DESTDIR = debian/tmp
 export VENDOR ?= 1
 
 %:
@@ -12,7 +12,7 @@ override_dh_auto_clean:
 	fi
 
 override_dh_auto_build:
-	just build-vendored
+	just disable-if-exists="/cdrom/casper/filesystem.squashfs" build-vendored
 
 override_dh_auto_install:
 	just rootdir=$(DESTDIR) install
