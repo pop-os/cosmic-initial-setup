@@ -28,3 +28,10 @@ Depends:
     ${misc:Depends},
     ${shlibs:Depends}
 Description: COSMIC Initial Setup
+
+Package: cosmic-initial-setup-casper
+Architecture: amd64 arm64
+Priority: extra
+Depends: casper
+Description: Disable COSMIC Initial Setup in casper
+ Disable COSMIC Initial Setup when running in a live system with casper
