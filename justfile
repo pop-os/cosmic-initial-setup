@@ -1,22 +1,29 @@
+set unstable
+
 name := 'cosmic-initial-setup'
 export APPID := 'com.system76.CosmicInitialSetup'
-export DISABLE_IF_EXISTS := env('DISABLE_IF_EXISTS', '/cdrom/casper/filesystem.squashfs')
 
 rootdir := ''
 prefix := '/usr'
+
+# An optional file that when set will prevent initial-setup from loading
+disable-if-exists := ''
+# Get the value from an environment variable if it was not passed to just command
+disable-if-exists-env := disable-if-exists || env('DISABLE_IF_EXISTS', '')
 
 base-dir := absolute_path(clean(rootdir / prefix))
 cargo-target-dir := env('CARGO_TARGET_DIR', 'target')
 bin-src := cargo-target-dir / 'release' / name
 bin-dst := base-dir / 'bin' / name
 icons-dir := base-dir / 'share' / 'icons' / 'hicolor' / 'scalable' / 'apps'
+app-dir := base-dir / 'share' / 'applications'
 
 polkit-rules-src := 'res' / '20-cosmic-initial-setup.rules'
 polkit-rules-dst := base-dir / 'share' / 'polkit-1' / 'rules.d' / '20-cosmic-initial-setup.rules'
 
 desktop-entry := APPID + '.desktop'
 desktop-src := 'res' / desktop-entry
-desktop-dst := base-dir / 'share' / 'applications' / desktop-entry
+desktop-dst := app-dir / desktop-entry
 
 icon-src := 'res' / 'icon.svg'
 icon-dst := icons-dir / APPID + '.svg'
@@ -47,7 +54,7 @@ clean-dist: clean clean-vendor
 
 # Compiles with debug profile
 build-debug *args:
-    cargo build {{args}}
+    env DISABLE_IF_EXISTS={{disable-if-exists-env}} cargo build {{args}}
 
 # Compiles with release profile
 build-release *args: (build-debug '--release' args)
@@ -81,7 +88,6 @@ install: install-themes install-layouts
     install -Dm0644 {{desktop-src}} {{desktop-dst}}
     install -Dm0644 {{autostart-src}} {{autostart-dst}}
     install -Dm0644 {{polkit-rules-src}} {{polkit-rules-dst}}
-
 
 install-layouts:
     rm -rf {{layouts-dst}}
