@@ -71,6 +71,7 @@ package = "smithay-client-toolkit"
 [features]
 default = ["a11y", "wgpu"]
 a11y = ["libcosmic/a11y"]
+nixos = []
 wgpu = ["libcosmic/wgpu"]
 
 [profile.release-with-debug]
