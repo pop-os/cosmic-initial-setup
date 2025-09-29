@@ -1,4 +1,5 @@
 use crate::fl;
+
 use cosmic::{
     cosmic_theme,
     iced::{Alignment, Length},
@@ -64,7 +65,11 @@ impl super::Page for Page {
     }
 
     fn init(&mut self) -> cosmic::Task<super::Message> {
-        let Ok(layouts_dir) = std::fs::read_dir("/usr/share/cosmic-layouts/") else {
+        #[cfg(feature = "nixos")]
+        let layouts_dir_path = "/run/current-system/sw/share/cosmic-layouts/";
+        #[cfg(not(feature = "nixos"))]
+        let layouts_dir_path = "/usr/share/cosmic-layouts/";
+        let Ok(layouts_dir) = std::fs::read_dir(layouts_dir_path) else {
             return cosmic::Task::none();
         };
 

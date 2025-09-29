@@ -1,10 +1,9 @@
 use cosmic::{
-    Element, Task,
     cosmic_config::{Config, ConfigSet, CosmicConfigEntry},
     cosmic_theme::{self, ThemeBuilder, ThemeMode},
     iced::{Alignment, Length},
     theme::{self, ThemeType},
-    widget,
+    widget, Element, Task,
 };
 use heck::ToTitleCase;
 use std::{collections::BTreeSet, sync::Arc};
@@ -96,7 +95,11 @@ impl Page {
             },
         ];
 
-        if let Ok(directory) = std::fs::read_dir("/usr/share/cosmic/cosmic-themes/") {
+        #[cfg(feature = "nixos")]
+        let themes_dir_path = "/run/current-system/sw/share/cosmic/cosmic-themes/";
+        #[cfg(not(feature = "nixos"))]
+        let themes_dir_path = "/usr/share/cosmic/cosmic-themes/";
+        if let Ok(directory) = std::fs::read_dir(themes_dir_path) {
             let mut extra_themes = BTreeSet::new();
             let mut buffer = Vec::with_capacity(8 * 1024);
             for entry in directory.filter_map(Result::ok) {
