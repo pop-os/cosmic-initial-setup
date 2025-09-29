@@ -29,7 +29,7 @@ layouts-src := 'res' / 'layouts'
 layouts-dst := base-dir / 'share' / 'cosmic-layouts'
 
 themes-src := 'res' / 'themes'
-themes-dst := base-dir / 'share' / 'cosmic' / 'cosmic-themes'
+themes-dst := base-dir / 'share' / 'cosmic-themes'
 
 # Default recipe which runs `just build-release`
 default: build-release

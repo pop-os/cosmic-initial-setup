@@ -96,9 +96,9 @@ impl Page {
         ];
 
         #[cfg(feature = "nixos")]
-        let themes_dir_path = "/run/current-system/sw/share/cosmic/cosmic-themes/";
+        let themes_dir_path = "/run/current-system/sw/share/cosmic-themes/";
         #[cfg(not(feature = "nixos"))]
-        let themes_dir_path = "/usr/share/cosmic/cosmic-themes/";
+        let themes_dir_path = "/usr/share/cosmic-themes/";
         if let Ok(directory) = std::fs::read_dir(themes_dir_path) {
             let mut extra_themes = BTreeSet::new();
             let mut buffer = Vec::with_capacity(8 * 1024);
