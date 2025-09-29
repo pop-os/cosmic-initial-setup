@@ -3,7 +3,6 @@ next = Siguiente
 cancel = Cancelar
 finish = Terminar
 identity = Identidad
-next = Siguiente
 password = Contraseña
 password-confirm = Confirmar Contraseña
 settings = Configuración
