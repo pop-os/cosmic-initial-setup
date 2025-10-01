@@ -1,0 +1,12 @@
+back = Tagasi
+cancel = Katkesta
+finish = Lõpeta
+identity = Identiteet
+next = Edasi
+password = Salasõna
+password-confirm = Korda salasõna
+settings = Seadistused
+skip = Jäta vahele
+skip-setup-and-close = Jäta algseadistamine vahele ja sulge
+type-to-search = Otsimiseks kirjuta midagi…
+wifi = WiFi
