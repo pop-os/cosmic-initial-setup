@@ -40,11 +40,6 @@ timezone-and-location-page = Zona horaria y ubicación
 # AppearancePage
 appearance-page = Personalización de apariencia
     .description = Puedes personalizar aún más los colores de acento y el aspecto de tu escritorio en la configuración de Apariencia.
-# LayoutPage
-layout-configuration-page = Configuración de la distribución
-    .bottom-panel = Panel inferior
-    .top-panel-and-dock = Panel superior y dock
-    .description = Mueve el panel o dock a cualquier borde, cambia su tamaño y ocúltalos automáticamente en la Configuración.
 # SystemAppsPage
 new-apps-page = Nuevas Aplicaciones del Sistema
     .description = Disfruta de una variedad de nuevas aplicaciones del sistema que vienen con el entorno de escritorio COSMIC; incluyendo Configuración, Tienda de Aplicaciones COSMIC, Archivos, Editor de Texto y Terminal.
