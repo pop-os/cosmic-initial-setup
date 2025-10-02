@@ -10,16 +10,6 @@ skip = Пропускане
 skip-setup-and-close = Пропускане и затваряне
 type-to-search = Въведете фраза за търсене…
 wifi = Wi-Fi
-# WelcomePage
-welcome = Добре дошли
-    .scale-options = Допълнителни опции за мащабиране
-    .screen-reader = Четец на екрана
-    .interface-size = Размер на интерфейса
-    .magnifier = Лупа
-    .magnifier-description =
-        Или може да използвате клавишни комбинации:
-        Super + = за увеличаване, Super + - за намаляване,
-        Super + придвижване с колелцето на мишката
 # SelectLanguagePage
 select-language-page = Език
 # SelectKeyboardLayoutPage
@@ -33,10 +23,6 @@ create-account-page = Създайте потребител
     .profile-add = Избор на снимка
     .invalid-username = Невалидно потребителско име.
     .password-mismatch = Паролите трябва да съвпадат.
-# LocationPage
-timezone-and-location = Часови пояс и местоположение
-    .search-the-closest-major-city = Въведете най-близкия голям град...
-    .geonames-attribution = Списъкът е подреден по население на града. Данни: geonames.org (с лиценз CC-BY-4.0).
 # AppearancePage
 appearance-page = Стилизирайте
     .description = Може допълнително да промените акцентните цветове и външния вид на работния си плот в настройките за външен вид.
@@ -62,17 +48,6 @@ launcher-page = Бързо и ефикасно
 
 # WirelessPage
 
-get-connected = Свържете се
-    .explain = Когато сте свързани, ще получавате най-новите обновления на системата и сигурността.
-    .airplane-mode = Самолетният режим е включен.
-    .connect = Свързване
-    .connected = Свързано
-    .connecting = Свързване…
-    .disconnect = Прекъсване
-    .forget = Забравяне
-    .no-networks = Няма намерени мрежи.
-    .known-networks = Познати мрежи
-    .visible-networks = Видими мрежи
 auth-dialog = Изисква се идентификация
     .wifi-description = Въведете паролата или ключа за шифриране. Може да се свържете и чрез натискане на бутона „WPS“ на рутера.
 forget-dialog = Забравяне на Wi-Fi мрежата?
