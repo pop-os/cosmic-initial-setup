@@ -61,6 +61,7 @@
               };
 
               cargoBuildFeatures = [ "nixos" ];
+              patches = [ ];
             };
           };
         };
