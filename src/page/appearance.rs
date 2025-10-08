@@ -1,9 +1,10 @@
 use cosmic::{
+    Element, Task,
     cosmic_config::{Config, ConfigSet, CosmicConfigEntry},
     cosmic_theme::{self, ThemeBuilder, ThemeMode},
     iced::{Alignment, Length},
     theme::{self, ThemeType},
-    widget, Element, Task,
+    widget,
 };
 use heck::ToTitleCase;
 use std::{collections::BTreeSet, sync::Arc};
