@@ -245,6 +245,7 @@ fn apply_layout(path: &Path) {
             // Copy layout to local config
             _ = std::process::Command::new("cp")
                 .arg("-r")
+                .arg("--no-preserve=all")
                 .arg(&path)
                 .arg(&config_dest_path)
                 .status();
