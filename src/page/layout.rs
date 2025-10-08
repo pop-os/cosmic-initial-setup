@@ -206,7 +206,7 @@ fn layout_button<'a>(
 
     let button = widget::button::custom_image_button(thumbnail, None)
         .class(cosmic::theme::Button::Image)
-        .selected(current.map_or(false, |current| current == id))
+        .selected(current == Some(id))
         .on_press(Message::Selected(id).into());
 
     widget::column::with_capacity(2)
