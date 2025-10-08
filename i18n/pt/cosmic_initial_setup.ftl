@@ -1,6 +1,6 @@
 back = Voltar
 cancel = Cancelar
-finish = Concluído
+finish = Concluir
 identity = Identidade
 next = Seguinte
 password = Palavra-passe

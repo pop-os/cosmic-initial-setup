@@ -1,0 +1,10 @@
+back = Tilbake
+cancel = Avbryt
+finish = Fullfør
+identity = Identitet
+next = Neste
+password = Passord
+password-confirm = Bekreft Passord
+settings = Innstillingar
+skip = Hopp over
+skip-setup-and-close = Hopp over oppsett og lukk
