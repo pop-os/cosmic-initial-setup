@@ -7,7 +7,7 @@ use cosmic::{
 };
 use kdl::{KdlDocument, KdlValue};
 use std::any::Any;
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, VecDeque};
 use std::io::Read;
 use std::path::{Path, PathBuf};
 
@@ -217,6 +217,41 @@ fn layout_button<'a>(
         .into()
 }
 
+fn copy_dir(src: &Path, dst: &Path) {
+    let mut dirs_to_copy = VecDeque::new();
+    dirs_to_copy.push_back((src.to_path_buf(), dst.to_path_buf()));
+
+    while let Some((src_dir, dst_dir)) = dirs_to_copy.pop_front() {
+        if let Err(why) = std::fs::create_dir_all(&dst_dir) {
+            tracing::error!(?dst_dir, ?why, "failed to create dir");
+            continue;
+        }
+
+        let Ok(dir) = src_dir.read_dir() else {
+            tracing::error!(?src_dir, "failed to read dir");
+            continue;
+        };
+
+        for entry in dir.filter_map(Result::ok) {
+            let src_path = entry.path();
+            let dst_path = dst_dir.join(entry.file_name());
+
+            if let Ok(meta) = entry.metadata() {
+                if meta.is_dir() {
+                    dirs_to_copy.push_back((src_path, dst_path));
+                } else if meta.is_file() {
+                    // We read and then write the contents to not preserve any metadata.
+                    let copy_result =
+                        std::fs::read(&src_path).and_then(|data| std::fs::write(&dst_path, &data));
+                    if let Err(why) = copy_result {
+                        tracing::error!(?src_path, ?dst_path, ?why, "failed to copy file");
+                    }
+                }
+            }
+        }
+    }
+}
+
 fn apply_layout(path: &Path) {
     let Ok(layout_dir) = path.read_dir() else {
         tracing::error!(?path, "failed to read layout directory");
@@ -243,12 +278,7 @@ fn apply_layout(path: &Path) {
             _ = std::fs::remove_dir_all(&config_dest_path);
 
             // Copy layout to local config
-            _ = std::process::Command::new("cp")
-                .arg("-r")
-                .arg("--no-preserve=all")
-                .arg(&path)
-                .arg(&config_dest_path)
-                .status();
+            copy_dir(&path, &config_dest_path);
         }
     }
 
