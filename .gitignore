@@ -1,12 +1,25 @@
-/.cargo/
-/debian/*debhelper*
-/debian/cosmic-initial-setup.substvars
-/debian/cosmic-initial-setup/
-/debian/files
-/target/
-/vendor.tar
-/vendor/
+# Cargo
+target/
+
+# Debian
+debian/*
+!debian/rules
+!debian/source
+!debian/control
+!debian/*postrm
+!debian/*install
+!debian/copyright
+!debian/*postinst
+!debian/*triggers
+!debian/changelog
+
+
+# Vendoring
+.cargo/
+vendor.tar
+vendor/
+cargo.just
 
 # Nix
-/.direnv/
-/result*
+.direnv/
+result*
