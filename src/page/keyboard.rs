@@ -1,12 +1,6 @@
 use std::cmp;
 
-use cosmic::{
-    Element, Task,
-    cosmic_config::{self, ConfigGet, ConfigSet},
-    cosmic_theme,
-    iced::Alignment,
-    theme, widget,
-};
+use cosmic::{Element, Element, Task, Task, cosmic_theme, iced::Alignment, theme, widget};
 use cosmic_comp_config::{KeyboardConfig, XkbConfig};
 use slotmap::{DefaultKey, SlotMap};
 
@@ -283,7 +277,11 @@ impl page::Page for Page {
         let mut list = widget::list_column();
 
         for (id, (_locale, variant, description, _source)) in &self.keyboard_layouts {
-            if self.search.is_empty() || description.to_lowercase().contains(&self.search) {
+            if self
+                .regex_opt
+                .as_ref()
+                .is_none_or(|re| re.is_match(description))
+            {
                 let selected = Some(id) == self.selected_opt;
                 let item = widget::settings::item::builder(description).control(
                     widget::row::with_children(vec![
