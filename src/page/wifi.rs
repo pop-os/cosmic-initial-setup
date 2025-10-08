@@ -218,12 +218,18 @@ impl super::Page for Page {
                 },
             );
 
-            if has_known {
-                view = view.push(known_networks);
-            }
+            if has_known || has_visible {
+                let mut networks = widget::column().spacing(spacing.space_l);
 
-            if has_visible {
-                view = view.push(visible_networks);
+                if has_known {
+                    networks = networks.push(known_networks);
+                }
+
+                if has_visible {
+                    networks = networks.push(visible_networks);
+                }
+
+                view = view.push(widget::scrollable(networks));
             }
         };
 
