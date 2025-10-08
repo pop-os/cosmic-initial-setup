@@ -14,6 +14,7 @@ export DISABLE_IF_EXISTS := disable-if-exists || env('DISABLE_IF_EXISTS', '')
 
 # Installation paths
 base-dir := absolute_path(clean(rootdir / prefix))
+cargo-target-dir := env('CARGO_TARGET_DIR', 'target')
 desktop-entry := appid + '.desktop'
 autostart-dst := rootdir / 'etc' / 'xdg' / 'autostart' / desktop-entry
 autostart-entry := appid + '.Autostart.desktop'
@@ -44,7 +45,7 @@ clean: fetch
 # Installs files
 install:
     mkdir -p {{layouts-dst}} {{themes-dst}}
-    install -Dm0755 {{ env('CARGO_TARGET_DIR', 'target') / 'release' / name }} '{{bin-dst}}'
+    install -Dm0755 {{ cargo-target-dir / 'release' / name }} '{{bin-dst}}'
     install -Dm0644 res/icon.svg '{{icon-dst}}'
     install -Dm0644 {{ 'res' / desktop-entry }} '{{desktop-dst}}'
     install -Dm0644 {{ 'res' / autostart-entry }} '{{autostart-dst}}'
