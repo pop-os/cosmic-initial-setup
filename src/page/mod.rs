@@ -34,6 +34,7 @@ pub fn pages(mode: AppMode) -> IndexMap<TypeId, Box<dyn Page>> {
     if let AppMode::NewInstall { create_user } = mode {
         pages.insert(TypeId::of::<wifi::Page>(), Box::new(wifi::Page::default()));
 
+        #[cfg(not(feature = "nixos"))]
         pages.insert(
             TypeId::of::<language::Page>(),
             Box::new(language::Page::new()),
@@ -48,6 +49,7 @@ pub fn pages(mode: AppMode) -> IndexMap<TypeId, Box<dyn Page>> {
             pages.insert(TypeId::of::<user::Page>(), Box::new(user::Page::default()));
         }
 
+        #[cfg(not(feature = "nixos"))]
         pages.insert(
             TypeId::of::<location::Page>(),
             Box::new(location::Page::new()),
