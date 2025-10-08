@@ -57,7 +57,8 @@ tag version:
     sed -i '0,/^version/s/^version.*/version = "{{version}}"/' Cargo.toml
     cargo check
     cargo clean
-    git add Cargo.toml Cargo.lock
+    dch -D noble -v {{version}}
+    git add Cargo.toml Cargo.lock debian/changelog
     git commit -m 'release: {{version}}'
     git tag -a {{version}} -m ''
 
