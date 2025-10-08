@@ -52,6 +52,15 @@ install:
     cd res/layouts; find . -type f -exec install -Dm0644 '{}' '{{layouts-dst}}/{}' \;
     find res/themes -type f -exec install -Dm0644 '{}' '{{themes-dst}}' \;
 
+# Bump cargo version, create git commit, and create tag
+tag version:
+    sed -i '0,/^version/s/^version.*/version = "{{version}}"/' Cargo.toml
+    cargo check
+    cargo clean
+    git add Cargo.toml Cargo.lock
+    git commit -m 'release: {{version}}'
+    git tag -a {{version}} -m ''
+
 # Uninstalls installed files
 uninstall:
     rm -rf {{desktop-dst}} {{polkit-rules-dst}} {{icon-dst}} {{themes-dst}} {{layouts-dst}} {{bin-dst}}
