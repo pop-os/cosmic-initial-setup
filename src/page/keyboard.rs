@@ -1,6 +1,12 @@
 use std::cmp;
 
-use cosmic::{Element, Element, Task, Task, cosmic_theme, iced::Alignment, theme, widget};
+use cosmic::{
+    Element, Task,
+    cosmic_config::{self, ConfigGet, ConfigSet},
+    cosmic_theme,
+    iced::Alignment,
+    theme, widget,
+};
 use cosmic_comp_config::{KeyboardConfig, XkbConfig};
 use slotmap::{DefaultKey, SlotMap};
 
