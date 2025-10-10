@@ -23,3 +23,4 @@ wireless-page = Verbinding maken
 password-confirm = Bevestig wachtwoord
 forget-dialog = Wilt u dit wifi-netwerk vergeten?
     .description = U moet in de toekomst opnieuw een wachtwoord invoeren om dit wifi-netwerk te kunnen gebruiken.
+cancel = Annuleer
