@@ -158,7 +158,7 @@ impl super::Page for Page {
                     let view_more: Option<Element<_>> = if self
                         .view_more_popup
                         .as_deref()
-                        .map_or(false, |id| id == network.ssid.as_ref())
+                        .is_some_and(|id| id == network.ssid.as_ref())
                     {
                         widget::popover(view_more_button.on_press(Message::ViewMore(None)))
                             .position(widget::popover::Position::Bottom)
@@ -355,7 +355,7 @@ pub enum Message {
 
 impl From<Message> for super::Message {
     fn from(message: Message) -> Self {
-        super::Message::WiFi(message).into()
+        super::Message::WiFi(message)
     }
 }
 
