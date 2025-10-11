@@ -45,12 +45,12 @@ new-apps-page = Nuevas Aplicaciones del Sistema
     .description = Disfruta de una variedad de nuevas aplicaciones del sistema que vienen con el entorno de escritorio COSMIC; incluyendo Configuración, Tienda de Aplicaciones COSMIC, Archivos, Editor de Texto y Terminal.
 # NewKeyboardShortcutsPage
 new-shortcuts-page = Nuevos Atajos de Teclado
-    .description = Usa Mayús+Super+flechas o arrastra con el puntero para mover ventanas. Aprovecha las pistas visuales al usar el mosaico automático de ventanas.
+    .description = Usa Mayús+Súper+flechas o arrastra con el puntero para mover ventanas. Aprovecha las pistas visuales al usar el mosaico automático de ventanas.
 # WorkflowPage
 workflow-page = Espacios de trabajo para tu flujo de trabajo
     .description =
-        Flota o organiza automáticamente las ventanas por espacio de trabajo usando el applet de mosaico.
-        Puedes seleccionar espacios de trabajo verticales u horizontales; y fijarlos en la vista general para hacerlos estáticos.
+        Alternar entre ventanas flotantes o en mosaico de forma automática para cada espacio de trabajo mediante la miniaplicación de mosaico.
+        Puedes seleccionar espacios de trabajo verticales u horizontales. También puedes fijarlos en la vista general para hacerlos estáticos.
 # LauncherPage
 launcher-page = Rápido y eficiente
     .description = Pulsa la tecla Súper (o Windows) para activar el lanzador. Realiza una búsqueda y pulsa Intro para abrir o cambiarse a una aplicación. También se puede saltar a la configuración o a funciones de sistema como suspender. Escribe "?" para saber más sobre las funciones avanzadas del lanzador.

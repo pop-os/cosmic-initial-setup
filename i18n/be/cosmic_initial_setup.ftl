@@ -1,0 +1,12 @@
+back = Назад
+cancel = Скасаваць
+finish = Скончыць
+next = Далей
+password = Пароль
+password-confirm = Пацвердзіць пароль
+settings = Налады
+skip = Прапусціць
+skip-setup-and-close = Прапусціць налады і закрыць
+wifi = Wi-Fi
+select-language-page = Выбраць мову
+keyboard-layout-page = Выбраць раскладку клавіятуры

@@ -23,3 +23,12 @@ create-account-page = Lag din bruker
 timezone-and-location-page = Tidssone og Lokasjon
     .search-the-closest-major-city = Søk etter nærmeste storby ...
     .geonames-attribution = Listen er sortert etter bybefolkning. Data: geonames.org (Lisensiert CC-BY-4.0).
+welcome-page = Velkommen
+    .scale-options = Flere skaleringsinnstillinger
+    .screen-reader = Skjermleser
+    .interface-size = Grensesnittstørrelse
+    .magnifier = Forstørrelseglass
+    .magnifier-description =
+        Eller bruk hurtigtastene:
+        Super + = til å zoome inn, Super + - for å zoome ut,
+        Super + rull med musen din
