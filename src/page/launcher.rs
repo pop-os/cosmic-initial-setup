@@ -6,7 +6,7 @@ use cosmic::{
 
 use crate::{fl, page};
 
-static LAUNCHER_SVG: &'static [u8] = include_bytes!("../../res/launcher.svg");
+static LAUNCHER_SVG: &[u8] = include_bytes!("../../res/launcher.svg");
 
 pub struct Page {
     handle: widget::svg::Handle,
