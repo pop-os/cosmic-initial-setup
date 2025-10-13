@@ -1,0 +1,14 @@
+back = Назад
+cancel = Прекини
+finish = Заврши
+identity = Идентитет
+next = Даље
+password = Шифра
+password-confirm = Потврди лозинку
+settings = Подешавања
+skip = Прескочи
+skip-setup-and-close = Прескочи постављање и затвори
+type-to-search = Куцајте за претрагу…
+wifi = Wi-Fi
+select-language-page = Изаберите језик
+keyboard-layout-page = Изаберите распоред тастатуре
