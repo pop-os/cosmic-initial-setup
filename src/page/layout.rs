@@ -66,7 +66,7 @@ impl super::Page for Page {
 
     fn init(&mut self) -> cosmic::Task<super::Message> {
         #[cfg(feature = "nixos")]
-        let layouts_dir_path = "/run/current-system/sw/share/cosmic-layouts/";
+        let layouts_dir_path = "/home/heitor/Projects/cosmic-initial-setup/res/layouts";
         #[cfg(not(feature = "nixos"))]
         let layouts_dir_path = "/usr/share/cosmic-layouts/";
         let Ok(layouts_dir) = std::fs::read_dir(layouts_dir_path) else {
