@@ -30,7 +30,7 @@ pub enum Message {
 
 impl From<Message> for super::Message {
     fn from(message: Message) -> Self {
-        super::Message::Keyboard(message).into()
+        super::Message::Keyboard(message)
     }
 }
 
@@ -268,7 +268,7 @@ impl page::Page for Page {
     }
 
     fn open(&mut self) -> cosmic::Task<page::Message> {
-        return widget::text_input::focus(self.search_id.clone());
+        widget::text_input::focus(self.search_id.clone())
     }
 
     fn completed(&self) -> bool {
