@@ -1,8 +1,32 @@
 use crate::fl;
 use crate::page;
-use cosmic::{Element, Task, cosmic_theme, iced::Alignment, theme, widget};
+use cosmic::{
+    Element, Task, cosmic_theme, iced::Alignment, theme, widget,
+    cosmic_config::{self, Config, ConfigSet, CosmicConfigEntry, cosmic_config_derive::CosmicConfigEntry},
+};
+use serde::{Deserialize, Serialize};
 
 static CITIES: &'static [u8] = include_bytes!("../../res/cities.bitcode-v0-6");
+
+const CONFIG_NAME: &str = "com.system76.CosmicInitialSetup";
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize, PartialEq, CosmicConfigEntry)]
+pub struct LocationState {
+    pub city_name: String,
+    pub timezone: String,
+    pub latitude: f64,
+    pub longitude: f64,
+}
+
+impl LocationState {
+    pub fn version() -> u64 {
+        1
+    }
+
+    pub fn state() -> Result<Config, cosmic_config::Error> {
+        Config::new_state(CONFIG_NAME, Self::version())
+    }
+}
 
 #[derive(Clone, Debug)]
 pub enum Message {
@@ -16,6 +40,7 @@ pub struct Page {
     search_id: widget::Id,
     search: String,
     regex_opt: Option<regex::Regex>,
+    config: Option<Config>,
 }
 
 impl Page {
@@ -27,12 +52,14 @@ impl Page {
                 Vec::new()
             }
         };
+        let config = LocationState::state().ok();
         Self {
             cities,
             selected_opt: None,
             search_id: widget::Id::unique(),
             search: String::new(),
             regex_opt: None,
+            config,
         }
     }
 
@@ -64,6 +91,20 @@ impl Page {
 
                 if let Some(city) = self.cities.get(selected) {
                     let timezone = city.timezone.clone();
+
+                    if let Some(ref config) = self.config {
+                        let location_state = LocationState {
+                            city_name: city.name.to_string(),
+                            timezone: city.timezone.to_string(),
+                            latitude: city.latitude,
+                            longitude: city.longitude,
+                        };
+
+                        if let Err(err) = config.set("selected_location", &location_state) {
+                            tracing::warn!(err = err.to_string(), "failed to save location state");
+                        }
+                    }
+
                     tokio::spawn(async move {
                         _ = tokio::process::Command::new("timedatectl")
                             .args(&["set-timezone", &timezone])

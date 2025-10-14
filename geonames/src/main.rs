@@ -86,6 +86,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             name: Box::from(name),
             alternate_names: alternate_names.split(',').map(Box::from).collect(),
             timezone: Box::from(timezone),
+            latitude: latitude.parse()?,
+            longitude: longitude.parse()?,
         };
         cities.push((population.parse::<u64>()?, city));
     }
