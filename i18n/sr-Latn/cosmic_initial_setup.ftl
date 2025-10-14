@@ -1,0 +1,1 @@
+cancel = Poništi
