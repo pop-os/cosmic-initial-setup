@@ -42,9 +42,9 @@ appearance-page = Přizpůsobit vzhled
     .description = Dále můžete upravit doplňkové barvy a vzhled své plochy v nastavení vzhledu.
 # LayoutPage
 layout-page = Nastavení rozložení
-    .bottom-panel = Spodní panel
+    .bottom-panel = Dolní panel
     .top-panel-and-dock = Horní panel a dok
-    .description = V nastavení je možné panel nebo dok přesouvat k jakémukoliv kraji, měnit jejich velikost nebo je automaticky skrývat.
+    .description = V nastavení je možné panel nebo dok přesunout k jakémukoliv kraji, změnit jejich velikost nebo je automaticky skrývat.
 # SystemAppsPage
 new-apps-page = Nové systémové aplikace
     .description = Vyzkoušejte řadu nových systémových aplikací, které jsou součástí prostředí COSMIC. Patří mezi ně: Nastavení, Obchod COSMIC, Soubory, Textový editor nebo Terminál.
