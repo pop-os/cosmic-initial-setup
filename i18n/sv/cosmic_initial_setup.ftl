@@ -44,7 +44,7 @@ new-shortcuts-page = Nya tangentbordsgenvägar
     .description = Använd Shift+Super+pilar, eller dra med musen, för att flytta fönster. Använd visuella indikationer när du använder automatisk fönsterkakling.
 workflow-page = Arbetsytor för ditt arbetsflöde
     .description =
-        Flyt eller automatisk kakla fönster per arbetsyta via kaklings-appleten
+        Flyt eller automatisk kakla fönster per arbetsyta via kaklings-miniprogrammet
         Du kan välja vertikala eller horisontella arbetsytor. Du kan även fästa arbetsytor för att göra dem statiska.
 launcher-page = Snabb och effektiv
     .description = Tryck på Super- (eller Windows) tangenten för att aktivera programstartaren. Sök och tryck enter för att öppna ett program eller växla till det. Du kan också hoppa till inställningar eller systemfunktioner som försätt i vänteläge. Skriv "?" för att lära om programstartarens avancerade funktioner.
