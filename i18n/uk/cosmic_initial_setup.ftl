@@ -19,7 +19,7 @@ welcome-page = Ласкаво просимо
         Super + = щоб наблизити, Super + - щоб віддалити, 
         Super + гортати за допомогою миші
 select-language-page = Оберіть мову
-keyboard-layout-page = Оберіть розкладку клавіатури
+keyboard-layout-page = Обрати розкладку клавіатури
 create-account-page = Створіть обліковий запис
     .full-name = Повне ім'я
     .user-name = Ім'я користувача
