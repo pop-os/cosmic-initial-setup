@@ -1,0 +1,2 @@
+back = Zurück
+cancel = Abbrechen
