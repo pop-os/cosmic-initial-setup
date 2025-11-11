@@ -29,6 +29,9 @@ themes-dst := base-dir / 'share' / 'cosmic-themes'
 default: fetch
     @just cargo build-release
 
+build-release: fetch
+    @just cargo build-release
+
 # Build release binary from vendored sources
 build-vendored:
     @just cargo build-vendored
