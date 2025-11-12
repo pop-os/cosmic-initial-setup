@@ -26,19 +26,16 @@ pub enum AccessibilityEvent {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, FromPrimitive, ToPrimitive)]
+#[derive(Default)]
 pub enum ColorFilter {
     Greyscale,
     Deuteranopia,
     Protanopia,
     Tritanopia,
+    #[default]
     Unknown,
 }
 
-impl Default for ColorFilter {
-    fn default() -> Self {
-        ColorFilter::Unknown
-    }
-}
 
 #[derive(Debug, Clone, Copy)]
 pub enum AccessibilityRequest {
