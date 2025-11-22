@@ -12,7 +12,7 @@ type-to-search = Írj a kereséshez…
 wifi = Wi-Fi
 # WelcomePage
 welcome-page = Üdvözlünk
-    .scale-options = További skálázási beállítások
+    .scale-options = További skálázás
     .screen-reader = Képernyőolvasó
     .interface-size = Kezelőfelület mérete
     .magnifier = Nagyító
