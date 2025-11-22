@@ -19,7 +19,7 @@ welcome-page = Vítejte
     .magnifier-description =
         Nebo použijte tyto klávesové zkratky:
         Super + = pro přiblížení, Super + - pro oddálení,
-        Super + posun s myší
+        Super + rolování kolečkem myši
 # SelectLanguagePage
 select-language-page = Vyberte jazyk
 # SelectKeyboardLayoutPage
@@ -74,7 +74,7 @@ wireless-page = Připojte se
     .known-networks = Známé sítě
     .visible-networks = Viditelné sítě
 auth-dialog = Vyžadováno ověření
-    .wifi-description = Vložte heslo nebo šifrovací klíč. Můžete se také připojit stisknutím tlačítka "WPS" na vašem routeru.
+    .wifi-description = Vložte heslo nebo šifrovací klíč. Můžete se také připojit stisknutím tlačítka „WPS“ na vašem routeru.
 forget-dialog = Zapomenout tuto Wi-Fi síť?
     .description = Pro opětovné připojení k této Wi-Fi síti bude nutné znovu zadat heslo.
 
