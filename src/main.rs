@@ -73,7 +73,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         page::AppMode::GnomeTransition
     } else {
         // If being run by the cosmic-initial-setup user, we are in OEM mode.
-        page::AppMode::NewInstall { create_user: pwd::Passwd::current_user().map_or(false, |current_user| current_user.name == "cosmic-initial-setup") }
+        page::AppMode::NewInstall { create_user: pwd::Passwd::current_user().is_some_and(|current_user| current_user.name == "cosmic-initial-setup") }
     };
 
     let mut settings = Settings::default();
@@ -312,7 +312,7 @@ impl Application for App {
                     tasks = tasks.chain(
                         cosmic::Task::future(async {
                             _ = std::process::Command::new("loginctl")
-                                .args(&["terminate-user", "cosmic-initial-setup"])
+                                .args(["terminate-user", "cosmic-initial-setup"])
                                 .status();
                         })
                         .discard(),
