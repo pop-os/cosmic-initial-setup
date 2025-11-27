@@ -11,3 +11,4 @@ NoDisplay=true
 Terminal=false
 StartupNotify=true
 StartupWMClass=com.system76.CosmicInitialSetup
+OnlyShowIn=COSMIC
