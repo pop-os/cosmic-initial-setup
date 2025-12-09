@@ -7,7 +7,7 @@ password = كلمة السر
 password-confirm = تأكيد كلمة السر
 settings = الإعدادات
 skip = تخطَّ
-skip-setup-and-close = تخطي الإعداد وأغلق
+skip-setup-and-close = تخطَّ الإعداد وأغلق
 type-to-search = اكتب للبحث…
 wifi = واي فاي
 # WelcomePage
@@ -23,7 +23,7 @@ welcome-page = مرحبًا
 # SelectLanguagePage
 select-language-page = اختر لغة
 # SelectKeyboardLayoutPage
-keyboard-layout-page = حدد تخطيط لوحة المفاتيح
+keyboard-layout-page = حدّد تخطيط لوحة المفاتيح
 # CreateAccountPage
 create-account-page = أنشى حسابك
     .full-name = اسم كامل
