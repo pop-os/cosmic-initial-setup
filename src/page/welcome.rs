@@ -204,6 +204,12 @@ impl Page {
                 Some(Ok(outputs)) => {
                     tracing::debug!("updating outputs");
                     self.list = outputs;
+                    if let Some((_, first_output)) = self.list.outputs.iter().next() {
+                        let scale_u32 = ((first_output.scale * 100.0) as u32).min(300);
+                        self.interface_scale =
+                            (scale_u32 / 25).checked_sub(2).unwrap_or(2) as usize;
+                        self.interface_adjusted_scale = (scale_u32 % 25).min(20);
+                    }
                 }
 
                 Some(Err(why)) => {
