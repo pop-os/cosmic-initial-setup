@@ -1,9 +1,13 @@
 use crate::accessibility::{AccessibilityEvent, AccessibilityRequest};
 use crate::{fl, page};
 use cosmic::Task;
+use cosmic::iced::Alignment;
+use cosmic::widget::segmented_button;
 use cosmic::{Element, widget};
+use cosmic_randr_shell::OutputKey;
 use cosmic_settings_subscriptions::accessibility::{DBusRequest, DBusUpdate};
 use futures_util::{FutureExt, SinkExt};
+use std::collections::BTreeMap;
 use std::sync::Arc;
 use tokio::sync::mpsc::UnboundedSender;
 
@@ -28,6 +32,7 @@ gen_dpi_scale_variables!([50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300]);
 
 pub struct Page {
     list: cosmic_randr_shell::List,
+    displays: segmented_button::SingleSelectModel,
     magnifier_enabled: bool,
     reader_enabled: bool,
     interface_scale: usize,
@@ -85,10 +90,17 @@ impl page::Page for Page {
     }
 
     fn view(&self) -> Element<'_, page::Message> {
+        let spacing = cosmic::theme::spacing();
         let screen_reader = widget::settings::item::builder(fl!("welcome-page", "screen-reader"))
             .toggler(self.reader_enabled, |enable| {
                 Message::ScreenReaderEnabled(enable).into()
             });
+
+        let display_switcher = (self.displays.len() > 1).then(|| {
+            widget::tab_bar::horizontal(&self.displays)
+                .button_alignment(Alignment::Center)
+                .on_activate(|e| Message::Display(e).into())
+        });
 
         let interface_size = widget::settings::item::builder(fl!("welcome-page", "interface-size"))
             .control(widget::dropdown(
@@ -112,11 +124,20 @@ impl page::Page for Page {
                 Message::MagnifierEnabled(enable).into()
             });
 
-        widget::settings::section()
-            .add(screen_reader)
+        let display_settings = widget::settings::section()
             .add(interface_size)
-            .add(scale_options)
-            .add(magnifier)
+            .add(scale_options);
+
+        let a11y_section = widget::settings::section()
+            .add(screen_reader)
+            .add(magnifier);
+
+        widget::column::with_capacity(5)
+            .push_maybe(display_switcher)
+            .push(widget::vertical_space().height(spacing.space_xxs))
+            .push(display_settings)
+            .push(widget::vertical_space().height(spacing.space_xl))
+            .push(a11y_section)
             .into()
     }
 }
@@ -125,6 +146,7 @@ impl Page {
     pub fn new() -> Self {
         Self {
             list: cosmic_randr_shell::List::default(),
+            displays: segmented_button::SingleSelectModel::default(),
             magnifier_enabled: false,
             reader_enabled: false,
             interface_scale: 2,
@@ -200,16 +222,44 @@ impl Page {
                 }
             },
 
+            Message::Display(entity) => self.set_active_display(entity),
+
             Message::UpdateDisplayList(result) => match Arc::into_inner(result) {
                 Some(Ok(outputs)) => {
-                    tracing::debug!("updating outputs");
                     self.list = outputs;
-                    if let Some((_, first_output)) = self.list.outputs.iter().next() {
-                        let scale_u32 = ((first_output.scale * 100.0) as u32).min(300);
-                        self.interface_scale =
-                            (scale_u32 / 25).checked_sub(2).unwrap_or(2) as usize;
-                        self.interface_adjusted_scale = (scale_u32 % 25).min(20);
+                    self.displays.clear();
+
+                    let sorted_outputs = self
+                        .list
+                        .outputs
+                        .iter()
+                        .map(|(key, output)| (&*output.name, key))
+                        .collect::<BTreeMap<_, _>>();
+
+                    let active_display_name = self
+                        .displays
+                        .text_remove(self.displays.active())
+                        .unwrap_or_default();
+
+                    let mut active_tab_pos: u16 = 0;
+
+                    for (pos, (_name, id)) in sorted_outputs.into_iter().enumerate() {
+                        let Some(output) = self.list.outputs.get(id) else {
+                            continue;
+                        };
+
+                        if output.name == active_display_name {
+                            active_tab_pos = pos as u16;
+                        }
+
+                        self.displays
+                            .insert()
+                            .text(output.name.clone())
+                            .data::<OutputKey>(id);
                     }
+
+                    self.displays.activate_position(active_tab_pos);
+                    self.set_active_display(self.displays.active());
                 }
 
                 Some(Err(why)) => {
@@ -223,17 +273,31 @@ impl Page {
         Task::none()
     }
 
+    fn set_active_display(&mut self, display: segmented_button::Entity) {
+        let Some(&output_id) = self.displays.data::<OutputKey>(display) else {
+            return;
+        };
+
+        let Some(output) = self.list.outputs.get(output_id) else {
+            return;
+        };
+
+        let scale_u32 = ((output.scale * 100.0) as u32).min(300);
+        self.interface_scale = (scale_u32 / 25).checked_sub(2).unwrap_or(2) as usize;
+        self.interface_adjusted_scale = (scale_u32 % 25).min(20);
+        self.displays.activate(display);
+    }
+
     /// Set the scale of each display.
     fn set_scale(&mut self, option: usize, scale_adjust: u32) -> Task<page::Message> {
         tracing::debug!("setting scale {option} with {scale_adjust}");
         self.interface_scale = option;
         self.interface_adjusted_scale = scale_adjust;
 
-        let tasks = self
-            .list
+        self.list
             .outputs
-            .iter()
-            .filter_map(|(_, output)| {
+            .get(*self.displays.active_data::<OutputKey>().unwrap())
+            .and_then(|output| {
                 let current = &self.list.modes[output.current?];
                 let scale = (option * 25 + 50) as u32 + self.interface_adjusted_scale.min(20);
 
@@ -268,9 +332,7 @@ impl Page {
 
                 Some(cosmic::task::future(command_fut))
             })
-            .collect::<Vec<_>>();
-
-        Task::batch(tasks)
+            .unwrap_or_else(Task::none)
     }
 }
 
@@ -285,6 +347,8 @@ pub enum ScaleAdjustResult {
 pub enum Message {
     /// Handle an a11y event.
     A11yEvent(crate::accessibility::AccessibilityEvent),
+    /// Change the active display tab
+    Display(segmented_button::Entity),
     /// Toggle the screen magnifier.
     MagnifierEnabled(bool),
     /// Set the preferred scale for a display.
