@@ -50,7 +50,7 @@ new-apps-page = Nové systémové aplikace
     .description = Vyzkoušejte řadu nových systémových aplikací, které jsou součástí prostředí COSMIC. Patří mezi ně: Nastavení, Obchod COSMIC, Soubory, Textový editor nebo Terminál.
 # NewKeyboardShortcutsPage
 new-shortcuts-page = Nové klávesové zkratky
-    .description = Pro přesouvání oken použijte Shift+Super+šipky nebo okna přetáhněte ukazatelem. Pokud používáte dlaždicový režim oken, využijte vizuálních nápověd.
+    .description = Pro přesouvání oken použijte Shift + Super + šipky nebo okna přetáhněte ukazatelem. Pokud používáte dlaždicový režim oken, využijte vizuálních nápověd.
 # WorkflowPage
 workflow-page = Pracovní plochy pro váš styl práce
     .description =
