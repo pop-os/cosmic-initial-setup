@@ -1,5 +1,5 @@
 back = رجوع
-cancel = إلغاء
+cancel = ألغِ
 finish = إنهاء
 identity = الهوية
 next = التالي
