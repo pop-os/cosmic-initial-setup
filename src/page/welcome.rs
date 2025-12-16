@@ -294,11 +294,9 @@ impl Page {
             return;
         };
 
-        eprintln!("scale of {} is {}", output.name, output.scale);
-
         let scale_u32 = ((output.scale * 100.0) as u32).min(300);
         self.interface_scale = (scale_u32 / 25).checked_sub(2).unwrap_or(2) as usize;
-        self.interface_adjusted_scale = (scale_u32 % 25).min(20);
+        self.interface_adjusted_scale = ((scale_u32 % 25).min(20) as f32 / 5.0).round() as u32 * 5;
         self.displays.activate(display);
     }
 
