@@ -235,6 +235,7 @@ impl Page {
 
             Message::UpdateDisplayList(result) => match Arc::into_inner(result) {
                 Some(Ok(outputs)) => {
+                    eprintln!("update display list");
                     self.list = outputs;
                     self.displays.clear();
 
@@ -260,6 +261,8 @@ impl Page {
                         if output.name == active_display_name {
                             active_tab_pos = pos as u16;
                         }
+
+                        eprintln!("insert {}", output.name);
 
                         self.displays
                             .insert()
@@ -291,6 +294,8 @@ impl Page {
             return;
         };
 
+        eprintln!("scale of {} is {}", output.name, output.scale);
+
         let scale_u32 = ((output.scale * 100.0) as u32).min(300);
         self.interface_scale = (scale_u32 / 25).checked_sub(2).unwrap_or(2) as usize;
         self.interface_adjusted_scale = (scale_u32 % 25).min(20);
@@ -305,10 +310,11 @@ impl Page {
 
         self.list
             .outputs
-            .get(*self.displays.active_data::<OutputKey>().unwrap())
+            .get_mut(*self.displays.active_data::<OutputKey>().unwrap())
             .and_then(|output| {
                 let current = &self.list.modes[output.current?];
                 let scale = (option * 25 + 50) as u32 + self.interface_adjusted_scale.min(20);
+                output.scale = scale as f64 / 100.0;
 
                 let mut command = tokio::process::Command::new("cosmic-randr");
 
