@@ -132,9 +132,15 @@ impl page::Page for Page {
             .add(screen_reader)
             .add(magnifier);
 
-        widget::column::with_capacity(5)
-            .push_maybe(display_switcher)
-            .push(widget::vertical_space().height(spacing.space_xxs))
+        let column = if let Some(switcher) = display_switcher {
+            widget::column::with_capacity(5)
+                .push(switcher)
+                .push(widget::vertical_space().height(spacing.space_xxs))
+        } else {
+            widget::column::with_capacity(3)
+        };
+
+        column
             .push(display_settings)
             .push(widget::vertical_space().height(spacing.space_xl))
             .push(a11y_section)
