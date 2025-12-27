@@ -17,7 +17,7 @@ welcome-page = Üdvözlünk
     .interface-size = Kezelőfelület mérete
     .magnifier = Nagyító
     .magnifier-description =
-        Vagy használd ezeket a billentyűparancsokat:
+        Vagy használd ezeket a gyorsbillentyűket:
         Super + = a nagyításhoz, Super + - a kicsinyítéshez,
         Super + egérgörgő
 # SelectLanguagePage
@@ -34,7 +34,7 @@ create-account-page = Hozd létre a fiókodat
     .invalid-username = Érvénytelen felhasználónév.
     .password-mismatch = A jelszónak és a megerősítésének meg kell egyeznie.
 # LocationPage
-timezone-and-location-page = Időzóna és tartózkodási hely
+timezone-and-location-page = Időzóna és hely
     .search-the-closest-major-city = Keresd meg a legközelebbi nagyvárost...
     .geonames-attribution = A lista a városok népessége szerint van rendezve. Forrás: geonames.org (CC-BY-4.0 licenc).
 # AppearancePage
@@ -49,7 +49,7 @@ layout-page = Elrendezés beállítása
 new-apps-page = Új rendszeralkalmazások
     .description = Élvezd a COSMIC asztali környezettel érkező új rendszeralkalmazások széles választékát, köztük a Beállításokat, a COSMIC Áruházat, a Fájlkezelőt, a Szövegszerkesztőt és a Terminált.
 # NewKeyboardShortcutsPage
-new-shortcuts-page = Új billentyűparancsok
+new-shortcuts-page = Új gyorsbillentyűk
     .description = Használd a Shift+Super+nyilakat, vagy húzd az egeret az ablakok mozgatásához. Használd ki az automatikus ablakcsempézés vizuális segítségeit.
 # WorkflowPage
 workflow-page = Munkaterületek a munkafolyamatodhoz

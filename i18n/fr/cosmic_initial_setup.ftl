@@ -14,15 +14,15 @@ forget-dialog = Oublier ce réseau Wi-Fi ?
     .description = Vous devrez à nouveau saisir un mot de passe pour utiliser ce réseau Wi-Fi à l'avenir.
 new-shortcuts-page = Nouveaux Raccourcis Clavier
     .description = Utilisez Maj+Super+flèches, ou glissez avec le curseur, pour déplacer les fenêtres. Tirez parti des aides visuelles en utilisant l'agencement automatique des fenêtres.
-appearance-page = Personnaliser l'Apparance
+appearance-page = Personnaliser l'apparence
     .description = Vous pouvez modifier les couleurs d'accentuation et l'apparence de votre bureau dans les paramètres Apparence.
 workflow-page = Espaces de travail adaptés à votre Mode de Travail
     .description =
         Faites flotter les fenêtres ou agencez-les automatiquement par espace de travail à l'aide de l'applet d'agencement.
         Vous pouvez sélectionner les espaces de travail verticaux ou horizontaux. Vous pouvez aussi épingler les espaces de travail pour les rendre statiques.
-launcher-page = Réactif et Performant
+launcher-page = Réactif et performant
     .description = Appuyez sur la touche Super (ou Windows) pour activer le Lanceur. Recherchez et appuyez sur Entrer pour ouvrir une appli ou basculer dessus. Vous pouvez aussi basculer sur les paramètres ou utiliser des fonctions système comme suspendre. Tapez "?" pour en apprendre plus sur les fonctionnalités avancées du Lanceur.
-wireless-page = Restez Connecté
+wireless-page = Restez connecté
     .explain = Une fois connecté, vous aurez les dernières mises à jour système et de sécurité.
     .airplane-mode = Le mode avion est activé.
     .connect = Se connecter
@@ -46,7 +46,7 @@ welcome-page = Bienvenue
 timezone-and-location-page = Fuseau horaire et Localisation
     .search-the-closest-major-city = Chercher la ville la plus proche...
     .geonames-attribution = La liste est triée en fonction du nombre d'habitants. Données : geonames.org (licence CC-BY-4.0).
-create-account-page = Créez Votre Compte
+create-account-page = Créez votre compte
     .full-name = Nom complet
     .user-name = Nom d'utilisateur
     .user-name-note = Il sera utilisé pour votre dossier personnel et ne pourra pas être changé.
