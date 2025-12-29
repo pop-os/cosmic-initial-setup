@@ -63,8 +63,8 @@ tag version:
     cargo clean
     dch -D noble -v {{version}}
     git add Cargo.toml Cargo.lock debian/changelog
-    git commit -m 'release: {{version}}'
-    git tag -a {{version}} -m ''
+    git commit -m 'release(debian): {{version}}'
+    git tag -a epoch-{{version}} -m ''
 
 # Uninstalls installed files
 uninstall:

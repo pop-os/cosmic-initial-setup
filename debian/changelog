@@ -1,3 +1,9 @@
+cosmic-initial-setup (1.0.0) noble; urgency=medium
+
+  * epoch-1.0.0 tag
+
+ -- Michael Murphy <michael@mmurphy.dev>  Fri, 12 Dec 2025 22:22:02 +0100
+
 cosmic-initial-setup (0.1.0) jammy; urgency=medium
 
   * Initial release.
