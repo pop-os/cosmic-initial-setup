@@ -17,15 +17,15 @@ welcome-page = Üdvözlünk
     .interface-size = Kezelőfelület mérete
     .magnifier = Nagyító
     .magnifier-description =
-        Vagy használd ezeket a billentyűparancsokat:
+        Vagy használd ezeket a gyorsbillentyűket:
         Super + = a nagyításhoz, Super + - a kicsinyítéshez,
         Super + egérgörgő
 # SelectLanguagePage
-select-language-page = Válassz nyelvet
+select-language-page = Nyelv kiválasztása
 # SelectKeyboardLayoutPage
-keyboard-layout-page = Válassz billentyűzetkiosztást
+keyboard-layout-page = Billentyűzetkiosztás kiválasztása
 # CreateAccountPage
-create-account-page = Hozd létre a fiókodat
+create-account-page = Fiók létrehozása
     .full-name = Teljes név
     .user-name = Felhasználónév
     .user-name-note = Ez lesz a saját mappád neve, ez később nem módosítható.
@@ -34,7 +34,7 @@ create-account-page = Hozd létre a fiókodat
     .invalid-username = Érvénytelen felhasználónév.
     .password-mismatch = A jelszónak és a megerősítésének meg kell egyeznie.
 # LocationPage
-timezone-and-location-page = Időzóna és tartózkodási hely
+timezone-and-location-page = Időzóna és hely
     .search-the-closest-major-city = Keresd meg a legközelebbi nagyvárost...
     .geonames-attribution = A lista a városok népessége szerint van rendezve. Forrás: geonames.org (CC-BY-4.0 licenc).
 # AppearancePage
@@ -49,7 +49,7 @@ layout-page = Elrendezés beállítása
 new-apps-page = Új rendszeralkalmazások
     .description = Élvezd a COSMIC asztali környezettel érkező új rendszeralkalmazások széles választékát, köztük a Beállításokat, a COSMIC Áruházat, a Fájlkezelőt, a Szövegszerkesztőt és a Terminált.
 # NewKeyboardShortcutsPage
-new-shortcuts-page = Új billentyűparancsok
+new-shortcuts-page = Új gyorsbillentyűk
     .description = Használd a Shift+Super+nyilakat, vagy húzd az egeret az ablakok mozgatásához. Használd ki az automatikus ablakcsempézés vizuális segítségeit.
 # WorkflowPage
 workflow-page = Munkaterületek a munkafolyamatodhoz
@@ -62,13 +62,13 @@ launcher-page = Gyors és hatékony
 
 # WirelessPage
 
-wireless-page = Csatlakozz a hálózathoz
-    .explain = Ha csatlakozol egy hálózathoz, megkapod a legfrissebb rendszer- és biztonsági frissítéseket.
+wireless-page = Kapcsolódás a hálózathoz
+    .explain = Ha Kapcsolódol egy hálózathoz, megkapod a legfrissebb rendszer- és biztonsági frissítéseket.
     .airplane-mode = A repülőgép üzemmód be van kapcsolva.
-    .connect = Kapcsolódás
-    .connected = Kapcsolódva
-    .connecting = Kapcsolódás...
-    .disconnect = Szétkapcsolás
+    .connect = Csatlakozás
+    .connected = Csatlakoztatva
+    .connecting = Csatlakozás...
+    .disconnect = Leválasztás
     .forget = Elfelejtés
     .no-networks = Nem található hálózat.
     .known-networks = Ismert hálózatok
