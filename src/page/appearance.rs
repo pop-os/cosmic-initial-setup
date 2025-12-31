@@ -12,8 +12,8 @@ use std::{ffi::OsStr, io::Read};
 
 use crate::{fl, page};
 
-static COSMIC_DARK_PNG: &'static [u8] = include_bytes!("../../res/cosmic-dark.png");
-static COSMIC_LIGHT_PNG: &'static [u8] = include_bytes!("../../res/cosmic-light.png");
+static COSMIC_DARK_PNG: &[u8] = include_bytes!("../../res/cosmic-dark.png");
+static COSMIC_LIGHT_PNG: &[u8] = include_bytes!("../../res/cosmic-light.png");
 
 fn dark_icon() -> widget::image::Handle {
     widget::image::Handle::from_bytes(COSMIC_DARK_PNG)
@@ -38,7 +38,7 @@ impl PartialEq for Theme {
 
 impl PartialOrd for Theme {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        self.name.partial_cmp(&other.name)
+        Some(self.cmp(other))
     }
 }
 
@@ -146,7 +146,7 @@ impl Page {
                 }
             }
 
-            themes.extend(extra_themes.into_iter());
+            themes.extend(extra_themes);
         }
 
         Self {
@@ -196,10 +196,10 @@ impl Page {
                     }
                 }
 
-                return cosmic::Task::done(page::Message::SetTheme(cosmic::Theme {
+                cosmic::Task::done(page::Message::SetTheme(cosmic::Theme {
                     theme_type: ThemeType::Custom(Arc::new(theme)),
                     ..cosmic::Theme::default()
-                }));
+                }))
             }
         }
     }

@@ -6,7 +6,7 @@ use cosmic::{
 };
 use serde::{Deserialize, Serialize};
 
-static CITIES: &'static [u8] = include_bytes!("../../res/cities.bitcode-v0-6");
+static CITIES: &[u8] = include_bytes!("../../res/cities.bitcode-v0-6");
 
 const CONFIG_NAME: &str = "com.system76.CosmicInitialSetup";
 
@@ -107,7 +107,7 @@ impl Page {
 
                     tokio::spawn(async move {
                         _ = tokio::process::Command::new("timedatectl")
-                            .args(&["set-timezone", &timezone])
+                            .args(["set-timezone", &timezone])
                             .status()
                             .await;
                     });
@@ -128,7 +128,7 @@ impl page::Page for Page {
     }
 
     fn open(&mut self) -> cosmic::Task<page::Message> {
-        return widget::text_input::focus(self.search_id.clone());
+        widget::text_input::focus(self.search_id.clone())
     }
 
     fn completed(&self) -> bool {
