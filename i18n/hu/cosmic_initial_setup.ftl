@@ -32,10 +32,10 @@ create-account-page = Fiók létrehozása
     .dialog-add = Hozzáadás
     .profile-add = Profilkép kiválasztása
     .invalid-username = Érvénytelen felhasználónév.
-    .password-mismatch = A jelszónak és a megerősítésének meg kell egyeznie.
+    .password-mismatch = A jelszónak és a megerősítésének meg kell egyeznie
 # LocationPage
 timezone-and-location-page = Időzóna és hely
-    .search-the-closest-major-city = Keresd meg a legközelebbi nagyvárost...
+    .search-the-closest-major-city = Keresd meg a legközelebbi nagyvárost…
     .geonames-attribution = A lista a városok népessége szerint van rendezve. Forrás: geonames.org (CC-BY-4.0 licenc).
 # AppearancePage
 appearance-page = Megjelenés testreszabása
@@ -63,14 +63,14 @@ launcher-page = Gyors és hatékony
 # WirelessPage
 
 wireless-page = Kapcsolódás a hálózathoz
-    .explain = Ha Kapcsolódol egy hálózathoz, megkapod a legfrissebb rendszer- és biztonsági frissítéseket.
-    .airplane-mode = A repülőgép üzemmód be van kapcsolva.
+    .explain = Ha kapcsolódol egy hálózathoz, megkapod a legfrissebb rendszer- és biztonsági frissítéseket.
+    .airplane-mode = A repülőgép üzemmód be van kapcsolva
     .connect = Csatlakozás
-    .connected = Csatlakoztatva
-    .connecting = Csatlakozás...
+    .connected = Csatlakozva
+    .connecting = Csatlakozás…
     .disconnect = Leválasztás
     .forget = Elfelejtés
-    .no-networks = Nem található hálózat.
+    .no-networks = Nem található hálózat
     .known-networks = Ismert hálózatok
     .visible-networks = Látható hálózatok
 auth-dialog = Hitelesítés szükséges
@@ -81,6 +81,6 @@ forget-dialog = El akarod felejteni ezt a Wi-Fi hálózatot?
 ## Users
 
 users = Felhasználók
-    .desc = Hitelesítés és felhasználói fiókok.
+    .desc = Hitelesítés és felhasználói fiókok
     .admin = Rendszergazda
     .standard = Normál
