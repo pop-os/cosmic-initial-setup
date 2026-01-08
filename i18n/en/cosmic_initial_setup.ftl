@@ -13,6 +13,7 @@ wifi = Wi-Fi
 
 # Accessibility Page
 accessibility-page = Accessibility setup
+    .display-scaling = Display scaling
     .scale-options = Additional scale options
     .screen-reader = Screen reader
     .interface-size = Interface size

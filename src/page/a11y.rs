@@ -127,28 +127,27 @@ impl page::Page for Page {
                 Message::MagnifierEnabled(enable).into()
             });
 
+        let a11y_section = widget::settings::section()
+            .add(screen_reader)
+            .add(magnifier);
+
+        let display_settings = widget::settings::section()
+            .add(interface_size)
+            .add(scale_options);
+
         if let Some(switcher) = display_switcher {
-            let display_settings = widget::settings::section()
-                .add(interface_size)
-                .add(scale_options);
-
-            let a11y_section = widget::settings::section()
-                .add(screen_reader)
-                .add(magnifier);
-
             widget::column::with_capacity(5)
+                .push(a11y_section)
+                .push(widget::vertical_space().height(spacing.space_xl))
                 .push(switcher)
                 .push(widget::vertical_space().height(spacing.space_xxs))
                 .push(display_settings)
-                .push(widget::vertical_space().height(spacing.space_xl))
-                .push(a11y_section)
                 .into()
         } else {
-            widget::settings::section()
-                .add(interface_size)
-                .add(scale_options)
-                .add(screen_reader)
-                .add(magnifier)
+            widget::column::with_capacity(3)
+                .push(a11y_section)
+                .push(widget::vertical_space().height(spacing.space_xl))
+                .push(display_settings.title(fl!("accessibility-page", "display-scaling")))
                 .into()
         }
     }
