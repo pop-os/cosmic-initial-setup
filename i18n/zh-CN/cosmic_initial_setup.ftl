@@ -11,8 +11,7 @@ skip-setup-and-close = 跳过设置并关闭
 type-to-search = 输入以搜索…
 wifi = Wi-Fi
 
-# WelcomePage
-welcome-page = 欢迎
+accessibility-page = 欢迎
     .scale-options = 其他缩放选项
     .screen-reader = 屏幕阅读器
     .interface-size = 界面大小

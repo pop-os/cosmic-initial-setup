@@ -2,8 +2,7 @@ back = 前
 next = 次
 finish = 完了
 skip-setup-and-close = スキップして閉じる
-# WelcomePage
-welcome-page = ようこそ
+accessibility-page = ようこそ
     .scale-options = 追加のスケーリングオプション
     .screen-reader = スクリーンリーダー
     .interface-size = インターフェースのサイズ

@@ -2,6 +2,7 @@ use cosmic::{Element, widget};
 use indexmap::IndexMap;
 use std::any::{Any, TypeId};
 
+pub mod a11y;
 pub mod appearance;
 pub mod keyboard;
 pub mod language;
@@ -11,7 +12,6 @@ pub mod location;
 pub mod new_apps;
 pub mod new_shortcuts;
 pub mod user;
-pub mod welcome;
 pub mod wifi;
 pub mod workflow;
 
@@ -26,10 +26,7 @@ pub enum AppMode {
 #[inline]
 pub fn pages(mode: AppMode) -> IndexMap<TypeId, Box<dyn Page>> {
     let mut pages: IndexMap<TypeId, Box<dyn Page>> = IndexMap::new();
-    pages.insert(
-        TypeId::of::<welcome::Page>(),
-        Box::new(welcome::Page::new()),
-    );
+    pages.insert(TypeId::of::<a11y::Page>(), Box::new(a11y::Page::new()));
 
     if let AppMode::NewInstall { create_user } = mode {
         pages.insert(TypeId::of::<wifi::Page>(), Box::new(wifi::Page::default()));
@@ -102,7 +99,7 @@ pub enum Message {
     Location(location::Message),
     SetTheme(cosmic::Theme),
     User(user::Message),
-    Welcome(welcome::Message),
+    A11y(a11y::Message),
     WiFi(wifi::Message),
 }
 

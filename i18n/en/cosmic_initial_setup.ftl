@@ -11,8 +11,8 @@ skip-setup-and-close = Skip setup and close
 type-to-search = Type to search…
 wifi = Wi-Fi
 
-# WelcomePage
-welcome-page = Welcome
+# Accessibility Page
+accessibility-page = Accessibility setup
     .scale-options = Additional scale options
     .screen-reader = Screen reader
     .interface-size = Interface size

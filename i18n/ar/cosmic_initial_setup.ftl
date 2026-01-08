@@ -10,8 +10,7 @@ skip = تخطَّ
 skip-setup-and-close = تخطَّ الإعداد وأغلق
 type-to-search = اكتب للبحث…
 wifi = واي فاي
-# WelcomePage
-welcome-page = مرحبًا
+accessibility-page = مرحبًا
     .scale-options = خيارات مقياس إضافية
     .screen-reader = قارئ الشاشة
     .interface-size = حجم الواجهة
