@@ -10,8 +10,7 @@ skip = Pomiń
 skip-setup-and-close = Pomiń konfigurację i zamknij
 type-to-search = Zacznij pisać by wyszukać…
 wifi = Wi-Fi
-# WelcomePage
-welcome-page = Witaj
+accessibility-page = Witaj
     .scale-options = Dodatkowe opcje skalowania
     .screen-reader = Czytnik ekranu
     .interface-size = Rozmiar interfejsu

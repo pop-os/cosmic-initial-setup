@@ -43,7 +43,7 @@ pub struct Page {
 
 impl page::Page for Page {
     fn title(&self) -> String {
-        fl!("welcome-page")
+        fl!("accessibility-page")
     }
 
     fn as_any(&mut self) -> &mut dyn std::any::Any {
@@ -64,7 +64,7 @@ impl page::Page for Page {
                         |mut sender| async move {
                             while let Some(event) = rx.recv().await {
                                 let _ = sender
-                                    .send(page::Message::Welcome(Message::A11yEvent(event)))
+                                    .send(page::Message::A11y(Message::A11yEvent(event)))
                                     .await;
                             }
                         },
@@ -91,10 +91,11 @@ impl page::Page for Page {
 
     fn view(&self) -> Element<'_, page::Message> {
         let spacing = cosmic::theme::spacing();
-        let screen_reader = widget::settings::item::builder(fl!("welcome-page", "screen-reader"))
-            .toggler(self.reader_enabled, |enable| {
-                Message::ScreenReaderEnabled(enable).into()
-            });
+        let screen_reader =
+            widget::settings::item::builder(fl!("accessibility-page", "screen-reader"))
+                .toggler(self.reader_enabled, |enable| {
+                    Message::ScreenReaderEnabled(enable).into()
+                });
 
         let display_switcher = (self.displays.len() > 1).then(|| {
             widget::tab_bar::horizontal(&self.displays)
@@ -102,24 +103,26 @@ impl page::Page for Page {
                 .on_activate(|e| Message::Display(e).into())
         });
 
-        let interface_size = widget::settings::item::builder(fl!("welcome-page", "interface-size"))
-            .control(widget::dropdown(
-                DPI_SCALE_LABELS,
-                Some(self.interface_scale),
-                |option| Message::Scale(option).into(),
-            ));
+        let interface_size =
+            widget::settings::item::builder(fl!("accessibility-page", "interface-size")).control(
+                widget::dropdown(DPI_SCALE_LABELS, Some(self.interface_scale), |option| {
+                    Message::Scale(option).into()
+                }),
+            );
 
-        let scale_options = widget::settings::item::builder(fl!("welcome-page", "scale-options"))
-            .control(widget::spin_button(
-                format!("{}%", self.interface_adjusted_scale),
-                self.interface_adjusted_scale,
-                5,
-                0,
-                20,
-                |value| Message::ScaleAdjust(value).into(),
-            ));
+        let scale_options =
+            widget::settings::item::builder(fl!("accessibility-page", "scale-options")).control(
+                widget::spin_button(
+                    format!("{}%", self.interface_adjusted_scale),
+                    self.interface_adjusted_scale,
+                    5,
+                    0,
+                    20,
+                    |value| Message::ScaleAdjust(value).into(),
+                ),
+            );
 
-        let magnifier = widget::settings::item::builder(fl!("welcome-page", "magnifier"))
+        let magnifier = widget::settings::item::builder(fl!("accessibility-page", "magnifier"))
             .toggler(self.magnifier_enabled, |enable| {
                 Message::MagnifierEnabled(enable).into()
             });
@@ -235,7 +238,6 @@ impl Page {
 
             Message::UpdateDisplayList(result) => match Arc::into_inner(result) {
                 Some(Ok(outputs)) => {
-                    eprintln!("update display list");
                     self.list = outputs;
                     self.displays.clear();
 
@@ -261,8 +263,6 @@ impl Page {
                         if output.name == active_display_name {
                             active_tab_pos = pos as u16;
                         }
-
-                        eprintln!("insert {}", output.name);
 
                         self.displays
                             .insert()
@@ -380,6 +380,6 @@ pub enum Message {
 
 impl From<Message> for page::Message {
     fn from(message: Message) -> Self {
-        page::Message::Welcome(message)
+        page::Message::A11y(message)
     }
 }
