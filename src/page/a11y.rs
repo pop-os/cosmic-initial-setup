@@ -1,8 +1,9 @@
 use crate::accessibility::{AccessibilityEvent, AccessibilityRequest};
 use crate::{fl, page};
 use cosmic::Task;
-use cosmic::iced::Alignment;
-use cosmic::widget::segmented_button;
+use cosmic::iced::{Alignment, Length, alignment};
+use cosmic::iced_core::text::Wrapping;
+use cosmic::widget::{segmented_button, text};
 use cosmic::{Element, widget};
 use cosmic_randr_shell::OutputKey;
 use cosmic_settings_subscriptions::accessibility::{DBusRequest, DBusUpdate};
@@ -91,11 +92,39 @@ impl page::Page for Page {
 
     fn view(&self) -> Element<'_, page::Message> {
         let spacing = cosmic::theme::spacing();
-        let screen_reader =
-            widget::settings::item::builder(fl!("accessibility-page", "screen-reader"))
-                .toggler(self.reader_enabled, |enable| {
-                    Message::ScreenReaderEnabled(enable).into()
-                });
+
+        let screen_reader = {
+            let text = widget::column::with_capacity(2)
+                .spacing(2)
+                .push(
+                    text::body(fl!("accessibility-page", "screen-reader")).wrapping(Wrapping::Word),
+                )
+                .width(Length::Shrink);
+
+            let icon = self.reader_enabled.then(|| {
+                widget::icon::from_name("audio-speakers-symbolic")
+                    .icon()
+                    .size(24)
+                    .class(cosmic::style::Svg::custom(|theme| {
+                        cosmic::iced::widget::svg::Style {
+                            color: Some(theme.cosmic().success_text_color().into()),
+                        }
+                    }))
+            });
+
+            widget::settings::item_row(vec![
+                widget::row::with_capacity(2)
+                    .spacing(spacing.space_xs)
+                    .push(text)
+                    .push_maybe(icon)
+                    .align_y(alignment::Vertical::Center)
+                    .width(Length::Fill)
+                    .into(),
+                widget::toggler(self.reader_enabled)
+                    .on_toggle(|enable| Message::ScreenReaderEnabled(enable).into())
+                    .into(),
+            ])
+        };
 
         let display_switcher = (self.displays.len() > 1).then(|| {
             widget::tab_bar::horizontal(&self.displays)
