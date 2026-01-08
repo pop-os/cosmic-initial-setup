@@ -231,6 +231,7 @@ impl Page {
                 DBusUpdate::Init(enabled, tx) => {
                     self.reader_enabled = enabled;
                     self.screen_reader_dbus_sender = Some(tx);
+                    return cosmic::Task::done(Message::ScreenReaderEnabled(true).into());
                 }
             },
 
