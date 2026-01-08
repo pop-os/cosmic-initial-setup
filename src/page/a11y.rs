@@ -99,6 +99,7 @@ impl page::Page for Page {
                 .push(
                     text::body(fl!("accessibility-page", "screen-reader")).wrapping(Wrapping::Word),
                 )
+                .push(text::caption("Super + Alt + S").wrapping(Wrapping::Word))
                 .width(Length::Shrink);
 
             let icon = self.reader_enabled.then(|| {
@@ -151,6 +152,7 @@ impl page::Page for Page {
             );
 
         let magnifier = widget::settings::item::builder(fl!("accessibility-page", "magnifier"))
+            .description(fl!("accessibility-page", "magnifier-description"))
             .toggler(self.magnifier_enabled, |enable| {
                 Message::MagnifierEnabled(enable).into()
             });
