@@ -35,7 +35,7 @@ pub struct Page {
     displays: segmented_button::SingleSelectModel,
     magnifier_enabled: bool,
     reader_enabled: bool,
-    interface_scale: usize,
+    scale: usize,
     interface_adjusted_scale: u32,
     a11y_wayland_thread: Option<crate::accessibility::Sender>,
     screen_reader_dbus_sender: Option<UnboundedSender<DBusRequest>>,
@@ -103,12 +103,11 @@ impl page::Page for Page {
                 .on_activate(|e| Message::Display(e).into())
         });
 
-        let interface_size =
-            widget::settings::item::builder(fl!("accessibility-page", "interface-size")).control(
-                widget::dropdown(DPI_SCALE_LABELS, Some(self.interface_scale), |option| {
-                    Message::Scale(option).into()
-                }),
-            );
+        let scale = widget::settings::item::builder(fl!("accessibility-page", "scale")).control(
+            widget::dropdown(DPI_SCALE_LABELS, Some(self.scale), |option| {
+                Message::Scale(option).into()
+            }),
+        );
 
         let scale_options =
             widget::settings::item::builder(fl!("accessibility-page", "scale-options")).control(
@@ -131,9 +130,7 @@ impl page::Page for Page {
             .add(screen_reader)
             .add(magnifier);
 
-        let display_settings = widget::settings::section()
-            .add(interface_size)
-            .add(scale_options);
+        let display_settings = widget::settings::section().add(scale).add(scale_options);
 
         if let Some(switcher) = display_switcher {
             widget::column::with_capacity(5)
@@ -160,7 +157,7 @@ impl Page {
             displays: segmented_button::SingleSelectModel::default(),
             magnifier_enabled: false,
             reader_enabled: false,
-            interface_scale: 2,
+            scale: 2,
             interface_adjusted_scale: 0,
             a11y_wayland_thread: None,
             screen_reader_dbus_sender: None,
@@ -200,7 +197,7 @@ impl Page {
             Message::Scale(option) => return self.set_scale(option, 0),
 
             Message::ScaleAdjust(scale_adjust) => {
-                return self.set_scale(self.interface_scale, scale_adjust);
+                return self.set_scale(self.scale, scale_adjust);
             }
 
             Message::ScaleAdjustResult(ScaleAdjustResult::Success) => {}
@@ -295,7 +292,7 @@ impl Page {
         };
 
         let scale_u32 = ((output.scale * 100.0) as u32).min(300);
-        self.interface_scale = (scale_u32 / 25).checked_sub(2).unwrap_or(2) as usize;
+        self.scale = (scale_u32 / 25).checked_sub(2).unwrap_or(2) as usize;
         self.interface_adjusted_scale = ((scale_u32 % 25).min(20) as f32 / 5.0).round() as u32 * 5;
         self.displays.activate(display);
     }
@@ -303,7 +300,7 @@ impl Page {
     /// Set the scale of each display.
     fn set_scale(&mut self, option: usize, scale_adjust: u32) -> Task<page::Message> {
         tracing::debug!("setting scale {option} with {scale_adjust}");
-        self.interface_scale = option;
+        self.scale = option;
         self.interface_adjusted_scale = scale_adjust;
 
         self.list
