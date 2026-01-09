@@ -1,7 +1,7 @@
 set unstable
 
 # The cargo module contains cargo recipes shared by all cosmic projects.
-mod? cargo 'cargo.just'
+mod cargo 'cargo.just'
 
 name := 'cosmic-initial-setup'
 appid := 'com.system76.CosmicInitialSetup'
@@ -26,10 +26,10 @@ polkit-rules-dst := base-dir / 'share' / 'polkit-1' / 'rules.d' / '20-cosmic-ini
 themes-dst := base-dir / 'share' / 'cosmic-themes'
 
 # Default recipe which runs `just cargo build-release`
-default: fetch
+default:
     @just cargo build-release
 
-build-release: fetch
+build-release:
     @just cargo build-release
 
 # Build release binary from vendored sources
@@ -37,13 +37,9 @@ build-vendored:
     @just cargo build-vendored
 
 # Clean
-clean: fetch
+clean:
     @just cargo clean
     rm -rf {{layouts-dst}} {{themes-dst}} {{bin-dst}} {{icon-dst}} {{desktop-dst}} {{autostart-dst}} {{polkit-rules-dst}}
-
-# Fetch cargo.just module if it is missing on the disk.
-@fetch:
-    {{ if path_exists('cargo.just') == 'false' { 'curl --proto =https --tlsv1.2 -sSf -o cargo.just https://raw.githubusercontent.com/pop-os/cosmic-justfiles/master/cargo.just' } else { 'true' } }}
 
 # Installs files
 install:
@@ -71,5 +67,5 @@ uninstall:
     rm -rf {{desktop-dst}} {{polkit-rules-dst}} {{icon-dst}} {{themes-dst}} {{layouts-dst}} {{bin-dst}}
 
 # Vendor sources
-vendor: fetch
+vendor:
     just cargo vendor
