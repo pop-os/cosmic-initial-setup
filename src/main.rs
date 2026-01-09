@@ -57,10 +57,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_writer(std::io::stderr)
         .event_format(log_format)
         .with_filter(tracing_subscriber::filter::filter_fn(move |metadata| {
-            let target = metadata.target();
-            metadata.level() == &tracing::Level::ERROR
-                || (target.starts_with("cosmic_initial_setup")
-                    && metadata.level() <= &log_level)
+            if metadata.level() == &tracing::Level::INFO {
+                return metadata.target() == "cosmic_initial_setup"
+            }
+
+            metadata.level() <= &log_level
         }));
 
     tracing_subscriber::registry().with(log_filter).init();
@@ -402,9 +403,7 @@ impl Application for App {
         let mut subscriptions = vec![
             // Make the screen reader toggleable.
             cosmic_settings_accessibility_subscription::subscription().map(|m| {
-                Message::PageMessage(page::Message::A11y(page::a11y::Message::ScreenReaderDbus(
-                    m,
-                )))
+                Message::PageMessage(page::Message::A11y(page::a11y::Message::A11yBus(m)))
             }),
         ];
 
