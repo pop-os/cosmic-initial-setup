@@ -91,3 +91,4 @@ cosmic-client-toolkit = { git = "https://github.com/pop-os/cosmic-protocols//" }
 # libcosmic = { path = "../libcosmic" }
 # cosmic-config = { path = "../libcosmic/cosmic-config" }
 # cosmic-theme = { path = "../libcosmic/cosmic-theme" }
+# iced_futures = { path = "../libcosmic/iced/futures" }

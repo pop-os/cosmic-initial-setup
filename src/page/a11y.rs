@@ -8,7 +8,7 @@ use cosmic_randr_shell::OutputKey;
 use cosmic_settings_a11y_manager_subscription::{
     self as cosmic_a11y_manager, AccessibilityEvent, AccessibilityRequest,
 };
-use cosmic_settings_accessibility_subscription::{DBusRequest, DBusUpdate};
+use cosmic_settings_accessibility_subscription as a11y_bus;
 use futures_util::{FutureExt, SinkExt};
 use std::collections::BTreeMap;
 use std::sync::Arc;
@@ -41,7 +41,7 @@ pub struct Page {
     scale: usize,
     interface_adjusted_scale: u32,
     a11y_wayland_thread: Option<cosmic_a11y_manager::Sender>,
-    screen_reader_dbus_sender: Option<UnboundedSender<DBusRequest>>,
+    screen_reader_dbus_sender: Option<UnboundedSender<a11y_bus::Request>>,
 }
 
 impl page::Page for Page {
@@ -146,6 +146,7 @@ impl page::Page for Page {
             widget::settings::item::builder(fl!("accessibility-page", "scale-options")).control(
                 widget::spin_button(
                     format!("{}%", self.interface_adjusted_scale),
+                    fl!("accessibility-page", "scale-options"),
                     self.interface_adjusted_scale,
                     5,
                     0,
@@ -236,31 +237,30 @@ impl Page {
 
             Message::ScaleAdjustResult(ScaleAdjustResult::Success) => {}
 
-            Message::ScaleAdjustResult(ScaleAdjustResult::FailureCode(code)) => {}
+            Message::ScaleAdjustResult(ScaleAdjustResult::FailureCode(_code)) => {}
 
-            Message::ScaleAdjustResult(ScaleAdjustResult::SpawnFailure(why)) => {}
+            Message::ScaleAdjustResult(ScaleAdjustResult::SpawnFailure(_why)) => {}
 
             Message::ScreenReaderEnabled(enabled) => {
                 if let Some(tx) = &self.screen_reader_dbus_sender {
-                    eprintln!("screen reader enabled: {enabled}");
                     self.reader_enabled = enabled;
-                    let _ = tx.send(DBusRequest::Status(enabled));
+                    let _ = tx.send(a11y_bus::Request::ScreenReader(enabled));
                 } else {
                     self.reader_enabled = false;
                 }
             }
 
-            Message::ScreenReaderDbus(update) => match update {
-                DBusUpdate::Error(err) => {
+            Message::A11yBus(update) => match update {
+                a11y_bus::Response::Error(err) => {
                     tracing::error!(?err, "screen reader dbus error");
                     let _ = self.screen_reader_dbus_sender.take();
                     self.reader_enabled = false;
                 }
-                DBusUpdate::Status(enabled) => {
-                    eprintln!("dbus reader enabled: {enabled}");
+                a11y_bus::Response::ScreenReader(enabled) => {
                     self.reader_enabled = enabled;
                 }
-                DBusUpdate::Init(enabled, tx) => {
+                a11y_bus::Response::IsEnabled(_) => (),
+                a11y_bus::Response::Init(enabled, tx) => {
                     self.reader_enabled = enabled;
                     self.screen_reader_dbus_sender = Some(tx);
                     return cosmic::Task::done(Message::ScreenReaderEnabled(true).into());
@@ -403,7 +403,7 @@ pub enum Message {
     /// Status of scale adjust command.
     ScaleAdjustResult(ScaleAdjustResult),
     /// Screen reader DBus events.
-    ScreenReaderDbus(DBusUpdate),
+    A11yBus(a11y_bus::Response),
     /// Enable the screen reader.
     ScreenReaderEnabled(bool),
     /// Update the display list
