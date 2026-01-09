@@ -1,4 +1,3 @@
-use crate::accessibility::{AccessibilityEvent, AccessibilityRequest};
 use crate::{fl, page};
 use cosmic::Task;
 use cosmic::iced::{Alignment, Length, alignment};
@@ -6,7 +5,10 @@ use cosmic::iced_core::text::Wrapping;
 use cosmic::widget::{segmented_button, text};
 use cosmic::{Element, widget};
 use cosmic_randr_shell::OutputKey;
-use cosmic_settings_subscriptions::accessibility::{DBusRequest, DBusUpdate};
+use cosmic_settings_a11y_manager_subscription::{
+    self as cosmic_a11y_manager, AccessibilityEvent, AccessibilityRequest,
+};
+use cosmic_settings_accessibility_subscription::{DBusRequest, DBusUpdate};
 use futures_util::{FutureExt, SinkExt};
 use std::collections::BTreeMap;
 use std::sync::Arc;
@@ -38,7 +40,7 @@ pub struct Page {
     reader_enabled: bool,
     scale: usize,
     interface_adjusted_scale: u32,
-    a11y_wayland_thread: Option<crate::accessibility::Sender>,
+    a11y_wayland_thread: Option<cosmic_a11y_manager::Sender>,
     screen_reader_dbus_sender: Option<UnboundedSender<DBusRequest>>,
 }
 
@@ -54,9 +56,9 @@ impl page::Page for Page {
     fn init(&mut self) -> cosmic::Task<page::Message> {
         let mut tasks = Vec::new();
 
-        // Intialize the a11y wayland thread, and fetch displays.
+        // Intialize the a11y wayland thread.
         if self.a11y_wayland_thread.is_none() {
-            match crate::accessibility::spawn_wayland_connection() {
+            match cosmic_a11y_manager::spawn_wayland_connection(1) {
                 Ok((tx, mut rx)) => {
                     self.a11y_wayland_thread = Some(tx);
 
@@ -78,6 +80,7 @@ impl page::Page for Page {
                         ?err,
                         "Failed to spawn wayland connection for accessibility page"
                     );
+                    self.a11y_wayland_thread = None;
                 }
             }
         }
@@ -239,6 +242,7 @@ impl Page {
 
             Message::ScreenReaderEnabled(enabled) => {
                 if let Some(tx) = &self.screen_reader_dbus_sender {
+                    eprintln!("screen reader enabled: {enabled}");
                     self.reader_enabled = enabled;
                     let _ = tx.send(DBusRequest::Status(enabled));
                 } else {
@@ -253,6 +257,7 @@ impl Page {
                     self.reader_enabled = false;
                 }
                 DBusUpdate::Status(enabled) => {
+                    eprintln!("dbus reader enabled: {enabled}");
                     self.reader_enabled = enabled;
                 }
                 DBusUpdate::Init(enabled, tx) => {
@@ -261,7 +266,6 @@ impl Page {
                     return cosmic::Task::done(Message::ScreenReaderEnabled(true).into());
                 }
             },
-
             Message::Display(entity) => self.set_active_display(entity),
 
             Message::UpdateDisplayList(result) => match Arc::into_inner(result) {
@@ -387,7 +391,7 @@ pub enum ScaleAdjustResult {
 #[derive(Clone, Debug)]
 pub enum Message {
     /// Handle an a11y event.
-    A11yEvent(crate::accessibility::AccessibilityEvent),
+    A11yEvent(AccessibilityEvent),
     /// Change the active display tab
     Display(segmented_button::Entity),
     /// Toggle the screen magnifier.

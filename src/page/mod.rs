@@ -1,4 +1,4 @@
-use cosmic::{Element, widget};
+use cosmic::{Element, iced::Subscription, widget};
 use indexmap::IndexMap;
 use std::any::{Any, TypeId};
 
@@ -148,5 +148,9 @@ pub trait Page {
 
     fn view(&self) -> Element<'_, Message> {
         widget::text::body("TODO").into()
+    }
+
+    fn subscription(&self) -> Subscription<Message> {
+        Subscription::none()
     }
 }

@@ -6,5 +6,5 @@ edition = "2024"
 [dependencies]
 bitcode = "0.6"
 reqwest = "0.12"
-tokio = { version = "1.47", features = ["full"] }
+tokio = { version = "1.49", features = ["full"] }
 zip = "5"

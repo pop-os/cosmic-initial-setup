@@ -15,7 +15,6 @@ use futures::{SinkExt, Stream, StreamExt};
 use indexmap::IndexMap;
 use tracing_subscriber::prelude::*;
 
-mod accessibility;
 mod greeter;
 mod localize;
 
@@ -402,7 +401,7 @@ impl Application for App {
     fn subscription(&self) -> Subscription<Self::Message> {
         let mut subscriptions = vec![
             // Make the screen reader toggleable.
-            cosmic_settings_subscriptions::accessibility::subscription().map(|m| {
+            cosmic_settings_accessibility_subscription::subscription().map(|m| {
                 Message::PageMessage(page::Message::A11y(page::a11y::Message::ScreenReaderDbus(
                     m,
                 )))
@@ -419,7 +418,7 @@ impl Application for App {
 }
 
 fn network_manager_stream() -> impl Stream<Item = Message> {
-    use cosmic_settings_subscriptions::network_manager;
+    use cosmic_settings_network_manager_subscription as network_manager;
     cosmic::iced_futures::stream::channel(1, |mut output| async move {
         let conn = zbus::Connection::system().await.unwrap();
 
