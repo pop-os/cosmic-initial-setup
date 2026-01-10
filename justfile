@@ -10,7 +10,7 @@ prefix := '/usr'
 
 # An optional file that when set will prevent initial-setup from loading
 disable-if-exists := ''
-export DISABLE_IF_EXISTS := disable-if-exists || env('DISABLE_IF_EXISTS', '')
+export DISABLE_IF_EXISTS := env('DISABLE_IF_EXISTS', disable-if-exists)
 
 # Installation paths
 base-dir := absolute_path(clean(rootdir / prefix))
