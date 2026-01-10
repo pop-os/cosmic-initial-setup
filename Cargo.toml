@@ -83,9 +83,8 @@ lto = "thin"
 [workspace]
 members = ["geonames"]
 
-[patch.'https://github.com/pop-os/cosmic-protocols']
-cosmic-protocols = { git = "https://github.com/pop-os/cosmic-protocols//" }
-cosmic-client-toolkit = { git = "https://github.com/pop-os/cosmic-protocols//" }
+[patch."https://github.com/smithay/client-toolkit.git"]
+sctk = { package = "smithay-client-toolkit", version = "0.20.0" }
 
 # [patch.'https://github.com/pop-os/libcosmic.git']
 # libcosmic = { path = "../libcosmic" }
