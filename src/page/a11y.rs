@@ -1,11 +1,14 @@
-use crate::accessibility::{AccessibilityEvent, AccessibilityRequest};
 use crate::{fl, page};
 use cosmic::Task;
-use cosmic::iced::Alignment;
-use cosmic::widget::segmented_button;
+use cosmic::iced::{Alignment, Length, alignment};
+use cosmic::iced_core::text::Wrapping;
+use cosmic::widget::{segmented_button, text};
 use cosmic::{Element, widget};
 use cosmic_randr_shell::OutputKey;
-use cosmic_settings_subscriptions::accessibility::{DBusRequest, DBusUpdate};
+use cosmic_settings_a11y_manager_subscription::{
+    self as cosmic_a11y_manager, AccessibilityEvent, AccessibilityRequest,
+};
+use cosmic_settings_accessibility_subscription as a11y_bus;
 use futures_util::{FutureExt, SinkExt};
 use std::collections::BTreeMap;
 use std::sync::Arc;
@@ -35,15 +38,15 @@ pub struct Page {
     displays: segmented_button::SingleSelectModel,
     magnifier_enabled: bool,
     reader_enabled: bool,
-    interface_scale: usize,
+    scale: usize,
     interface_adjusted_scale: u32,
-    a11y_wayland_thread: Option<crate::accessibility::Sender>,
-    screen_reader_dbus_sender: Option<UnboundedSender<DBusRequest>>,
+    a11y_wayland_thread: Option<cosmic_a11y_manager::Sender>,
+    screen_reader_dbus_sender: Option<UnboundedSender<a11y_bus::Request>>,
 }
 
 impl page::Page for Page {
     fn title(&self) -> String {
-        fl!("welcome-page")
+        fl!("accessibility-page")
     }
 
     fn as_any(&mut self) -> &mut dyn std::any::Any {
@@ -53,9 +56,9 @@ impl page::Page for Page {
     fn init(&mut self) -> cosmic::Task<page::Message> {
         let mut tasks = Vec::new();
 
-        // Intialize the a11y wayland thread, and fetch displays.
+        // Intialize the a11y wayland thread.
         if self.a11y_wayland_thread.is_none() {
-            match crate::accessibility::spawn_wayland_connection() {
+            match cosmic_a11y_manager::spawn_wayland_connection(1) {
                 Ok((tx, mut rx)) => {
                     self.a11y_wayland_thread = Some(tx);
 
@@ -64,7 +67,7 @@ impl page::Page for Page {
                         |mut sender| async move {
                             while let Some(event) = rx.recv().await {
                                 let _ = sender
-                                    .send(page::Message::Welcome(Message::A11yEvent(event)))
+                                    .send(page::Message::A11y(Message::A11yEvent(event)))
                                     .await;
                             }
                         },
@@ -77,6 +80,7 @@ impl page::Page for Page {
                         ?err,
                         "Failed to spawn wayland connection for accessibility page"
                     );
+                    self.a11y_wayland_thread = None;
                 }
             }
         }
@@ -91,10 +95,40 @@ impl page::Page for Page {
 
     fn view(&self) -> Element<'_, page::Message> {
         let spacing = cosmic::theme::spacing();
-        let screen_reader = widget::settings::item::builder(fl!("welcome-page", "screen-reader"))
-            .toggler(self.reader_enabled, |enable| {
-                Message::ScreenReaderEnabled(enable).into()
+
+        let screen_reader = {
+            let text = widget::column::with_capacity(2)
+                .spacing(2)
+                .push(
+                    text::body(fl!("accessibility-page", "screen-reader")).wrapping(Wrapping::Word),
+                )
+                .push(text::caption("Super + Alt + S").wrapping(Wrapping::Word))
+                .width(Length::Shrink);
+
+            let icon = self.reader_enabled.then(|| {
+                widget::icon::from_name("audio-speakers-symbolic")
+                    .icon()
+                    .size(24)
+                    .class(cosmic::style::Svg::custom(|theme| {
+                        cosmic::iced::widget::svg::Style {
+                            color: Some(theme.cosmic().success_text_color().into()),
+                        }
+                    }))
             });
+
+            widget::settings::item_row(vec![
+                widget::row::with_capacity(2)
+                    .spacing(spacing.space_xs)
+                    .push(text)
+                    .push_maybe(icon)
+                    .align_y(alignment::Vertical::Center)
+                    .width(Length::Fill)
+                    .into(),
+                widget::toggler(self.reader_enabled)
+                    .on_toggle(|enable| Message::ScreenReaderEnabled(enable).into())
+                    .into(),
+            ])
+        };
 
         let display_switcher = (self.displays.len() > 1).then(|| {
             widget::tab_bar::horizontal(&self.displays)
@@ -102,50 +136,50 @@ impl page::Page for Page {
                 .on_activate(|e| Message::Display(e).into())
         });
 
-        let interface_size = widget::settings::item::builder(fl!("welcome-page", "interface-size"))
-            .control(widget::dropdown(
-                DPI_SCALE_LABELS,
-                Some(self.interface_scale),
-                |option| Message::Scale(option).into(),
-            ));
+        let scale = widget::settings::item::builder(fl!("accessibility-page", "scale")).control(
+            widget::dropdown(DPI_SCALE_LABELS, Some(self.scale), |option| {
+                Message::Scale(option).into()
+            }),
+        );
 
-        let scale_options = widget::settings::item::builder(fl!("welcome-page", "scale-options"))
-            .control(widget::spin_button(
-                format!("{}%", self.interface_adjusted_scale),
-                self.interface_adjusted_scale,
-                5,
-                0,
-                20,
-                |value| Message::ScaleAdjust(value).into(),
-            ));
+        let scale_options =
+            widget::settings::item::builder(fl!("accessibility-page", "scale-options")).control(
+                widget::spin_button(
+                    format!("{}%", self.interface_adjusted_scale),
+                    fl!("accessibility-page", "scale-options"),
+                    self.interface_adjusted_scale,
+                    5,
+                    0,
+                    20,
+                    |value| Message::ScaleAdjust(value).into(),
+                ),
+            );
 
-        let magnifier = widget::settings::item::builder(fl!("welcome-page", "magnifier"))
+        let magnifier = widget::settings::item::builder(fl!("accessibility-page", "magnifier"))
+            .description(fl!("accessibility-page", "magnifier-description"))
             .toggler(self.magnifier_enabled, |enable| {
                 Message::MagnifierEnabled(enable).into()
             });
 
+        let a11y_section = widget::settings::section()
+            .add(screen_reader)
+            .add(magnifier);
+
+        let display_settings = widget::settings::section().add(scale).add(scale_options);
+
         if let Some(switcher) = display_switcher {
-            let display_settings = widget::settings::section()
-                .add(interface_size)
-                .add(scale_options);
-
-            let a11y_section = widget::settings::section()
-                .add(screen_reader)
-                .add(magnifier);
-
             widget::column::with_capacity(5)
+                .push(a11y_section)
+                .push(widget::vertical_space().height(spacing.space_xl))
                 .push(switcher)
                 .push(widget::vertical_space().height(spacing.space_xxs))
                 .push(display_settings)
-                .push(widget::vertical_space().height(spacing.space_xl))
-                .push(a11y_section)
                 .into()
         } else {
-            widget::settings::section()
-                .add(interface_size)
-                .add(scale_options)
-                .add(screen_reader)
-                .add(magnifier)
+            widget::column::with_capacity(3)
+                .push(a11y_section)
+                .push(widget::vertical_space().height(spacing.space_xl))
+                .push(display_settings.title(fl!("accessibility-page", "display-scaling")))
                 .into()
         }
     }
@@ -158,7 +192,7 @@ impl Page {
             displays: segmented_button::SingleSelectModel::default(),
             magnifier_enabled: false,
             reader_enabled: false,
-            interface_scale: 2,
+            scale: 2,
             interface_adjusted_scale: 0,
             a11y_wayland_thread: None,
             screen_reader_dbus_sender: None,
@@ -198,44 +232,44 @@ impl Page {
             Message::Scale(option) => return self.set_scale(option, 0),
 
             Message::ScaleAdjust(scale_adjust) => {
-                return self.set_scale(self.interface_scale, scale_adjust);
+                return self.set_scale(self.scale, scale_adjust);
             }
 
             Message::ScaleAdjustResult(ScaleAdjustResult::Success) => {}
 
-            Message::ScaleAdjustResult(ScaleAdjustResult::FailureCode(code)) => {}
+            Message::ScaleAdjustResult(ScaleAdjustResult::FailureCode(_code)) => {}
 
-            Message::ScaleAdjustResult(ScaleAdjustResult::SpawnFailure(why)) => {}
+            Message::ScaleAdjustResult(ScaleAdjustResult::SpawnFailure(_why)) => {}
 
             Message::ScreenReaderEnabled(enabled) => {
                 if let Some(tx) = &self.screen_reader_dbus_sender {
                     self.reader_enabled = enabled;
-                    let _ = tx.send(DBusRequest::Status(enabled));
+                    let _ = tx.send(a11y_bus::Request::ScreenReader(enabled));
                 } else {
                     self.reader_enabled = false;
                 }
             }
 
-            Message::ScreenReaderDbus(update) => match update {
-                DBusUpdate::Error(err) => {
+            Message::A11yBus(update) => match update {
+                a11y_bus::Response::Error(err) => {
                     tracing::error!(?err, "screen reader dbus error");
                     let _ = self.screen_reader_dbus_sender.take();
                     self.reader_enabled = false;
                 }
-                DBusUpdate::Status(enabled) => {
+                a11y_bus::Response::ScreenReader(enabled) => {
                     self.reader_enabled = enabled;
                 }
-                DBusUpdate::Init(enabled, tx) => {
+                a11y_bus::Response::IsEnabled(_) => (),
+                a11y_bus::Response::Init(enabled, tx) => {
                     self.reader_enabled = enabled;
                     self.screen_reader_dbus_sender = Some(tx);
+                    return cosmic::Task::done(Message::ScreenReaderEnabled(true).into());
                 }
             },
-
             Message::Display(entity) => self.set_active_display(entity),
 
             Message::UpdateDisplayList(result) => match Arc::into_inner(result) {
                 Some(Ok(outputs)) => {
-                    eprintln!("update display list");
                     self.list = outputs;
                     self.displays.clear();
 
@@ -261,8 +295,6 @@ impl Page {
                         if output.name == active_display_name {
                             active_tab_pos = pos as u16;
                         }
-
-                        eprintln!("insert {}", output.name);
 
                         self.displays
                             .insert()
@@ -295,7 +327,7 @@ impl Page {
         };
 
         let scale_u32 = ((output.scale * 100.0) as u32).min(300);
-        self.interface_scale = (scale_u32 / 25).checked_sub(2).unwrap_or(2) as usize;
+        self.scale = (scale_u32 / 25).checked_sub(2).unwrap_or(2) as usize;
         self.interface_adjusted_scale = ((scale_u32 % 25).min(20) as f32 / 5.0).round() as u32 * 5;
         self.displays.activate(display);
     }
@@ -303,7 +335,7 @@ impl Page {
     /// Set the scale of each display.
     fn set_scale(&mut self, option: usize, scale_adjust: u32) -> Task<page::Message> {
         tracing::debug!("setting scale {option} with {scale_adjust}");
-        self.interface_scale = option;
+        self.scale = option;
         self.interface_adjusted_scale = scale_adjust;
 
         self.list
@@ -359,7 +391,7 @@ pub enum ScaleAdjustResult {
 #[derive(Clone, Debug)]
 pub enum Message {
     /// Handle an a11y event.
-    A11yEvent(crate::accessibility::AccessibilityEvent),
+    A11yEvent(AccessibilityEvent),
     /// Change the active display tab
     Display(segmented_button::Entity),
     /// Toggle the screen magnifier.
@@ -371,7 +403,7 @@ pub enum Message {
     /// Status of scale adjust command.
     ScaleAdjustResult(ScaleAdjustResult),
     /// Screen reader DBus events.
-    ScreenReaderDbus(DBusUpdate),
+    A11yBus(a11y_bus::Response),
     /// Enable the screen reader.
     ScreenReaderEnabled(bool),
     /// Update the display list
@@ -380,6 +412,6 @@ pub enum Message {
 
 impl From<Message> for page::Message {
     fn from(message: Message) -> Self {
-        page::Message::Welcome(message)
+        page::Message::A11y(message)
     }
 }

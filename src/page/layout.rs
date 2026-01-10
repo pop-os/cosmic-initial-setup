@@ -205,6 +205,7 @@ fn layout_button<'a>(
     let thumbnail = widget::image(&layout.icon_path).width(144).height(81);
 
     let button = widget::button::custom_image_button(thumbnail, None)
+        .description(name.as_str())
         .class(cosmic::theme::Button::Image)
         .selected(current == Some(id))
         .on_press(Message::Selected(id).into());

@@ -236,6 +236,7 @@ impl page::Page for Page {
 
             let button = widget::button::custom_image_button(thumbnail, None)
                 .class(theme::Button::Image)
+                .description(&theme.name)
                 .selected(i == self.selected)
                 .on_press(Message::Select(i).into());
 

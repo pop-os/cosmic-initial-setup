@@ -10,8 +10,7 @@ skip = Přeskočit
 skip-setup-and-close = Přeskočit nastavování a zavřít
 type-to-search = Pište pro vyhledávání…
 wifi = Wi-Fi
-# WelcomePage
-welcome-page = Vítejte
+accessibility-page = Vítejte
     .scale-options = Další možnosti škálování
     .screen-reader = Čtečka obrazovky
     .interface-size = Velikost rozhraní

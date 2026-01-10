@@ -10,8 +10,7 @@ skip = Kihagyás
 skip-setup-and-close = Beállítás kihagyása és bezárás
 type-to-search = Írj a kereséshez…
 wifi = Wi-Fi
-# WelcomePage
-welcome-page = Üdvözlünk
+accessibility-page = Üdvözlünk
     .scale-options = További skálázás
     .screen-reader = Képernyőolvasó
     .interface-size = Kezelőfelület mérete

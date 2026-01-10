@@ -15,7 +15,6 @@ use futures::{SinkExt, Stream, StreamExt};
 use indexmap::IndexMap;
 use tracing_subscriber::prelude::*;
 
-mod accessibility;
 mod greeter;
 mod localize;
 
@@ -58,10 +57,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_writer(std::io::stderr)
         .event_format(log_format)
         .with_filter(tracing_subscriber::filter::filter_fn(move |metadata| {
-            let target = metadata.target();
-            metadata.level() == &tracing::Level::ERROR
-                || (target.starts_with("cosmic_initial_setup")
-                    && metadata.level() <= &log_level)
+            if metadata.level() == &tracing::Level::INFO {
+                return metadata.target() == "cosmic_initial_setup"
+            }
+
+            metadata.level() <= &log_level
         }));
 
     tracing_subscriber::registry().with(log_filter).init();
@@ -160,120 +160,108 @@ impl Application for App {
         match message {
             Message::None => {}
 
-            Message::PageMessage(page_message) => {
-                match page_message {
-                    page::Message::SetTheme(theme) => {
-                        return cosmic::command::set_theme(theme);
-                    }
+            Message::PageMessage(page_message) => match page_message {
+                page::Message::SetTheme(theme) => {
+                    return cosmic::command::set_theme(theme);
+                }
 
-                    page::Message::Appearance(message) => {
-                        if let Some(page) =
-                            self.pages.get_mut(&TypeId::of::<page::appearance::Page>())
-                        {
-                            return page
-                                .as_any()
-                                .downcast_mut::<page::appearance::Page>()
-                                .unwrap()
-                                .update(message)
-                                .map(Message::PageMessage)
-                                .map(cosmic::Action::App);
-                        }
-                    }
-
-                    page::Message::Keyboard(message) => {
-                        if let Some(page) =
-                            self.pages.get_mut(&TypeId::of::<page::keyboard::Page>())
-                        {
-                            return page
-                                .as_any()
-                                .downcast_mut::<page::keyboard::Page>()
-                                .unwrap()
-                                .update(message)
-                                .map(Message::PageMessage)
-                                .map(cosmic::Action::App);
-                        }
-                    }
-
-                    page::Message::Language(message) => {
-                        if let Some(page) =
-                            self.pages.get_mut(&TypeId::of::<page::language::Page>())
-                        {
-                            return page
-                                .as_any()
-                                .downcast_mut::<page::language::Page>()
-                                .unwrap()
-                                .update(message)
-                                .map(Message::PageMessage)
-                                .map(cosmic::Action::App);
-                        }
-                    }
-
-                    page::Message::Layout(message) => {
-                        if let Some(page) = self.pages.get_mut(&TypeId::of::<page::layout::Page>())
-                        {
-                            return page
-                                .as_any()
-                                .downcast_mut::<page::layout::Page>()
-                                .unwrap()
-                                .update(message)
-                                .map(Message::PageMessage)
-                                .map(cosmic::Action::App);
-                        }
-                    }
-
-                    page::Message::Location(message) => {
-                        if let Some(page) =
-                            self.pages.get_mut(&TypeId::of::<page::location::Page>())
-                        {
-                            return page
-                                .as_any()
-                                .downcast_mut::<page::location::Page>()
-                                .unwrap()
-                                .update(message)
-                                .map(Message::PageMessage)
-                                .map(cosmic::Action::App);
-                        }
-                    }
-
-                    page::Message::User(message) => {
-                        if let Some(page) = self.pages.get_mut(&TypeId::of::<page::user::Page>()) {
-                            return page
-                                .as_any()
-                                .downcast_mut::<page::user::Page>()
-                                .unwrap()
-                                .update(message)
-                                .map(Message::PageMessage)
-                                .map(cosmic::Action::App);
-                        }
-                    }
-
-                    page::Message::Welcome(message) => {
-                        if let Some(page) = self.pages.get_mut(&TypeId::of::<page::welcome::Page>())
-                        {
-                            // eprintln!("type id = {:?}", page.type_id());
-                            return page
-                                .as_any()
-                                .downcast_mut::<page::welcome::Page>()
-                                .unwrap()
-                                .update(message)
-                                .map(Message::PageMessage)
-                                .map(cosmic::Action::App);
-                        }
-                    }
-
-                    page::Message::WiFi(message) => {
-                        if let Some(page) = self.pages.get_mut(&TypeId::of::<page::wifi::Page>()) {
-                            return page
-                                .as_any()
-                                .downcast_mut::<page::wifi::Page>()
-                                .unwrap()
-                                .update(message)
-                                .map(Message::PageMessage)
-                                .map(cosmic::Action::App);
-                        }
+                page::Message::Appearance(message) => {
+                    if let Some(page) = self.pages.get_mut(&TypeId::of::<page::appearance::Page>())
+                    {
+                        return page
+                            .as_any()
+                            .downcast_mut::<page::appearance::Page>()
+                            .unwrap()
+                            .update(message)
+                            .map(Message::PageMessage)
+                            .map(cosmic::Action::App);
                     }
                 }
-            }
+
+                page::Message::Keyboard(message) => {
+                    if let Some(page) = self.pages.get_mut(&TypeId::of::<page::keyboard::Page>()) {
+                        return page
+                            .as_any()
+                            .downcast_mut::<page::keyboard::Page>()
+                            .unwrap()
+                            .update(message)
+                            .map(Message::PageMessage)
+                            .map(cosmic::Action::App);
+                    }
+                }
+
+                page::Message::Language(message) => {
+                    if let Some(page) = self.pages.get_mut(&TypeId::of::<page::language::Page>()) {
+                        return page
+                            .as_any()
+                            .downcast_mut::<page::language::Page>()
+                            .unwrap()
+                            .update(message)
+                            .map(Message::PageMessage)
+                            .map(cosmic::Action::App);
+                    }
+                }
+
+                page::Message::Layout(message) => {
+                    if let Some(page) = self.pages.get_mut(&TypeId::of::<page::layout::Page>()) {
+                        return page
+                            .as_any()
+                            .downcast_mut::<page::layout::Page>()
+                            .unwrap()
+                            .update(message)
+                            .map(Message::PageMessage)
+                            .map(cosmic::Action::App);
+                    }
+                }
+
+                page::Message::Location(message) => {
+                    if let Some(page) = self.pages.get_mut(&TypeId::of::<page::location::Page>()) {
+                        return page
+                            .as_any()
+                            .downcast_mut::<page::location::Page>()
+                            .unwrap()
+                            .update(message)
+                            .map(Message::PageMessage)
+                            .map(cosmic::Action::App);
+                    }
+                }
+
+                page::Message::User(message) => {
+                    if let Some(page) = self.pages.get_mut(&TypeId::of::<page::user::Page>()) {
+                        return page
+                            .as_any()
+                            .downcast_mut::<page::user::Page>()
+                            .unwrap()
+                            .update(message)
+                            .map(Message::PageMessage)
+                            .map(cosmic::Action::App);
+                    }
+                }
+
+                page::Message::A11y(message) => {
+                    if let Some(page) = self.pages.get_mut(&TypeId::of::<page::a11y::Page>()) {
+                        return page
+                            .as_any()
+                            .downcast_mut::<page::a11y::Page>()
+                            .unwrap()
+                            .update(message)
+                            .map(Message::PageMessage)
+                            .map(cosmic::Action::App);
+                    }
+                }
+
+                page::Message::WiFi(message) => {
+                    if let Some(page) = self.pages.get_mut(&TypeId::of::<page::wifi::Page>()) {
+                        return page
+                            .as_any()
+                            .downcast_mut::<page::wifi::Page>()
+                            .unwrap()
+                            .update(message)
+                            .map(Message::PageMessage)
+                            .map(cosmic::Action::App);
+                    }
+                }
+            },
 
             Message::PageOpen(page_i) => {
                 if let Some((_, page)) = self.pages.get_index_mut(page_i) {
@@ -414,10 +402,8 @@ impl Application for App {
     fn subscription(&self) -> Subscription<Self::Message> {
         let mut subscriptions = vec![
             // Make the screen reader toggleable.
-            cosmic_settings_subscriptions::accessibility::subscription().map(|m| {
-                Message::PageMessage(page::Message::Welcome(
-                    page::welcome::Message::ScreenReaderDbus(m),
-                ))
+            cosmic_settings_accessibility_subscription::subscription().map(|m| {
+                Message::PageMessage(page::Message::A11y(page::a11y::Message::A11yBus(m)))
             }),
         ];
 
@@ -431,7 +417,7 @@ impl Application for App {
 }
 
 fn network_manager_stream() -> impl Stream<Item = Message> {
-    use cosmic_settings_subscriptions::network_manager;
+    use cosmic_settings_network_manager_subscription as network_manager;
     cosmic::iced_futures::stream::channel(1, |mut output| async move {
         let conn = zbus::Connection::system().await.unwrap();
 

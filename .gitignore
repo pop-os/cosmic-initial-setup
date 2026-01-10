@@ -18,7 +18,6 @@ debian/*
 .cargo/
 vendor.tar
 vendor/
-cargo.just
 
 # Nix
 .direnv/

@@ -2,8 +2,7 @@ back = Terug
 next = Volgende
 finish = Voltooien
 skip-setup-and-close = Setup overslaan en sluiten
-# WelcomePage
-welcome-page = Welkom
+accessibility-page = Welkom
     .scale-options = Extra schalingsopties
     .screen-reader = Schermverteller
     .interface-size = Interface-grootte
