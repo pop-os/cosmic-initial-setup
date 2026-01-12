@@ -40,7 +40,7 @@ tracing = "0.1.44"
 tracing-subscriber = "0.3.22"
 url = "2.5.8"
 xkb-data = "0.2.1"
-zbus = "5"
+zbus = "5.13.1"
 zbus_polkit = "5.0.0"
 
 [dependencies.accounts-zbus]
