@@ -4,6 +4,7 @@ Name[zh_CN]=初始设置
 Name[ar]=الإعداد الأولي
 Name[cs]=Úvodní nastavení
 Name[hu]=Első Beállítás
+Name[pl]=Wstępna konfiguracja
 Name[pt]=Ajustes Iniciais
 Icon=com.system76.CosmicInitialSetup
 Exec=cosmic-initial-setup
