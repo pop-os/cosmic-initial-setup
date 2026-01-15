@@ -5,6 +5,7 @@ Name[zh_CN]=COSMIC 初始设置
 Name[ar]=الإعداد الأولي ل COSMIC
 Name[cs]=Úvodní nastavení COSMIC
 Name[hu]=COSMIC Első Beállítás
+Name[pl]=Wstępna konfiguracja COSMIC
 Name[pt]=Ajustes Iniciais do COSMIC
 Exec=cosmic-initial-setup
 NoDisplay=true
