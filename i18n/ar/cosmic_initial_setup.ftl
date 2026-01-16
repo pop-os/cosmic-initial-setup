@@ -10,15 +10,17 @@ skip = تخطَّ
 skip-setup-and-close = تخطَّ الإعداد وأغلق
 type-to-search = اكتب للبحث…
 wifi = واي فاي
-accessibility-page = مرحبًا
+accessibility-page = إعدادات الإتاحة
+    .display-scaling = مقياس الشاشة
+    .scale = مقياس
     .scale-options = خيارات مقياس إضافية
     .screen-reader = قارئ الشاشة
     .interface-size = حجم الواجهة
-    .magnifier = المكبر
+    .magnifier = مكبر
     .magnifier-description =
         أو استخدم اختصارات لوحة المفاتيح:
         Super + = للتكبير، Super + - للتصغير،
-        Super + التمرير بالماوس
+        Super + التمرير بالفأرة
 # SelectLanguagePage
 select-language-page = اختر لغة
 # SelectKeyboardLayoutPage

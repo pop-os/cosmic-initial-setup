@@ -11,14 +11,16 @@ skip-setup-and-close = 跳过设置并关闭
 type-to-search = 输入以搜索…
 wifi = Wi-Fi
 accessibility-page = 欢迎
+    .display-scaling = 屏幕缩放
+    .scale = 比例
     .scale-options = 其他缩放选项
     .screen-reader = 屏幕阅读器
     .interface-size = 界面大小
     .magnifier = 放大器
     .magnifier-description =
         或使用键盘快捷键：
-        Super + = 放大，Super + - 缩小，
-        Super + 鼠标滚轮滚动
+        超级键 + = 放大，超级键 + - 缩小，
+        超级键 + 鼠标滚轮滚动
 # SelectLanguagePage
 select-language-page = 选择语言
 # SelectKeyboardLayoutPage
@@ -27,11 +29,11 @@ keyboard-layout-page = 选择键盘布局
 create-account-page = 创建您的账户
     .full-name = 全名
     .user-name = 用户名
-    .user-name-note = 这将用于命名您的主文件夹，且之后无法更改。
+    .user-name-note = 这将用于命名您的主文件夹，且之后无法更改
     .dialog-add = 添加
     .profile-add = 选择个人资料图片
-    .invalid-username = 用户名无效。
-    .password-mismatch = 密码和确认密码必须一致。
+    .invalid-username = 用户名无效
+    .password-mismatch = 密码和确认密码必须一致
 # LocationPage
 timezone-and-location-page = 时区和位置
     .search-the-closest-major-city = 搜索最近的主要城市...
@@ -69,7 +71,7 @@ wireless-page = 连接网络
     .connecting = 连接中…
     .disconnect = 断开连接
     .forget = 忘记网络
-    .no-networks = 未找到任何网络。
+    .no-networks = 未找到任何网络
     .known-networks = 已知网络
     .visible-networks = 可见网络
 auth-dialog = 需要身份验证

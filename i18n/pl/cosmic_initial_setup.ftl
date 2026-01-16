@@ -33,25 +33,25 @@ create-account-page = Stwórz konto
     .invalid-username = Niedozwolona nazwa użytkownika.
     .password-mismatch = Hasło musi być takie samo jak potwierdzenie hasła.
 # LocationPage
-timezone-and-location-page = Strefa Czasowa i Lokalizacja
+timezone-and-location-page = Strefa czasowa i lokalizacja
     .search-the-closest-major-city = Wyszukaj najbliższe duże miasto…
     .geonames-attribution = Ta lista jest uszeregowana według liczby ludności. Dane z: geonames.org (licencja CC-BY-4.0).
 # AppearancePage
-appearance-page = Personalizuj Wygląd
+appearance-page = Personalizuj wygląd
     .description = Możesz bardziej dostosować kolory akcentów oraz wygląd w ustawieniach wyglądu.
 # LayoutPage
-layout-page = Konfiguracja Kompozycji
+layout-page = Konfiguracja kompozycji
     .bottom-panel = Dolny panel
     .top-panel-and-dock = Górny panel i dok
     .description = Przenieś panel lub dok do dowolnej krawędzi, zmień ich wielkość i spraw by chowały się automatycznie w Ustawieniach.
 # SystemAppsPage
-new-apps-page = Nowe Aplikacje Systemowe
+new-apps-page = Nowe aplikacje systemowe
     .description = Rozkoszuj się wieloma nowymi aplikacjami systemowymi które pochodzą z środowiska graficznego COSMIC. Wliczając w to Ustawienia, Sklep COSMIC, Pliki, Edytor Tekstu i Terminal.
 # NewKeyboardShortcutsPage
-new-shortcuts-page = Nowe Skróty Klawiszowe
+new-shortcuts-page = Nowe skróty klawiszowe
     .description = Użyj Shift+Super+strzałek, lub przeciągnij kursorem by poruszać oknami. Zwróć uwagę na widoczne wskazówki podczas używani okien w trybie kafelków.
 # WorkflowPage
-workflow-page = Obszary Robocze dla Twojego Przepływu Pracy
+workflow-page = Obszary robocze dla twojego przepływu pracy
     .description =
         Ustaw pływające lub automatycznie pokafelkowane okna dla każdego obszaru roboczego używając apletu kafelkowania.
         Możesz wybrać pionowe lub poziome obszary robocze, oraz przypiąć je na stałe do podglądu obszarów roboczych.
@@ -72,7 +72,7 @@ wireless-page = Połącz się
     .no-networks = Nie znaleziono sieci.
     .known-networks = Zapamiętane Sieci
     .visible-networks = Widoczne Sieci
-auth-dialog = Konieczne Uwierzytelnienie
+auth-dialog = Konieczne uwierzytelnienie
     .wifi-description = Wprowadź hasło lub klucz szyfrowania. Możesz też połączyć się, używając przycisku „WPS” na routerze.
 forget-dialog = Chcesz zapomnieć o tej sieci Wi-Fi?
     .description = By znów używać tej sieci Wi-Fi będzie konieczne ponowne wprowadzenie hasła.
