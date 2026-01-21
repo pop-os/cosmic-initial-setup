@@ -55,17 +55,17 @@ new-shortcuts-page = Új gyorsbillentyűk
 # WorkflowPage
 workflow-page = Munkaterületek a munkafolyamatodhoz
     .description =
-        Lebegtesd vagy automatikusan csempézd az ablakokat munkaterületenként a csempézés kisalkalmazással.
+        Lebegtesd vagy automatikusan csempézd az ablakokat munkaterületenként a csempéző kisalkalmazással.
         Választhatsz függőleges vagy vízszintes munkaterületeket. Rögzítheted azokat az áttekintésben, hogy statikussá váljanak.
 # LauncherPage
 launcher-page = Gyors és hatékony
-    .description = Nyomd meg a Super (vagy Windows) gombot az Alkalmazásindító aktiválásához. Keress rá egy alkalmazásra, majd nyomd meg az Enter billentyűt a megnyitásához vagy az átváltásához. Beállításokhoz és rendszerfunkciókhoz is ugorhatsz, például a felfüggesztés funkcióhoz. Írd be a „?” jelet az Alkalmazásindító speciális funkcióinak megismeréséhez.
+    .description = Nyomd meg a Super (vagy Windows) gombot az Alkalmazásindító aktiválásához. Keress rá egy alkalmazásra, majd nyomd meg az Enter billentyűt a megnyitásához vagy az átváltásához. Beállításokhoz és rendszerfunkciókhoz is ugorhatsz, például a felfüggesztés funkcióhoz. Írd be a „?” az Alkalmazásindító speciális funkcióinak megismeréséhez.
 
 # WirelessPage
 
 wireless-page = Csatlakozás a hálózathoz
     .explain = Ha csatlakozol a hálózathoz, megkapod a legfrissebb rendszer- és biztonsági frissítéseket.
-    .airplane-mode = A repülőgép üzemmód be van kapcsolva
+    .airplane-mode = A repülőgép-üzemmód be van kapcsolva
     .connect = Csatlakozás
     .connected = Csatlakozva
     .connecting = Csatlakozás…
@@ -75,9 +75,9 @@ wireless-page = Csatlakozás a hálózathoz
     .known-networks = Ismert hálózatok
     .visible-networks = Látható hálózatok
 auth-dialog = Hitelesítés szükséges
-    .wifi-description = Írd be a jelszót vagy a titkosítókulcsot. A router „WPS” gombjának megnyomásával is csatlakozhatsz.
+    .wifi-description = Add meg a jelszót vagy a titkosítási kulcsot. A router „WPS” gombjának megnyomásával is csatlakozhatsz.
 forget-dialog = El akarod felejteni ezt a Wi-Fi hálózatot?
-    .description = A jelszót ismét meg kell adnod, ha újra csatlakozni szeretnél.
+    .description = A jelszót ismét meg kell majd adnod a csatlakozáshoz.
 
 ## Users
 

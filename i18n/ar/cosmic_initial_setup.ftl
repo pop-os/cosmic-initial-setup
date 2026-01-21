@@ -32,8 +32,8 @@ create-account-page = أنشى حسابك
     .user-name-note = سيُستخدم هذا لتسمية مجلد المنزل، ولا يمكن تغييره.
     .dialog-add = أضف
     .profile-add = اختر صورة ملف التعريف
-    .invalid-username = اسم المستخدم غير صالح.
-    .password-mismatch = يجب أن تتطابق كلمة السر والتأكيد.
+    .invalid-username = اسم المستخدم غير صالح
+    .password-mismatch = يجب أن تتطابق كلمة السر والتأكيد
 # LocationPage
 timezone-and-location-page = المنطقة الزمنية والموقع
     .search-the-closest-major-city = ابحث عن أقرب مدينة رئيسية...

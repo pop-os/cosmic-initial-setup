@@ -1,0 +1,11 @@
+back = 뒤로가기
+cancel = 취소
+identity = ID
+password = 암호
+settings = 설정
+skip = 건너뛰기
+wifi = Wi-Fi
+appearance-page = 외관 개인화
+    .description = 외관 설정에서 강조 색상과 데스크톱 외형을 더 자세히 설정할 수 있습니다.
+new-apps-page = 새로운 시스템 앱
+    .description = COSMIC 데스크톱 환경과 함께 제공되는 다양한 신규 시스템 앱을 만나보세요. 설정, COSMIC 앱 스토어, 파일, 텍스트 편집기 및 터미널이 포함됩니다.
