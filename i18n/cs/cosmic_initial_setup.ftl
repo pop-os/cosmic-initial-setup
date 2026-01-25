@@ -11,9 +11,9 @@ skip-setup-and-close = Přeskočit nastavování a zavřít
 type-to-search = Pište pro vyhledávání…
 wifi = Wi-Fi
 accessibility-page = Nastavení přístupnosti
-    .display-scaling = Škálování displeje
-    .scale = Škálování
-    .scale-options = Další možnosti škálování
+    .display-scaling = Měřítko obrazovky
+    .scale = Měřítko
+    .scale-options = Další možnosti měřítka
     .screen-reader = Čtečka obrazovky
     .interface-size = Velikost rozhraní
     .magnifier = Lupa
@@ -40,7 +40,7 @@ timezone-and-location-page = Časová zóna a poloha
     .geonames-attribution = Seznam je seřazen podle obydlení měst. Data: geonames.org (licencováno CC-BY-4.0).
 # AppearancePage
 appearance-page = Přizpůsobit vzhled
-    .description = Dále můžete upravit doplňkové barvy a vzhled své plochy v nastavení vzhledu.
+    .description = Dále můžete upravit barvy zvýraznění a vzhled své plochy v nastavení vzhledu.
 # LayoutPage
 layout-page = Nastavení rozložení
     .bottom-panel = Dolní panel

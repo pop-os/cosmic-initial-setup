@@ -19,8 +19,8 @@ accessibility-page = 欢迎
     .magnifier = 放大器
     .magnifier-description =
         或使用键盘快捷键：
-        超级键 + = 放大，超级键 + - 缩小，
-        超级键 + 鼠标滚轮滚动
+        Super + = 放大，Super + - 缩小，
+        Super + 鼠标滚轮滚动
 # SelectLanguagePage
 select-language-page = 选择语言
 # SelectKeyboardLayoutPage
@@ -51,7 +51,7 @@ new-apps-page = 新的系统应用
     .description = 享受随 COSMIC 桌面环境带来的一系列新系统应用，包括设置、COSMIC 应用商店、文件、文本编辑器和终端。
 # NewKeyboardShortcutsPage
 new-shortcuts-page = 新的键盘快捷键
-    .description = 使用换档键 + 超级键 + 方向键，或使用指针拖动来移动窗口。在使用自动窗口平铺时，可以利用视觉提示。
+    .description = 使用 Shift + Super + 方向键，或使用指针拖动来移动窗口。在使用自动窗口平铺时，可以利用视觉提示。
 # WorkflowPage
 workflow-page = 适合您工作流程的工作区
     .description =
@@ -59,7 +59,7 @@ workflow-page = 适合您工作流程的工作区
         您可以选择垂直或水平工作区。还可以固定工作区使其变为静态。
 # LauncherPage
 launcher-page = 快速高效
-    .description = 按下超级（或 Windows）键开启启动器。搜索并按回车键即可打开应用或切换到该应用。您还可以跳转到设置或系统功能（如待机）。输入"？"即可了解启动器的高级功能。
+    .description = 按下 Super（或 Windows）键开启启动器。搜索并按回车键即可打开应用或切换到该应用。您还可以跳转到设置或系统功能（如待机）。输入"？"即可了解启动器的高级功能。
 
 # WirelessPage
 
