@@ -6,6 +6,7 @@ Name[cs]=Úvodní nastavení
 Name[hu]=Első Beállítás
 Name[pl]=Wstępna konfiguracja
 Name[pt]=Ajustes Iniciais
+Name[it]=Setup iniziale
 Icon=com.system76.CosmicInitialSetup
 Exec=cosmic-initial-setup
 Terminal=false
