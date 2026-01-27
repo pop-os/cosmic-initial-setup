@@ -7,6 +7,7 @@ Name[cs]=Úvodní nastavení COSMIC
 Name[hu]=COSMIC Első Beállítás
 Name[pl]=Wstępna konfiguracja COSMIC
 Name[pt]=Ajustes Iniciais do COSMIC
+Name[it]=Setup iniziale di COSMIC
 Exec=cosmic-initial-setup
 NoDisplay=true
 Terminal=false
