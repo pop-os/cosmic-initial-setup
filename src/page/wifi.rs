@@ -21,7 +21,6 @@ use cosmic_settings_network_manager_subscription::{
     self as network_manager, NetworkManagerState,
     available_wifi::{AccessPoint, NetworkType},
     current_networks::ActiveConnectionInfo,
-    hw_address::HwAddress,
     nm_secret_agent,
 };
 use eyre::Context;
@@ -381,7 +380,6 @@ enum WiFiDialog {
     Forget(network_manager::SSID),
     Password {
         ssid: network_manager::SSID,
-        hw_address: HwAddress,
         identity: Option<String>,
         password: SecureString,
         password_hidden: bool,
@@ -413,12 +411,7 @@ impl Page {
                 }
 
                 match req {
-                    network_manager::Request::Authenticate {
-                        ssid,
-                        identity,
-                        hw_address,
-                        ..
-                    } => {
+                    network_manager::Request::Authenticate { ssid, identity, .. } => {
                         if success {
                             self.connecting.remove(ssid.as_str());
                         } else {
@@ -426,7 +419,6 @@ impl Page {
                             self.dialog = Some(WiFiDialog::Password {
                                 ssid: ssid.into(),
                                 identity,
-                                hw_address,
                                 password: SecureString::from(""),
                                 password_hidden: true,
                                 tx: Arc::default(),
@@ -436,9 +428,9 @@ impl Page {
 
                     network_manager::Request::SelectAccessPoint(
                         ssid,
-                        hw_address,
                         network_type,
                         _tx,
+                        interface,
                     ) => {
                         if success || matches!(network_type, NetworkType::Open) {
                             self.connecting.remove(ssid.as_ref());
@@ -447,7 +439,6 @@ impl Page {
                                 ssid,
                                 identity: matches!(network_type, NetworkType::EAP)
                                     .then(String::new),
-                                hw_address,
                                 password: SecureString::from(""),
                                 password_hidden: true,
                                 tx: Arc::new(Mutex::new(None)),
@@ -530,9 +521,9 @@ impl Page {
                         .sender
                         .unbounded_send(network_manager::Request::SelectAccessPoint(
                             ssid,
-                            ap.hw_address,
                             ap.network_type,
                             self.secret_tx.clone(),
+                            self.active_device.as_ref().map(|d| d.interface.clone()),
                         ));
                 }
             }
@@ -560,7 +551,6 @@ impl Page {
                     self.dialog = Some(WiFiDialog::Password {
                         ssid,
                         identity: matches!(ap.network_type, NetworkType::EAP).then(String::new),
-                        hw_address: ap.hw_address,
                         password: SecureString::from(""),
                         password_hidden: true,
                         tx: Arc::default(),
@@ -587,7 +577,6 @@ impl Page {
                     ssid,
                     identity,
                     password,
-                    hw_address,
                     tx,
                     ..
                 } = dialog
@@ -596,6 +585,7 @@ impl Page {
                     self.connecting.insert(ssid.clone());
                     let nm_sender = nm.sender.clone();
                     let secret_tx = self.secret_tx.clone();
+                    let interface = self.active_device.as_ref().map(|d| d.interface.clone());
                     return Task::future(async move {
                         let mut guard = tx.lock().await;
                         if let Some(tx) = guard.take() {
@@ -604,9 +594,9 @@ impl Page {
                             _ = nm_sender.unbounded_send(network_manager::Request::Authenticate {
                                 ssid: ssid.to_string(),
                                 identity,
-                                hw_address,
                                 password,
                                 secret_tx,
+                                interface,
                             });
                         }
                     })
@@ -693,7 +683,6 @@ impl Page {
                         ssid,
                         password: previous,
                         password_hidden: true,
-                        hw_address: ap.hw_address,
                         identity: matches!(ap.network_type, NetworkType::EAP).then(String::new),
                         tx,
                     });
@@ -711,7 +700,6 @@ impl Page {
                         ssid,
                         password,
                         identity,
-                        hw_address,
                         ..
                     }) = self.dialog.take()
                     {
@@ -721,7 +709,6 @@ impl Page {
                             tx: Arc::new(Mutex::new(None)),
                             ssid,
                             identity,
-                            hw_address,
                         });
                         return cosmic::task::message(Message::FocusSecureInput);
                     }
