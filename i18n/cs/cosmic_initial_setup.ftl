@@ -59,7 +59,7 @@ workflow-page = Pracovní plochy pro váš styl práce
         Pracovní plochy mohou být vertikální či horizontální. Lze je také připnout, aby zůstaly statické.
 # LauncherPage
 launcher-page = Rychlý a efektivní
-    .description = Stiskněte klávesu Super (nebo Windows) pro aktivaci Spouštěče. Vyhledejte aplikaci, stiskněte Enter a aplikace se otevře nebo přenese do popředí. Můžete také rychle přejít do nastavení nebo k systémovým funkcím, například uspání. Zadejte „?“ a objevte pokročilé funkce Spouštěče.
+    .description = Stiskněte klávesu Super (nebo Windows) pro aktivaci spouštěče. Vyhledejte aplikaci, stiskněte Enter a aplikace se otevře nebo přenese do popředí. Můžete také rychle přejít do nastavení nebo k systémovým funkcím, například uspání. Zadejte „?“ a objevte pokročilé funkce spouštěče.
 
 # WirelessPage
 
