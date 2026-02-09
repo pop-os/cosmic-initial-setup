@@ -1,10 +1,10 @@
-back = رجوع
+back = ارجع
 cancel = ألغِ
 finish = إنهاء
 identity = الهوية
 next = التالي
 password = كلمة السر
-password-confirm = تأكيد كلمة السر
+password-confirm = أكِّد كلمة السر
 settings = الإعدادات
 skip = تخطَّ
 skip-setup-and-close = تخطَّ الإعداد وأغلق
@@ -76,8 +76,8 @@ wireless-page = الاتصال
     .visible-networks = الشبكات الظاهرة
 auth-dialog = الاستيثاق مطلوب
     .wifi-description = أدخل كلمة السر أو مفتاح التعمية. يمكنك الاتصال أيضًا بالضغط على زر "WPS" في جهاز التوجيه.
-forget-dialog = انسَ شبكة واي فاي هذه؟
-    .description = ستحتاج إلى إدخال كلمة سر مرة أخرى لاستخدام شبكة واي فاي هذه في المستقبل.
+forget-dialog = أنسَ شبكة واي فاي هذه؟
+    .description = سيتعين إدخال كلمة السر مجددًا لاستخدامها مستقبلًا.
 
 ## Users
 
