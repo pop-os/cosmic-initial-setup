@@ -22,7 +22,7 @@ accessibility-page = إعدادات الإتاحة
         Super + = للتكبير، Super + - للتصغير،
         Super + التمرير بالفأرة
 # SelectLanguagePage
-select-language-page = اختر لغة
+select-language-page = حدِّد لغة
 # SelectKeyboardLayoutPage
 keyboard-layout-page = حدّد تخطيط لوحة المفاتيح
 # CreateAccountPage
@@ -59,7 +59,7 @@ workflow-page = مساحات عمل لسير عملك
         يمكنك تحديد مساحات عمل رأسية أو أفقية. يمكنك أيضًا تثبيت مساحات العمل لجعلها ساكنة.
 # LauncherPage
 launcher-page = سريع وفعّال
-    .description = اضغط على مفتاح Super (أو Windows) لتنشيط المُشغّل. ابحث واضغط على Enter لفتح تطبيق أو التبديل إليه. يمكنك أيضًا الانتقال إلى الإعدادات أو وظائف النظام مثل التعليق. اكتب «؟» للتعرف على الميزات المتقدمة للمُشغّل.
+    .description = اضغط على مفتاح Super (أو Windows) لتنشيط المُشغّل. ابحث واضغط على Enter لفتح تطبيق أو التبديل إليه. يمكنك أيضًا الانتقال إلى الإعدادات أو وظائف النظام مثل التعليق. اكتب "?" للتعرف على الميزات المتقدمة للمُشغّل.
 
 # WirelessPage
 
