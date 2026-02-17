@@ -40,7 +40,7 @@ timezone-and-location-page = Fuso horário e localização
     .geonames-attribution = A lista é classificada pela população da cidade. Fonte: geonames.org (licença CC-BY-4.0).
 # AppearancePage
 appearance-page = Personalize a aparência
-    .description = Você ainda pode alterar as cores de destaque — e a aparência da sua área de trabalho — nas configurações de Aparência.
+    .description = Você pode alterar também as cores de destaque e a aparência da sua área de trabalho nas configurações de Aparência.
 # LayoutPage
 layout-page = Configuração do layout de tela
     .bottom-panel = Painel inferior
