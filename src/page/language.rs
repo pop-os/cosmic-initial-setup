@@ -280,7 +280,7 @@ impl super::Page for Page {
                                 .size(16)
                                 .into()
                         } else {
-                            widget::Space::with_width(16).into()
+                            widget::space::horizontal().width(16).into()
                         }])
                         .align_y(Alignment::Center)
                         .spacing(space_xxs),
@@ -311,7 +311,7 @@ impl super::Page for Page {
 
         let element: Element<_> = widget::column::with_children(vec![
             search_input.into(),
-            widget::Space::with_height(space_m).into(),
+            widget::space::vertical().height(space_m).into(),
             widget::scrollable(section).into(),
         ])
         .into();

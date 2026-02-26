@@ -347,7 +347,7 @@ impl Application for App {
         let mut button_row = widget::row::with_capacity(4)
             .spacing(space_xxs)
             .push_maybe(skip_button)
-            .push(widget::horizontal_space());
+            .push(widget::space::horizontal());
 
         if let Some(page_i) = self.page_i.checked_sub(1) {
             if self.pages.get_index(page_i).is_some() {
@@ -384,13 +384,13 @@ impl Application for App {
             .height(Length::Fill);
 
         widget::column::with_capacity(7)
-            .push(widget::Space::with_height(space_xl))
+            .push(widget::space::vertical().height(space_xl))
             .push(title)
-            .push(widget::Space::with_height(space_l))
+            .push(widget::space::vertical().height(space_l))
             .push(content)
-            .push(widget::Space::with_height(space_m))
+            .push(widget::space::vertical().height(space_m))
             .push(button_row)
-            .push(widget::Space::with_height(space_l))
+            .push(widget::space::vertical().height(space_l))
             .max_width(page.width())
             .width(page.width())
             .align_x(Alignment::Center)
@@ -418,28 +418,34 @@ impl Application for App {
 
 fn network_manager_stream() -> impl Stream<Item = Message> {
     use cosmic_settings_network_manager_subscription as network_manager;
-    cosmic::iced_futures::stream::channel(1, |mut output| async move {
-        let conn = zbus::Connection::system().await.unwrap();
+    cosmic::iced_futures::stream::channel(
+        1,
+        |mut output: futures::channel::mpsc::Sender<Message>| async move {
+            let conn = zbus::Connection::system().await.unwrap();
 
-        let (tx, mut rx) = futures::channel::mpsc::channel(1);
+            let (tx, mut rx) = futures::channel::mpsc::channel(1);
 
-        let watchers = std::pin::pin!(async move {
-            futures::join!(
-                network_manager::watch(conn.clone(), tx.clone()),
-                network_manager::active_conns::watch(conn.clone(), tx.clone()),
-                network_manager::wireless_enabled::watch(conn.clone(), tx.clone()),
-                network_manager::watch_connections_changed(conn, tx)
-            );
-        });
+            let watchers = std::pin::pin!(async move {
+                futures::join!(
+                    network_manager::watch(conn.clone(), tx.clone()),
+                    network_manager::active_conns::watch(conn.clone(), tx.clone()),
+                    network_manager::wireless_enabled::watch(conn.clone(), tx.clone()),
+                    network_manager::watch_connections_changed(conn, tx)
+                );
+            });
 
-        let forwarder = std::pin::pin!(async move {
-            while let Some(message) = rx.next().await {
-                _ = output
-                    .send(page::Message::WiFi(page::wifi::Message::NetworkManager(message)).into())
-                    .await;
-            }
-        });
+            let forwarder = std::pin::pin!(async move {
+                while let Some(message) = rx.next().await {
+                    _ = output
+                        .send(
+                            page::Message::WiFi(page::wifi::Message::NetworkManager(message))
+                                .into(),
+                        )
+                        .await;
+                }
+            });
 
-        futures::future::select(watchers, forwarder).await;
-    })
+            futures::future::select(watchers, forwarder).await;
+        },
+    )
 }

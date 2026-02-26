@@ -6,12 +6,12 @@ rust-version = "1.90"
 
 [dependencies]
 cosmic-protocols = { git = "https://github.com/pop-os/cosmic-protocols" }
-cosmic-settings-accessibility-subscription = { git = "https://github.com/pop-os/cosmic-settings" }
-cosmic-settings-a11y-manager-subscription = { git = "https://github.com/pop-os/cosmic-settings" }
-cosmic-settings-network-manager-subscription = { git = "https://github.com/pop-os/cosmic-settings" }
+cosmic-settings-accessibility-subscription = { git = "https://github.com/pop-os/cosmic-settings", branch = "iced-rebase" }
+cosmic-settings-a11y-manager-subscription = { git = "https://github.com/pop-os/cosmic-settings", branch = "iced-rebase" }
+cosmic-settings-network-manager-subscription = { git = "https://github.com/pop-os/cosmic-settings", branch = "iced-rebase" }
 crabtime = "1.1.4"
 eyre = "0.6.12"
-futures = "0.3.31"
+futures = "0.3.32"
 futures-util = "0.3.31"
 geonames = { path = "geonames" }
 gettext-rs = { version = "0.7.7", features = ["gettext-system"] }
@@ -48,14 +48,23 @@ git = "https://github.com/pop-os/dbus-settings-bindings"
 
 [dependencies.cosmic-comp-config]
 git = "https://github.com/pop-os/cosmic-comp"
+branch = "iced-rebase"
 
 [dependencies.cosmic-randr-shell]
 git = "https://github.com/pop-os/cosmic-randr"
 
 [dependencies.libcosmic]
 git = "https://github.com/pop-os/libcosmic.git"
+branch = "iced-rebase"
 default-features = false
-features = ["a11y", "dbus-config", "single-instance", "tokio", "winit", "xdg-portal"]
+features = [
+    "a11y",
+    "dbus-config",
+    "single-instance",
+    "tokio",
+    "winit",
+    "xdg-portal",
+]
 
 [dependencies.locale1]
 git = "https://github.com/pop-os/dbus-settings-bindings"
@@ -86,8 +95,8 @@ members = ["geonames"]
 [patch."https://github.com/smithay/client-toolkit.git"]
 sctk = { package = "smithay-client-toolkit", version = "0.20.0" }
 
-# [patch.'https://github.com/pop-os/libcosmic.git']
-# libcosmic = { path = "../libcosmic" }
-# cosmic-config = { path = "../libcosmic/cosmic-config" }
-# cosmic-theme = { path = "../libcosmic/cosmic-theme" }
-# iced_futures = { path = "../libcosmic/iced/futures" }
+[patch.'https://github.com/pop-os/libcosmic.git']
+libcosmic = { git = "https://github.com/pop-os/libcosmic.git//", branch = "iced-rebase" }
+cosmic-config = { git = "https://github.com/pop-os/libcosmic.git//", branch = "iced-rebase" }
+cosmic-theme = { git = "https://github.com/pop-os/libcosmic.git//", branch = "iced-rebase" }
+iced_futures = { git = "https://github.com/pop-os/libcosmic.git//", branch = "iced-rebase" }

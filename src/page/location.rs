@@ -1,8 +1,13 @@
 use crate::fl;
 use crate::page;
 use cosmic::{
-    Element, Task, cosmic_theme, iced::Alignment, theme, widget,
-    cosmic_config::{self, Config, ConfigSet, CosmicConfigEntry, cosmic_config_derive::CosmicConfigEntry},
+    Element, Task,
+    cosmic_config::{
+        self, Config, ConfigSet, CosmicConfigEntry, cosmic_config_derive::CosmicConfigEntry,
+    },
+    cosmic_theme,
+    iced::Alignment,
+    theme, widget,
 };
 use serde::{Deserialize, Serialize};
 
@@ -180,7 +185,7 @@ impl page::Page for Page {
                                     .size(16)
                                     .into()
                             } else {
-                                widget::Space::with_width(16).into()
+                                widget::space::horizontal().width(16).into()
                             },
                         ])
                         .align_y(Alignment::Center)
@@ -218,10 +223,10 @@ impl page::Page for Page {
         }
         let element: Element<_> = widget::column::with_children(vec![
             search_input.into(),
-            widget::Space::with_height(space_m).into(),
+            widget::space::vertical().height(space_m).into(),
             //TODO: manual height used due to layout issues
             widget::scrollable(section).height(286).into(),
-            widget::Space::with_height(space_m).into(),
+            widget::space::vertical().height(space_m).into(),
             widget::text::body(fl!("timezone-and-location-page", "geonames-attribution")).into(),
         ])
         .into();

@@ -64,7 +64,7 @@ impl page::Page for Page {
 
                     let task = cosmic::Task::stream(cosmic::iced_futures::stream::channel(
                         1,
-                        |mut sender| async move {
+                        |mut sender: futures::channel::mpsc::Sender<_>| async move {
                             while let Some(event) = rx.recv().await {
                                 let _ = sender
                                     .send(page::Message::A11y(Message::A11yEvent(event)))
@@ -170,15 +170,15 @@ impl page::Page for Page {
         if let Some(switcher) = display_switcher {
             widget::column::with_capacity(5)
                 .push(a11y_section)
-                .push(widget::vertical_space().height(spacing.space_xl))
+                .push(widget::space::vertical().height(spacing.space_xl))
                 .push(switcher)
-                .push(widget::vertical_space().height(spacing.space_xxs))
+                .push(widget::space::vertical().height(spacing.space_xxs))
                 .push(display_settings)
                 .into()
         } else {
             widget::column::with_capacity(3)
                 .push(a11y_section)
-                .push(widget::vertical_space().height(spacing.space_xl))
+                .push(widget::space::vertical().height(spacing.space_xl))
                 .push(display_settings.title(fl!("accessibility-page", "display-scaling")))
                 .into()
         }

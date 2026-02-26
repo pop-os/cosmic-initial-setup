@@ -12,9 +12,8 @@ use std::{
 
 use cosmic::{
     Apply, Element, Task,
-    iced::{Alignment, Length, alignment},
+    iced::{Alignment, Length, alignment, widget::operation::focus_next},
     iced_core::text::Wrapping,
-    iced_widget::focus_next,
     widget::{self, column, icon},
 };
 use cosmic_settings_network_manager_subscription::{
@@ -213,7 +212,7 @@ impl super::Page for Page {
 
                     let widget = widget::settings::item_row(vec![
                         identifier.into(),
-                        widget::horizontal_space().into(),
+                        widget::space::horizontal().into(),
                         controls.into(),
                     ]);
 
