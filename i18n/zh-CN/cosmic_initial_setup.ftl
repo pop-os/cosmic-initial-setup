@@ -10,13 +10,13 @@ skip = 跳过
 skip-setup-and-close = 跳过设置并关闭
 type-to-search = 输入以搜索…
 wifi = Wi-Fi
-accessibility-page = 欢迎
+accessibility-page = 无障碍设置
     .display-scaling = 屏幕缩放
     .scale = 比例
     .scale-options = 其他缩放选项
     .screen-reader = 屏幕阅读器
     .interface-size = 界面大小
-    .magnifier = 放大器
+    .magnifier = 放大镜
     .magnifier-description =
         或使用键盘快捷键：
         Super + = 放大，Super + - 缩小，
@@ -29,7 +29,7 @@ keyboard-layout-page = 选择键盘布局
 create-account-page = 创建您的账户
     .full-name = 全名
     .user-name = 用户名
-    .user-name-note = 这将用于命名您的主文件夹，且之后无法更改
+    .user-name-note = 这将用于命名您的主文件夹，且之后无法更改。
     .dialog-add = 添加
     .profile-add = 选择个人资料图片
     .invalid-username = 用户名无效
@@ -40,7 +40,7 @@ timezone-and-location-page = 时区和位置
     .geonames-attribution = 列表按城市人口排序。数据来源：geonames.org（遵循 CC-BY-4.0 许可）。
 # AppearancePage
 appearance-page = 个性化外观
-    .description = 您可以在“外观”设置中进一步自定义强调色和桌面外观。
+    .description = 您可以在“外观”设置中进一步自定义主题色和桌面外观。
 # LayoutPage
 layout-page = 布局配置
     .bottom-panel = 底部面板

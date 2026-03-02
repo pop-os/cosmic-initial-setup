@@ -1,6 +1,6 @@
 back = ارجع
 cancel = ألغِ
-finish = إنهاء
+finish = أنهِ
 identity = الهوية
 next = التالي
 password = كلمة السر

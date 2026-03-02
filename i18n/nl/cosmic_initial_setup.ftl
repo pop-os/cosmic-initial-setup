@@ -46,3 +46,9 @@ workflow-page = Virtuele werkbladen speciaal voor jouw werkwijze
     .description =
         Je kunt in deze applet per werkblad instellen of vensters moeten zweven of automatisch moeten tegelen.
         Je kunt kiezen uit 'n verticale of horizontale werkbladenwisselaar. Je kan werkbladen vastpinnen zodat ze niet automatisch verwijderd worden.
+auth-dialog = Authenticatie vereist
+    .wifi-description = Voer het wachtwoord of de encryptiesleutel in. U kunt ook verbinding maken door op de “WPS”-knop op de router te drukken.
+users = Gebruikers
+    .desc = Authenticatie en gebruikersaccounts
+    .admin = Beheerder
+    .standard = Standaard
