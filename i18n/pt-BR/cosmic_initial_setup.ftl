@@ -11,16 +11,16 @@ skip-setup-and-close = Pular a configuração e fechar
 type-to-search = Digite para pesquisar…
 wifi = Wi-Fi
 accessibility-page = Configurações de acessibilidade
-    .display-scaling = Dimensionamento da tela
+    .display-scaling = Escala da tela
     .scale = Escala
-    .scale-options = Ajuste de escala
+    .scale-options = Mais opções de escala
     .screen-reader = Leitor de tela
     .interface-size = Tamanho da interface
     .magnifier = Ampliador de tela
     .magnifier-description =
         Ou use teclas de atalho:
         Super + = para aumentar o zoom, Super + - para diminuir o zoom,
-        Super + Scroll para rolar com o mouse
+        Super + rolar com o mouse
 # SelectLanguagePage
 select-language-page = Selecione o idioma
 # SelectKeyboardLayoutPage
@@ -29,7 +29,7 @@ keyboard-layout-page = Selecione o layout de teclado
 create-account-page = Crie sua conta
     .full-name = Nome completo
     .user-name = Nome de usuário
-    .user-name-note = Este será usado para nomear sua pasta home (arquivos pessoais), e não pode ser alterado.
+    .user-name-note = Este será usado para nomear sua pasta pessoal, e não pode ser alterado.
     .dialog-add = Adicionar
     .profile-add = Escolha a imagem do seu perfil
     .invalid-username = Nome de usuário inválido
@@ -40,12 +40,12 @@ timezone-and-location-page = Fuso horário e localização
     .geonames-attribution = A lista é classificada pela população da cidade. Fonte: geonames.org (licença CC-BY-4.0).
 # AppearancePage
 appearance-page = Personalize a aparência
-    .description = Você pode alterar também as cores de destaque e a aparência da sua área de trabalho nas configurações de Aparência.
+    .description = Você pode alterar também as cores de destaque e a aparência da sua área de trabalho nas configurações de aparência.
 # LayoutPage
 layout-page = Configuração do layout de tela
     .bottom-panel = Painel inferior
     .top-panel-and-dock = Painel superior e dock
-    .description = Mova o painel ou a dock para qualquer borda da tela, altere seus tamanhos e oculte-os automaticamente em Configurações.
+    .description = Mover o painel ou a dock para qualquer borda da tela, alterar seus tamanhos e ocultá-los automaticamente nas configurações.
 # SystemAppsPage
 new-apps-page = Novos aplicativos de sistema
     .description = Aproveite uma variedade de novos aplicativos de sistema que acompanham o ambiente de trabalho COSMIC, incluindo: Configurações, Loja de Aplicativos, Gestor de Arquivos, Editor de Texto e Terminal.
@@ -53,7 +53,7 @@ new-apps-page = Novos aplicativos de sistema
 new-shortcuts-page = Novos atalhos de teclado
     .description = Use Shift+Super+setas ou arraste com o mouse para mover janelas. Aproveite as dicas visuais ao usar o modo automático de janelas lado a lado.
 # WorkflowPage
-workflow-page = Áreas de trabalho para seu workflow
+workflow-page = Áreas de trabalho para seu fluxo de trabalho
     .description =
         Alterne entre os modos de janelas flutuantes e lado a lado, por área de trabalho, usando o miniaplicativo de organização de janelas.
         Você pode selecionar áreas de trabalho verticais ou horizontais e fixá-las na visão geral para torná-las estáticas.

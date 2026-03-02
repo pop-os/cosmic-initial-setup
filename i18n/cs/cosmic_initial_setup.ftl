@@ -35,7 +35,7 @@ create-account-page = Vytvořte váš účet
     .invalid-username = Neplatné uživatelské jméno
     .password-mismatch = Heslo a jeho potvrzení se musí shodovat
 # LocationPage
-timezone-and-location-page = Časová zóna a poloha
+timezone-and-location-page = Časové pásmo a poloha
     .search-the-closest-major-city = Najít nejbližší velké město...
     .geonames-attribution = Seznam je seřazen podle obydlení měst. Data: geonames.org (licencováno CC-BY-4.0).
 # AppearancePage
