@@ -60,7 +60,7 @@ new-apps-page = New system applications
 
 # NewKeyboardShortcutsPage
 new-shortcuts-page = New keyboard shortcuts
-    .description = Use Shift+Super+arrows, or drag with the pointer, to move windows. Take advantage of the visual hints when using automatic window tiling.
+    .description = Use Shift + Super + arrows, or drag with the pointer, to move windows. Take advantage of the visual hints when using automatic window tiling.
 
 # WorkflowPage
 workflow-page = Workspaces for your workflow
@@ -69,7 +69,7 @@ workflow-page = Workspaces for your workflow
 
 # LauncherPage
 launcher-page = Fast and efficient
-    .description = Press the Super (or Windows) key to activate the Launcher. Search and press enter to open an app or switch to it. You can also jump to settings or system functions like suspend. Type “?” to learn about the Launcher's advanced features.
+    .description = Press the Super (or Windows) key to activate the Launcher. Search and press Enter to open an app or switch to it. You can also jump to settings or system functions like suspend. Type “?” to learn about the Launcher's advanced features.
 
 # WirelessPage
 
