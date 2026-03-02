@@ -60,9 +60,9 @@ wireless-page = Tersambung
     .known-networks = Jaringan yang dikenal
     .visible-networks = Jaringan yang terlihat
 launcher-page = Cepat dan efisien
-    .description = Tekan tombol Super (atau Windows) untuk mengaktifkan Peluncur. Cari dan tekan enter untuk membuka aplikasi atau alih ke aplikasi tersebut. Anda juga dapat langsung menuju pengaturan atau fungsi sistem seperti hentikan. Ketik “?” untuk mempelajari tentang fitur canggih Peluncur.
+    .description = Tekan tombol Super (atau Windows) untuk mengaktifkan Peluncur. Cari dan tekan Enter untuk membuka aplikasi atau alih ke aplikasi tersebut. Anda juga dapat langsung menuju pengaturan atau fungsi sistem seperti hentikan. Ketik “?” untuk mempelajari tentang fitur canggih Peluncur.
 new-shortcuts-page = Pintasan papan ketik baru
-    .description = Gunakan Shift+Super+panah, atau seret dengan penunjuk, untuk memindahkan jendela. Manfaatkan petunjuk visual saat menggunakan pengubinan jendela otomatis.
+    .description = Gunakan Shift + Super + panah, atau seret dengan penunjuk, untuk memindahkan jendela. Manfaatkan petunjuk visual saat menggunakan pengubinan jendela otomatis.
 workflow-page = Ruang kerja untuk alur kerja anda
     .description =
         Apung atau ubin jendela secara otomatis per ruang kerja menggunakan applet pengubinan.

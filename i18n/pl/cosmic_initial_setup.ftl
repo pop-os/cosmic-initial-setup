@@ -49,7 +49,7 @@ new-apps-page = Nowe aplikacje systemowe
     .description = Rozkoszuj się wieloma nowymi aplikacjami systemowymi które pochodzą z środowiska graficznego COSMIC. Wliczając w to Ustawienia, Sklep COSMIC, Pliki, Edytor Tekstu i Terminal.
 # NewKeyboardShortcutsPage
 new-shortcuts-page = Nowe skróty klawiszowe
-    .description = Użyj Shift+Super+strzałek, lub przeciągnij kursorem by poruszać oknami. Zwróć uwagę na widoczne wskazówki podczas używani okien w trybie kafelków.
+    .description = Użyj Shift + Super + strzałek, lub przeciągnij kursorem by poruszać oknami. Zwróć uwagę na widoczne wskazówki podczas używani okien w trybie kafelków.
 # WorkflowPage
 workflow-page = Obszary robocze dla twojego przepływu pracy
     .description =
@@ -57,7 +57,7 @@ workflow-page = Obszary robocze dla twojego przepływu pracy
         Możesz wybrać pionowe lub poziome obszary robocze, oraz przypiąć je na stałe do podglądu obszarów roboczych.
 # LauncherPage
 launcher-page = Szybko i sprawnie
-    .description = launcher-description = Naciśnij przycisk Super (lub Windows) by uruchomić Program Startowy. Wyszukaj aplikację i naciśnij enter by ją otworzyć lub przełączyć na nią. Możesz tak również otworzyć ustawienia lub uruchomić funkcje systemowe jak wstrzymanie systemu. Naciśniej „?” by dowiedzieć się więcej o zaawansowanych możliwościach Programu Startowego.
+    .description = Naciśnij przycisk Super (lub Windows) by uruchomić Program Startowy. Wyszukaj aplikację i naciśnij Enter by ją otworzyć lub przełączyć na nią. Możesz tak również otworzyć ustawienia lub uruchomić funkcje systemowe jak wstrzymanie systemu. Naciśniej „?” by dowiedzieć się więcej o zaawansowanych możliwościach Programu Startowego.
 
 # WirelessPage
 

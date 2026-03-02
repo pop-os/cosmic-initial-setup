@@ -8,7 +8,7 @@ password-confirm = Jelszó megerősítése
 settings = Beállítások
 skip = Kihagyás
 skip-setup-and-close = Beállítás kihagyása és bezárás
-type-to-search = Írj a kereséshez…
+type-to-search = Gépelj a kereséshez…
 wifi = Wi-Fi
 accessibility-page = Akadálymentességi beállítások
     .display-scaling = Kijelző skálázása
@@ -51,7 +51,7 @@ new-apps-page = Új rendszeralkalmazások
     .description = Élvezd a COSMIC asztali környezettel érkező új rendszeralkalmazások széles választékát, köztük a Beállításokat, a COSMIC Áruházat, a Fájlkezelőt, a Szövegszerkesztőt és a Terminált.
 # NewKeyboardShortcutsPage
 new-shortcuts-page = Új gyorsbillentyűk
-    .description = Használd a Shift+Super+nyilakat, vagy húzd az egeret az ablakok mozgatásához. Használd ki az automatikus ablakcsempézés vizuális segítségeit.
+    .description = Használd a Shift + Super + nyilakat, vagy húzd az egeret az ablakok mozgatásához. Használd ki az automatikus ablakcsempézés vizuális segítségeit.
 # WorkflowPage
 workflow-page = Munkaterületek a munkafolyamatodhoz
     .description =
@@ -59,7 +59,7 @@ workflow-page = Munkaterületek a munkafolyamatodhoz
         Választhatsz függőleges vagy vízszintes munkaterületeket. Rögzítheted azokat az áttekintésben, hogy statikussá váljanak.
 # LauncherPage
 launcher-page = Gyors és hatékony
-    .description = Nyomd meg a Super (vagy Windows) gombot az Alkalmazásindító aktiválásához. Keress rá egy alkalmazásra, majd nyomd meg az Enter billentyűt a megnyitásához vagy az átváltásához. Beállításokhoz és rendszerfunkciókhoz is ugorhatsz, például a felfüggesztés funkcióhoz. Írd be a „?” az Alkalmazásindító speciális funkcióinak megismeréséhez.
+    .description = Nyomd meg a Super (vagy Windows) gombot az Alkalmazásindító aktiválásához. Keress rá egy alkalmazásra, majd nyomd meg az Enter billentyűt a megnyitásához vagy az átváltásához. Beállításokhoz és rendszerfunkciókhoz is ugorhatsz, például a felfüggesztés funkcióhoz. Írd be a „?” jelet az Alkalmazásindító speciális funkcióinak megismeréséhez.
 
 # WirelessPage
 
