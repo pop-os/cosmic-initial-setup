@@ -13,7 +13,7 @@ type-to-search = Taper pour rechercher…
 forget-dialog = Oublier ce réseau Wi-Fi ?
     .description = Vous devrez à nouveau saisir un mot de passe pour utiliser ce réseau Wi-Fi à l'avenir.
 new-shortcuts-page = Nouveaux raccourcis clavier
-    .description = Utilisez Maj+Super+flèches, ou glissez avec le curseur, pour déplacer les fenêtres. Tirez parti des aides visuelles en utilisant l'agencement automatique des fenêtres.
+    .description = Utilisez Maj + Super + flèches, ou glissez avec le curseur pour déplacer les fenêtres. Tirez parti des aides visuelles en utilisant l'agencement automatique des fenêtres.
 appearance-page = Personnaliser l'apparence
     .description = Vous pouvez modifier les couleurs d'accentuation et l'apparence de votre bureau dans les paramètres Apparence.
 workflow-page = Espaces de travail adaptés à votre mode de travail
@@ -21,7 +21,7 @@ workflow-page = Espaces de travail adaptés à votre mode de travail
         Faites flotter les fenêtres ou agencez-les automatiquement par espace de travail à l'aide de l'applet d'agencement.
         Vous pouvez sélectionner les espaces de travail verticaux ou horizontaux. Vous pouvez aussi épingler les espaces de travail pour les rendre statiques.
 launcher-page = Réactif et performant
-    .description = Appuyez sur la touche Super (ou Windows) pour activer le Lanceur. Recherchez et appuyez sur Entrer pour ouvrir une appli ou basculer dessus. Vous pouvez aussi basculer sur les paramètres ou utiliser des fonctions système comme suspendre. Tapez "?" pour en apprendre plus sur les fonctionnalités avancées du Lanceur.
+    .description = Appuyez sur la touche Super (ou Windows) pour activer le Lanceur. Recherchez et appuyez sur Entrée pour ouvrir une appli ou basculer dessus. Vous pouvez aussi basculer sur les paramètres ou utiliser des fonctions système comme suspendre. Tapez "?" pour en apprendre plus sur les fonctionnalités avancées du Lanceur.
 wireless-page = Soyez connecté
     .explain = Une fois connecté, vous aurez les dernières mises à jour système et de sécurité.
     .airplane-mode = Le mode avion est activé.
