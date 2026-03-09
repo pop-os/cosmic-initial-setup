@@ -43,7 +43,7 @@ layout-page = Cumraíocht leagan amach
 new-apps-page = Feidhmchláir chórais nua
     .description = Bain sult as réimse feidhmchlár córais nua a thagann leis an timpeallacht deisce COSMIC. Lena n-áirítear Socruithe, Siopa Aipeanna COSMIC, Comhaid, Eagarthóir Téacs, agus Teirminéal.
 new-shortcuts-page = Aicearraí méarchláir nua
-    .description = Úsáid Shift+Super+saigheada, nó tarraing leis an pointeoir, chun fuinneoga a bhogadh. Bain leas as na leideanna amhairc agus tú ag úsáid tíleáil uathoibríoch fuinneoige.
+    .description = Úsáid Shift + Super + saigheada, nó tarraing leis an pointeoir, chun fuinneoga a bhogadh. Bain leas as na leideanna amhairc agus tú ag úsáid tíleáil uathoibríoch fuinneoige.
 workflow-page = Spásanna oibre do do shreabhadh oibre
     .description =
         Snámh nó tíligh fuinneoga go huathoibríoch in aghaidh an spáis oibre ag baint úsáide as an bhfeidhmchlár tílithe.

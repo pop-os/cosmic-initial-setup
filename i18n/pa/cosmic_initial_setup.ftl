@@ -1,0 +1,16 @@
+settings = ਸੈਟਿੰਗਾਂ
+password = ਪਾਸਵਰਡ
+password-confirm = ਪਾਸਵਰਡ ਦੀ ਤਸਦੀਕ ਕਰੋ
+identity = ਪਛਾਣ
+forget-dialog = ਇਸ Wi-Fi ਨੈੱਟਵਰਕ ਨੂੰ ਭੁੱਲਣਾ ਹੈ?
+    .description = ਭਵਿੱਖ ਵਿੱਚ ਜਦੋਂ ਵੀ ਤੁਸੀਂ ਇਸ Wi-Fi ਨਾਲ ਕਨੈਕਟ ਕਰਨਾ ਹੋਇਆ ਤਾਂ ਤੁਹਾਨੂੰ ਪਾਸਵਰਡ ਫੇਰ ਭਰਨਾ ਪਵੇਗਾ।
+cancel = ਰੱਦ ਕਰੋ
+back = ਪਿੱਛੇ
+finish = ਮੁਕੰਮਲ
+next = ਅੱਗੇ
+skip = ਛੱਡੋ
+skip-setup-and-close = ਸੈਟਅੱਪ ਨੂੰ ਛੱਡੋ ਅਤੇ ਬੰਦ ਕਰੋ
+type-to-search = ਖੋਜਣ ਲਈ ਲਿਖੋ…
+wifi = Wi-Fi
+select-language-page = ਭਾਸ਼ਾ ਨੂੰ ਚੁਣੋ
+keyboard-layout-page = ਕੀਬੋਰਡ ਖਾਕੇ ਨੂੰ ਚੁਣੋ

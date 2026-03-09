@@ -25,3 +25,4 @@ create-account-page = Luo käyttäjätili
     .profile-add = Valitse profiilikuva
     .invalid-username = Virheellinen käyttäjänimi
     .password-mismatch = Salasanan ja vahvistuksen tulee täsmätä
+identity = Identiteetti
