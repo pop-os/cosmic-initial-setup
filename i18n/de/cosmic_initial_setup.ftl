@@ -30,3 +30,18 @@ users = Benutzer
     .desc = Authentifizierung und Benutzerkonten.
     .admin = Administrator
     .standard = Standard
+workflow-page = Arbeitsflächen für deinen Arbeitsablauf
+    .description =
+        Fenster pro Arbeitsfläche mit dem Kachel-Applet frei verschieben oder automatisch kacheln.
+        Du kannst vertikale oder horizontale Arbeitsflächen auswählen. Du kannst Arbeitsflächen auch anheften, um sie statisch zu machen.
+create-account-page = Dein Konto erstellen
+    .full-name = Vollständiger Name
+    .user-name = Benutzername
+    .user-name-note = Dies wird zur Benennung deines persönlichen Ordners verwendet und kann nicht geändert werden.
+    .dialog-add = Hinzufügen
+    .profile-add = Profilbild auswählen
+    .invalid-username = Ungültiger Benutzername
+    .password-mismatch = Passwort und Bestätigung müssen übereinstimmen
+timezone-and-location-page = Zeitzone und Standort
+    .search-the-closest-major-city = Nächstgelegene Großstadt suchen...
+    .geonames-attribution = Die Liste ist nach der Einwohnerzahl der Städte sortiert. Daten: geonames.org (lizenziert unter CC-BY-4.0).
