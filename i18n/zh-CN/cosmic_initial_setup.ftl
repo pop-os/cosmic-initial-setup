@@ -59,7 +59,7 @@ workflow-page = 适合您工作流程的工作区
         您可以选择垂直或水平工作区。还可以固定工作区使其变为静态。
 # LauncherPage
 launcher-page = 快速高效
-    .description = 按下 Super（或 Windows）键开启启动器。搜索并按回车键即可打开应用或切换到该应用。您还可以跳转到设置或系统功能（如待机）。输入"？"即可了解启动器的高级功能。
+    .description = 按下 Super（或 Windows）键开启启动器。搜索并按回车键即可打开应用或切换到该应用。您还可以跳转到设置或系统功能（如待机）。输入“?”即可了解启动器的高级功能。
 
 # WirelessPage
 
