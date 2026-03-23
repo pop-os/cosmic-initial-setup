@@ -36,7 +36,7 @@ create-account-page = 创建您的账户
     .password-mismatch = 密码和确认密码必须一致
 # LocationPage
 timezone-and-location-page = 时区和位置
-    .search-the-closest-major-city = 搜索最近的主要城市...
+    .search-the-closest-major-city = 搜索最近的主要城市…
     .geonames-attribution = 列表按城市人口排序。数据来源：geonames.org（遵循 CC-BY-4.0 许可）。
 # AppearancePage
 appearance-page = 个性化外观
@@ -59,7 +59,7 @@ workflow-page = 适合您工作流程的工作区
         您可以选择垂直或水平工作区。还可以固定工作区使其变为静态。
 # LauncherPage
 launcher-page = 快速高效
-    .description = 按下 Super（或 Windows）键开启启动器。搜索并按回车键即可打开应用或切换到该应用。您还可以跳转到设置或系统功能（如待机）。输入"？"即可了解启动器的高级功能。
+    .description = 按下 Super（或 Windows）键开启启动器。搜索并按回车键即可打开应用或切换到该应用。您还可以跳转到设置或系统功能（如待机）。输入“?”即可了解启动器的高级功能。
 
 # WirelessPage
 

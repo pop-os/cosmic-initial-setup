@@ -64,7 +64,7 @@ launcher-page = Rápido e eficiente
 # WirelessPage
 
 wireless-page = Mantenha-se conectado
-    .explain = Quando conectado, você irá obter o sistema mais recente e atualizações de segurança.
+    .explain = Quando estiver conectado, você irá obter as mais recentes atualizações de sistema e de segurança.
     .airplane-mode = Modo avião está ativo
     .connect = Conectar
     .connected = Conectado
