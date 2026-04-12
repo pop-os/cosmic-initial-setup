@@ -42,9 +42,9 @@ new-apps-page = Novas aplicações do sistema
     .description = Desfrute de uma variedade de novas aplicações do sistema que acompanham o ambiente de trabalho COSMIC. Incluindo Definições, Loja de Aplicações COSMIC, Ficheiros, Editor de Texto e Terminal.
 new-shortcuts-page = Novas teclas de atalho
     .description = Use Shift+Super+setas ou arraste com o ponteiro para mover janelas. Aproveite as dicas visuais ao usar o agrupamento automático de janelas.
-workflow-page = Áreas de trabalho para o seu fluxo de trabalho
+workflow-page = Espaços de trabalho para o seu fluxo de trabalho
     .description =
-        Alterne entre os modos de janelas flutuantes e lado a lado, por área de trabalho, usando o miniaplicativo de agrupamento de janelas.
+        Alterne entre os modos de janelas flutuantes e lado a lado por área de trabalho usando a miniaplicação de agrupamento de janelas.
         Pode selecionar áreas de trabalho verticais ou horizontais. Também pode fixar áreas de trabalho para torná-las estáticas.
 launcher-page = Rápido e eficiente
     .description = Prima a tecla Super (ou Windows) para ativar o Lançador. Pesquise e prima Enter para abrir uma aplicação ou alternar. Também pode aceder às definições ou funções do sistema, como suspender. Digite "?" para saber mais sobre as funcionalidades avançadas do Lançador.
