@@ -202,11 +202,22 @@ impl super::Page for Page {
 
             let mut available_languages_set = BTreeSet::new();
 
-            let output = tokio::process::Command::new("localectl")
-                .arg("list-locales")
+            // Use 'locale -a' instead of 'localectl list-locales' for OpenRC compatibility
+            let output_result = tokio::process::Command::new("locale")
+                .arg("-a")
                 .output()
-                .await
-                .expect("Failed to run localectl");
+                .await;
+
+            let locale_list = match output_result {
+                Ok(output) => {
+                    let output_str = String::from_utf8(output.stdout).unwrap_or_default();
+                    parse_locale_output(&output_str)
+                }
+                Err(why) => {
+                    tracing::error!(?why, "failed to list available locales using 'locale -a'");
+                    Vec::new()
+                }
+            };
 
             let mut available_languages = SlotMap::new();
             let mut selected = DefaultKey::null();
@@ -218,14 +229,13 @@ impl super::Page for Page {
                 }
             }
 
-            let output = String::from_utf8(output.stdout).unwrap_or_default();
-            for line in output.lines() {
-                if line == "C.UTF-8" || Some(line) == current_lang.as_deref() {
+            for line in locale_list {
+                if Some(line.as_str()) == current_lang.as_deref() {
                     continue;
                 }
 
-                if let Some(locale) = registry.locale(line) {
-                    available_languages_set.insert(localized_locale(&locale, line.to_owned()));
+                if let Some(locale) = registry.locale(&line) {
+                    available_languages_set.insert(localized_locale(&locale, line));
                 }
             }
 
