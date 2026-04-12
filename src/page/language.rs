@@ -95,7 +95,11 @@ impl Page {
             Message::Select(selected) => {
                 if let Some(locale) = self.available_languages.get(selected) {
                     let lang = locale.lang_code.clone();
-                    tokio::spawn(set_locale(lang.clone(), lang));
+                    tokio::spawn(async move {
+                        if let Err(why) = set_locale(lang.clone(), lang).await {
+                            tracing::error!(?why, "failed to set locale via D-Bus");
+                        }
+                    });
 
                     if let Some(config) = self.config.as_mut() {
                         _ = config.set("system_locales", vec![locale.lang_code.clone()]);
@@ -329,23 +333,28 @@ impl super::Page for Page {
     }
 }
 
-pub async fn set_locale(lang: String, region: String) {
-    _ = tokio::process::Command::new("localectl")
-        .arg("set-locale")
-        .args(&[
-            ["LANG=", &lang].concat(),
-            ["LC_ADDRESS=", &region].concat(),
-            ["LC_IDENTIFICATION=", &region].concat(),
-            ["LC_MEASUREMENT=", &region].concat(),
-            ["LC_MONETARY=", &region].concat(),
-            ["LC_NAME=", &region].concat(),
-            ["LC_NUMERIC=", &region].concat(),
-            ["LC_PAPER=", &region].concat(),
-            ["LC_TELEPHONE=", &region].concat(),
-            ["LC_TIME=", &region].concat(),
-        ])
-        .status()
-        .await;
+/// Sets the system locale using D-Bus instead of localectl for OpenRC compatibility.
+pub async fn set_locale(lang: String, region: String) -> eyre::Result<()> {
+    tracing::debug!("setting locale lang={lang}, region={region}");
+
+    let conn = zbus::Connection::system()
+        .await
+        .wrap_err("failed to connect to system D-Bus")?;
+
+    let proxy = locale1::locale1Proxy::new(&conn)
+        .await
+        .wrap_err("failed to create locale1 D-Bus proxy")?;
+
+    let locale_settings = build_locale_settings(&lang, &region);
+    let locale_strs: Vec<&str> = locale_settings.iter().map(|s| s.as_str()).collect();
+
+    proxy
+        .set_locale(&locale_strs, true)
+        .await
+        .wrap_err("failed to set locale via D-Bus")?;
+
+    tracing::debug!("successfully set locale via D-Bus");
+    Ok(())
 }
 
 fn localized_iso_codes(locale: &locales_rs::Locale) -> (String, String) {
