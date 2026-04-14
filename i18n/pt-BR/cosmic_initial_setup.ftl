@@ -53,10 +53,10 @@ new-apps-page = Novos aplicativos de sistema
 new-shortcuts-page = Novos atalhos de teclado
     .description = Use Shift + Super + setas, ou arraste com o mouse para mover janelas. Aproveite as dicas visuais ao usar o modo automático de janelas lado a lado.
 # WorkflowPage
-workflow-page = Áreas de trabalho para seu fluxo de trabalho
+workflow-page = Espaços de trabalho para seu fluxo de trabalho
     .description =
-        Alterne entre os modos de janelas flutuantes e lado a lado, por área de trabalho, usando o miniaplicativo de organização de janelas.
-        Você pode selecionar áreas de trabalho verticais ou horizontais e fixá-las na visão geral para torná-las estáticas.
+        Alterne entre os modos de janelas flutuantes e lado a lado por espaço de trabalho usando o miniaplicativo de organização de janelas.
+        Você pode selecionar espaços de trabalho verticais ou horizontais e fixá-los na visão geral para torná-los estáticos.
 # LauncherPage
 launcher-page = Rápido e eficiente
     .description = Pressione a tecla Super (ou Windows) para ativar o lançador. Pesquise e pressione Enter para abrir um aplicativo ou alternar para ele. Você também pode acessar as configurações ou funções do sistema, como suspender. Digite "?" para saber mais sobre os recursos avançados do lançador.
@@ -64,7 +64,7 @@ launcher-page = Rápido e eficiente
 # WirelessPage
 
 wireless-page = Mantenha-se conectado
-    .explain = Quando estiver conectado, você irá obter as mais recentes atualizações de sistema e de segurança.
+    .explain = Quando estiver conectado, você irá obter as atualizações mais recentes do sistema de segurança.
     .airplane-mode = Modo avião está ativo
     .connect = Conectar
     .connected = Conectado

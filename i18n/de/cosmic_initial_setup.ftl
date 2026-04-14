@@ -45,3 +45,27 @@ create-account-page = Dein Konto erstellen
 timezone-and-location-page = Zeitzone und Standort
     .search-the-closest-major-city = Nächstgelegene Großstadt suchen...
     .geonames-attribution = Die Liste ist nach der Einwohnerzahl der Städte sortiert. Daten: geonames.org (lizenziert unter CC-BY-4.0).
+finish = Fertigstellen
+accessibility-page = Einrichtung der Barrierefreiheit
+    .display-scaling = Anzeigeskalierung
+    .scale = Skalierung
+    .scale-options = Zusätzliche Skalierungsoptionen
+    .screen-reader = Bildschirmleser
+    .interface-size = Oberflächengröße
+    .magnifier = Vergrößerungsglas
+    .magnifier-description =
+        Oder Tastenkombinationen verwenden:
+        Super + = Vergrößern, Super + - = Verkleinern,
+        Super + mit der Maus scrollen
+appearance-page = Aussehen personalisieren
+    .description = Du kannst die Akzentfarben und das Erscheinungsbild deines Desktops in den Einstellungen für das Aussehen weiter anpassen.
+layout-page = Anordnungskonfiguration
+    .bottom-panel = Panel unten
+    .top-panel-and-dock = Panel oben und Dock
+    .description = Nutze die Einstellungen, um das Panel oder Dock an eine beliebige Seite zu verschieben, deren Größen zu ändern oder sie automatisch zu verstecken.
+new-apps-page = Neue Systemanwendungen
+    .description = Erfreue dich an einer Reihe neuer Systemanwendungen, die mit der COSMIC Desktopumgebung kommen. Dazu gehören die Einstellungen, der COSMIC App Store, Dateien, Texteditor und Terminal.
+launcher-page = Schnell und effizient
+    .description = Drücke die Super-Taste (oder Windows-Taste), um den Starter zu aktivieren. Suche nach einer App und drücke die Eingabetaste, um sie zu öffnen oder zu ihr zu wechseln. Du kannst auch zu den Einstellungen oder Systemfunktionen wie dem Ruhezustand springen. Gib „?“ ein, um mehr über die erweiterten Funktionen des Starters zu erfahren.
+new-shortcuts-page = Neue Tastaturkurzbefehle
+    .description = Verwende Umschalt+Super+Pfeiltasten oder ziehe mit dem Mauszeiger, um Fenster zu verschieben. Nutze die visuellen Hinweise, wenn du die automatische Fensterkachelung verwendest.
