@@ -414,11 +414,16 @@ impl PartialEq for SystemLocale {
 }
 
 /// Parses the output from `locale -a` command and returns a vector of locale strings.
-/// Filters out C.UTF-8 as it's not a real locale for language selection.
+/// Filters out C and POSIX pseudo-locales as they are not real locales for language selection.
 fn parse_locale_output(output: &str) -> Vec<String> {
     output
         .lines()
-        .filter(|line| *line != "C.UTF-8")
+        .filter(|line| {
+            // Filter out C and POSIX variants (C, C.utf8, POSIX, POSIX.iso88591, etc.)
+            let is_pseudo = *line == "C" || *line == "POSIX" 
+                || line.starts_with("C.") || line.starts_with("POSIX.");
+            !is_pseudo
+        })
         .map(|line| line.to_string())
         .collect()
 }
@@ -494,5 +499,23 @@ mod tests {
 
         assert!(settings.iter().any(|s| s == "LANG=fr_FR.UTF-8"));
         assert!(settings.iter().any(|s| s == "LC_TIME=en_GB.UTF-8"));
+    }
+
+    #[test]
+    fn test_parse_locale_output_filters_any_c_posix_variant() {
+        let output = "C\nC.utf8\nC.UTF-8\nPOSIX\nPOSIX.utf8\nC.iso88591\nen_US.utf8\n";
+        let result = parse_locale_output(output);
+        
+        // Should filter out all C and POSIX variants
+        assert!(!result.contains(&"C".to_string()));
+        assert!(!result.contains(&"C.utf8".to_string()));
+        assert!(!result.contains(&"C.UTF-8".to_string()));
+        assert!(!result.contains(&"POSIX".to_string()));
+        assert!(!result.contains(&"POSIX.utf8".to_string()));
+        assert!(!result.contains(&"C.iso88591".to_string()));
+        
+        // Should keep real locales
+        assert!(result.contains(&"en_US.utf8".to_string()));
+        assert_eq!(result.len(), 1);
     }
 }
