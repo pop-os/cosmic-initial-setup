@@ -414,7 +414,7 @@ impl PartialEq for SystemLocale {
 }
 
 /// Parses the output from `locale -a` command and returns a vector of locale strings.
-/// Filters out C and POSIX pseudo-locales as they are not real locales for language selection.
+/// Filters out C and POSIX pseudo-locales and accepts only UTF-8 encoded locales.
 fn parse_locale_output(output: &str) -> Vec<String> {
     output
         .lines()
@@ -422,7 +422,13 @@ fn parse_locale_output(output: &str) -> Vec<String> {
             // Filter out C and POSIX variants (C, C.utf8, POSIX, POSIX.iso88591, etc.)
             let is_pseudo = *line == "C" || *line == "POSIX" 
                 || line.starts_with("C.") || line.starts_with("POSIX.");
-            !is_pseudo
+            if is_pseudo {
+                return false;
+            }
+            
+            // Accept only UTF-8 encoded locales (case insensitive)
+            let line_lower = line.to_lowercase();
+            line_lower.contains(".utf8") || line_lower.contains(".utf-8")
         })
         .map(|line| line.to_string())
         .collect()
@@ -517,5 +523,24 @@ mod tests {
         // Should keep real locales
         assert!(result.contains(&"en_US.utf8".to_string()));
         assert_eq!(result.len(), 1);
+    }
+
+    #[test]
+    fn test_parse_locale_output_accepts_only_utf8_locales() {
+        let output = "en_US.utf8\nen_US.UTF-8\nde_DE.iso88591\nfr_FR\nes_ES.utf8\n";
+        let result = parse_locale_output(output);
+        
+        // Should accept UTF-8 encoded locales (case insensitive)
+        assert!(result.contains(&"en_US.utf8".to_string()));
+        assert!(result.contains(&"en_US.UTF-8".to_string()));
+        assert!(result.contains(&"es_ES.utf8".to_string()));
+        
+        // Should reject non-UTF-8 encodings
+        assert!(!result.contains(&"de_DE.iso88591".to_string()));
+        
+        // Should reject locales without explicit encoding
+        assert!(!result.contains(&"fr_FR".to_string()));
+        
+        assert_eq!(result.len(), 3);
     }
 }
