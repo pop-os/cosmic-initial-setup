@@ -543,4 +543,48 @@ mod tests {
         
         assert_eq!(result.len(), 3);
     }
+
+    #[test]
+    fn test_parse_locale_output_comprehensive_filtering() {
+        // Test comprehensive scenario matching cosmic-settings PR #1961
+        let output = concat!(
+            "C\n",
+            "C.utf8\n",
+            "C.UTF-8\n",
+            "POSIX\n",
+            "POSIX.utf8\n",
+            "C.iso88591\n",
+            "en_US.utf8\n",
+            "en_US.UTF-8\n",
+            "de_DE.utf8\n",
+            "fr_FR.UTF-8\n",
+            "es_ES.iso88591\n",
+            "ca_ES.utf8@valencia\n",  // Locale with modifier
+            "ar_IN\n",                  // No encoding specified
+            "\n",                       // Empty line
+        );
+        let result = parse_locale_output(output);
+        
+        // Should filter all C and POSIX variants
+        assert!(!result.iter().any(|s| s.starts_with("C")));
+        assert!(!result.iter().any(|s| s.starts_with("POSIX")));
+        
+        // Should accept UTF-8 locales (case insensitive)
+        assert!(result.contains(&"en_US.utf8".to_string()));
+        assert!(result.contains(&"en_US.UTF-8".to_string()));
+        assert!(result.contains(&"de_DE.utf8".to_string()));
+        assert!(result.contains(&"fr_FR.UTF-8".to_string()));
+        
+        // Should accept UTF-8 locales with modifiers
+        assert!(result.contains(&"ca_ES.utf8@valencia".to_string()));
+        
+        // Should reject non-UTF-8 encodings and locales without encoding
+        assert!(!result.contains(&"es_ES.iso88591".to_string()));
+        assert!(!result.contains(&"ar_IN".to_string()));
+        
+        // Should handle empty lines
+        assert!(!result.contains(&"".to_string()));
+        
+        assert_eq!(result.len(), 5);
+    }
 }
