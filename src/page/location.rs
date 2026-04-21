@@ -1,8 +1,13 @@
 use crate::fl;
 use crate::page;
 use cosmic::{
-    Element, Task, cosmic_theme, iced::Alignment, theme, widget,
-    cosmic_config::{self, Config, ConfigSet, CosmicConfigEntry, cosmic_config_derive::CosmicConfigEntry},
+    Element, Task,
+    cosmic_config::{
+        self, Config, ConfigSet, CosmicConfigEntry, cosmic_config_derive::CosmicConfigEntry,
+    },
+    cosmic_theme,
+    iced::Alignment,
+    theme, widget,
 };
 use serde::{Deserialize, Serialize};
 
