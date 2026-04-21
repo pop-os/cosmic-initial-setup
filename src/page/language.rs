@@ -416,20 +416,18 @@ impl PartialEq for SystemLocale {
 /// Parses the output from `locale -a` command and returns a vector of locale strings.
 /// Filters out C and POSIX pseudo-locales and accepts only UTF-8 encoded locales.
 fn parse_locale_output(output: &str) -> Vec<String> {
+    // Regex to match C or POSIX exactly, or followed by a dot (any encoding variant)
+    let pseudo_locale_re = regex::Regex::new(r"^(C|POSIX)(\.|$)").unwrap();
+    
+    // Regex to match UTF-8 encoding (case insensitive) with optional modifier
+    // Matches .utf8 or .utf-8 at end of string, optionally followed by @modifier
+    let utf8_re = regex::Regex::new(r"(?i)\.(utf-?8)(@.*)?$").unwrap();
+    
     output
         .lines()
-        .filter(|line| {
-            // Filter out C and POSIX variants (C, C.utf8, POSIX, POSIX.iso88591, etc.)
-            let is_pseudo = *line == "C" || *line == "POSIX" 
-                || line.starts_with("C.") || line.starts_with("POSIX.");
-            if is_pseudo {
-                return false;
-            }
-            
-            // Accept only UTF-8 encoded locales (case insensitive)
-            let line_lower = line.to_lowercase();
-            line_lower.contains(".utf8") || line_lower.contains(".utf-8")
-        })
+        .map(|line| line.trim())
+        .filter(|line| !pseudo_locale_re.is_match(line))
+        .filter(|line| utf8_re.is_match(line))
         .map(|line| line.to_string())
         .collect()
 }
