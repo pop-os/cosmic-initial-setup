@@ -160,13 +160,13 @@ impl super::Page for Page {
             .on_input(|value| Message::Edit(EditorField::PasswordConfirm, value).into()),
         );
 
-        widget::column()
+        widget::column::with_capacity(6)
             .push(profile_image_selector)
             .push(full_name_input)
             .push(username_input)
             .push(password_input)
             .push(password_confirm_input)
-            .push(widget::vertical_space().height(cosmic::theme::spacing().space_s))
+            .push(widget::space::vertical().height(cosmic::theme::spacing().space_s))
             .spacing(cosmic::theme::spacing().space_s)
             .into()
     }

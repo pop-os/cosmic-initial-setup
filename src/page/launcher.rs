@@ -34,7 +34,7 @@ impl page::Page for Page {
     }
 
     fn view(&self) -> Element<'_, page::Message> {
-        let cosmic_theme::Spacing { space_s, .. } = theme::active().cosmic().spacing;
+        let cosmic_theme::Spacing { space_s, .. } = theme::spacing();
 
         widget::column::with_children(vec![
             widget::text::body(fl!("launcher-page", "description"))

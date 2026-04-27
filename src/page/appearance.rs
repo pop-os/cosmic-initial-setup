@@ -224,7 +224,7 @@ impl page::Page for Page {
             space_m,
             space_xl,
             ..
-        } = theme::active().cosmic().spacing;
+        } = theme::spacing();
 
         let mut grid = widget::grid().column_spacing(space_m).row_spacing(space_m);
         for (i, theme) in self.themes.iter().enumerate() {

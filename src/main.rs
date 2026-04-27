@@ -11,7 +11,7 @@ use cosmic::{
     iced::{Alignment, Length, Limits, Subscription},
     theme, widget,
 };
-use futures::{SinkExt, Stream, StreamExt};
+use futures::{SinkExt, Stream, StreamExt, channel::mpsc::Sender};
 use indexmap::IndexMap;
 use tracing_subscriber::prelude::*;
 
@@ -331,7 +331,7 @@ impl Application for App {
             space_l,
             space_xl,
             ..
-        } = theme::active().cosmic().spacing;
+        } = theme::spacing();
 
         let page = &self.pages[self.page_i];
 
@@ -347,7 +347,7 @@ impl Application for App {
         let mut button_row = widget::row::with_capacity(4)
             .spacing(space_xxs)
             .push_maybe(skip_button)
-            .push(widget::horizontal_space());
+            .push(widget::space::horizontal());
 
         if let Some(page_i) = self.page_i.checked_sub(1) {
             if self.pages.get_index(page_i).is_some() {
@@ -384,13 +384,13 @@ impl Application for App {
             .height(Length::Fill);
 
         widget::column::with_capacity(7)
-            .push(widget::Space::with_height(space_xl))
+            .push(widget::space::vertical().height(space_xl))
             .push(title)
-            .push(widget::Space::with_height(space_l))
+            .push(widget::space::vertical().height(space_l))
             .push(content)
-            .push(widget::Space::with_height(space_m))
+            .push(widget::space::vertical().height(space_m))
             .push(button_row)
-            .push(widget::Space::with_height(space_l))
+            .push(widget::space::vertical().height(space_l))
             .max_width(page.width())
             .width(page.width())
             .align_x(Alignment::Center)
@@ -418,7 +418,7 @@ impl Application for App {
 
 fn network_manager_stream() -> impl Stream<Item = Message> {
     use cosmic_settings_network_manager_subscription as network_manager;
-    cosmic::iced_futures::stream::channel(1, |mut output| async move {
+    cosmic::iced::stream::channel(1, |mut output: Sender<Message>| async move {
         let conn = zbus::Connection::system().await.unwrap();
 
         let (tx, mut rx) = futures::channel::mpsc::channel(1);

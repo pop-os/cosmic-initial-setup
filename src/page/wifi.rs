@@ -12,9 +12,9 @@ use std::{
 
 use cosmic::{
     Apply, Element, Task,
+    iced::core::text::Wrapping,
+    iced::widget::operation::focus_next,
     iced::{Alignment, Length, alignment},
-    iced_core::text::Wrapping,
-    iced_widget::focus_next,
     widget::{self, column, icon},
 };
 use cosmic_settings_network_manager_subscription::{
@@ -67,7 +67,7 @@ impl super::Page for Page {
 
     fn view(&self) -> Element<'_, super::Message> {
         let Some(NmState { ref state, .. }) = self.nm_state else {
-            return cosmic::widget::column().into();
+            return cosmic::widget::space().into();
         };
 
         let theme = cosmic::theme::active();
@@ -175,7 +175,7 @@ impl super::Page for Page {
                             .position(widget::popover::Position::Bottom)
                             .on_close(Message::ViewMore(None))
                             .popup({
-                                widget::column()
+                                widget::column::with_capacity(3)
                                     .push_maybe(is_connected.then(|| {
                                         popup_button(
                                             Message::Disconnect(network.ssid.clone()),
@@ -213,7 +213,7 @@ impl super::Page for Page {
 
                     let widget = widget::settings::item_row(vec![
                         identifier.into(),
-                        widget::horizontal_space().into(),
+                        widget::space::horizontal().into(),
                         controls.into(),
                     ]);
 
@@ -230,15 +230,10 @@ impl super::Page for Page {
             );
 
             if has_known || has_visible {
-                let mut networks = widget::column().spacing(spacing.space_l);
-
-                if has_known {
-                    networks = networks.push(known_networks);
-                }
-
-                if has_visible {
-                    networks = networks.push(visible_networks);
-                }
+                let networks = widget::column::with_capacity(2)
+                    .spacing(spacing.space_l)
+                    .push_maybe((has_known).then_some(known_networks))
+                    .push_maybe((has_visible).then_some(visible_networks));
 
                 view = view.push(widget::scrollable(networks));
             }
@@ -275,7 +270,7 @@ impl super::Page for Page {
                     widget::button::standard(fl!("cancel")).on_press(Message::CancelDialog.into());
 
                 let control: Element<_> = if let Some(identity) = identity {
-                    column::column()
+                    column::with_capacity(2)
                         .spacing(8)
                         .push(
                             widget::text_input::text_input(fl!("identity"), identity)
@@ -754,8 +749,8 @@ impl Page {
             Message::FocusSecureInput => {
                 // retry until the widget is in the tree and focused or the dialog is removed.
                 if matches!(self.dialog, Some(WiFiDialog::Password { .. })) {
-                    return cosmic::iced_runtime::task::widget(
-                        cosmic::iced_core::widget::operation::focusable::find_focused(),
+                    return cosmic::iced::runtime::task::widget(
+                        cosmic::iced::core::widget::operation::focusable::find_focused(),
                     )
                     .collect()
                     .then(|id| {

@@ -34,7 +34,7 @@ impl super::Page for Page {
     }
 
     fn view(&self) -> cosmic::Element<'_, super::Message> {
-        let cosmic_theme::Spacing { space_s, .. } = cosmic::theme::active().cosmic().spacing;
+        let cosmic_theme::Spacing { space_s, .. } = cosmic::theme::spacing();
 
         let description = widget::text::body(fl!("workflow-page", "description"))
             .align_x(cosmic::iced::Alignment::Center)

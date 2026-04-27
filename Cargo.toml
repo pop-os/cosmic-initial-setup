@@ -2,7 +2,7 @@
 name = "cosmic-initial-setup"
 version = "1.0.0"
 edition = "2024"
-rust-version = "1.90"
+rust-version = "1.93"
 
 [dependencies]
 cosmic-protocols = { git = "https://github.com/pop-os/cosmic-protocols" }
@@ -11,8 +11,7 @@ cosmic-settings-a11y-manager-subscription = { git = "https://github.com/pop-os/c
 cosmic-settings-network-manager-subscription = { git = "https://github.com/pop-os/cosmic-settings" }
 crabtime = "1.1.4"
 eyre = "0.6.12"
-futures = "0.3.31"
-futures-util = "0.3.31"
+futures = "0.3.32"
 geonames = { path = "geonames" }
 gettext-rs = { version = "0.7.7", features = ["gettext-system"] }
 heck = "0.5.0"
@@ -22,8 +21,8 @@ i18n-embed = { version = "0.16", features = [
     "desktop-requester",
 ] }
 i18n-embed-fl = "0.10"
-indexmap = "2.13.0"
-itoa = "1.0.17"
+indexmap = "2.14.0"
+itoa = "1.0.18"
 kdl = "6.5.0"
 num-derive = "0.4.2"
 num-traits = "0.2.19"
@@ -37,10 +36,10 @@ serde = { version = "1.0.228", features = ["derive"] }
 slotmap = "1.1.1"
 tokio = { version = "1", features = ["sync"] }
 tracing = "0.1.44"
-tracing-subscriber = "0.3.22"
+tracing-subscriber = "0.3.23"
 url = "2.5.8"
-xkb-data = "0.2.1"
-zbus = "5.13.1"
+xkb-data = "0.2.2"
+zbus = "5.15.0"
 zbus_polkit = "5.0.0"
 
 [dependencies.accounts-zbus]
@@ -63,10 +62,6 @@ git = "https://github.com/pop-os/dbus-settings-bindings"
 [dependencies.locales-rs]
 git = "https://github.com/AerynOS/locales-rs"
 
-[dependencies.sctk]
-version = "0.20.0"
-package = "smithay-client-toolkit"
-
 [features]
 default = ["a11y", "wgpu"]
 a11y = ["libcosmic/a11y"]
@@ -82,9 +77,6 @@ lto = "thin"
 
 [workspace]
 members = ["geonames"]
-
-[patch."https://github.com/smithay/client-toolkit.git"]
-sctk = { package = "smithay-client-toolkit", version = "0.20.0" }
 
 # [patch.'https://github.com/pop-os/libcosmic.git']
 # libcosmic = { path = "../libcosmic" }

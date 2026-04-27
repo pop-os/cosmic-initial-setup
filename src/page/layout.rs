@@ -152,7 +152,7 @@ impl super::Page for Page {
     fn view(&self) -> cosmic::Element<'_, super::Message> {
         let cosmic_theme::Spacing {
             space_s, space_m, ..
-        } = cosmic::theme::active().cosmic().spacing;
+        } = cosmic::theme::spacing();
 
         let description = widget::text::body(fl!("layout-page", "description"))
             .align_x(cosmic::iced::Alignment::Center)
