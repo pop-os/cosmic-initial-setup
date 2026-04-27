@@ -136,7 +136,7 @@ impl super::Page for Page {
             })
         }
 
-        self.layouts.sort_by(|a, b| a.id.cmp(&b.id));
+        self.layouts.sort_by_key(|a| a.id);
 
         cosmic::Task::none()
     }

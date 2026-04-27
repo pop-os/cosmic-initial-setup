@@ -6,7 +6,7 @@ use cosmic::{
 };
 use std::any::Any;
 
-static SCREENSHOT: &'static [u8] = include_bytes!("../../res/new-shortcuts.svg");
+static SCREENSHOT: &[u8] = include_bytes!("../../res/new-shortcuts.svg");
 
 pub struct Page {
     handle: widget::svg::Handle,

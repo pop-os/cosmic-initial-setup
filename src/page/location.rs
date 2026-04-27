@@ -11,7 +11,7 @@ use cosmic::{
 };
 use serde::{Deserialize, Serialize};
 
-static CITIES: &'static [u8] = include_bytes!("../../res/cities.bitcode-v0-6");
+static CITIES: &[u8] = include_bytes!("../../res/cities.bitcode-v0-6");
 
 const CONFIG_NAME: &str = "com.system76.CosmicInitialSetup";
 
@@ -112,7 +112,7 @@ impl Page {
 
                     tokio::spawn(async move {
                         _ = tokio::process::Command::new("timedatectl")
-                            .args(&["set-timezone", &timezone])
+                            .args(["set-timezone", &timezone])
                             .status()
                             .await;
                     });
@@ -133,7 +133,7 @@ impl page::Page for Page {
     }
 
     fn open(&mut self) -> cosmic::Task<page::Message> {
-        return widget::text_input::focus(self.search_id.clone());
+        widget::text_input::focus(self.search_id.clone())
     }
 
     fn completed(&self) -> bool {
@@ -215,11 +215,11 @@ impl page::Page for Page {
         if self.selected_opt.is_some() {
             // Go to next page if an item is selected
             //TODO: search_input = search_input.on_submit(Message::Next);
-        } else if let Some(first) = first_opt {
-            if self.regex_opt.is_some() {
-                // Select first item if no item is selected and there is a search
-                search_input = search_input.on_submit(move |_| Message::Select(first));
-            }
+        } else if let Some(first) = first_opt
+            && self.regex_opt.is_some()
+        {
+            // Select first item if no item is selected and there is a search
+            search_input = search_input.on_submit(move |_| Message::Select(first));
         }
         let element: Element<_> = widget::column::with_children(vec![
             search_input.into(),

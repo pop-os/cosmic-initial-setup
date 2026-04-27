@@ -202,7 +202,7 @@ impl Page {
 
     pub fn update(&mut self, message: Message) -> cosmic::Task<page::Message> {
         match message {
-            Message::A11yEvent(AccessibilityEvent::Bound(version)) => {
+            Message::A11yEvent(AccessibilityEvent::Bound(_version)) => {
                 // self.wayland_available = Some(version);
             }
 
@@ -210,7 +210,10 @@ impl Page {
                 self.magnifier_enabled = value;
             }
 
-            Message::A11yEvent(AccessibilityEvent::ScreenFilter { inverted, filter }) => {
+            Message::A11yEvent(AccessibilityEvent::ScreenFilter {
+                inverted: _,
+                filter: _,
+            }) => {
                 //     self.screen_inverted = inverted;
                 //     self.screen_filter_active = filter.is_some();
                 //     if let Some(filter) = filter {

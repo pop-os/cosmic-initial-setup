@@ -27,11 +27,10 @@ const GNOME_SETUP_DONE_PATH: &str = ".config/gnome-initial-setup-done";
 /// Runs application with these settings
 #[rustfmt::skip]
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    if let Some(file_path) = option_env!("DISABLE_IF_EXISTS") {
-        if Path::new(file_path).exists() {
+    if let Some(file_path) = option_env!("DISABLE_IF_EXISTS")
+        && Path::new(file_path).exists() {
             return Ok(());
         }
-    }
 
     #[allow(deprecated)]
     let home_dir = std::env::home_dir().unwrap();
@@ -73,7 +72,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         page::AppMode::GnomeTransition
     } else {
         // If being run by the cosmic-initial-setup user, we are in OEM mode.
-        page::AppMode::NewInstall { create_user: pwd::Passwd::current_user().map_or(false, |current_user| current_user.name == "cosmic-initial-setup") }
+        page::AppMode::NewInstall { create_user: pwd::Passwd::current_user().is_some_and(|current_user| current_user.name == "cosmic-initial-setup") }
     };
 
     let mut settings = Settings::default();
@@ -300,7 +299,7 @@ impl Application for App {
                     tasks = tasks.chain(
                         cosmic::Task::future(async {
                             _ = std::process::Command::new("loginctl")
-                                .args(&["terminate-user", "cosmic-initial-setup"])
+                                .args(["terminate-user", "cosmic-initial-setup"])
                                 .status();
                         })
                         .discard(),
@@ -349,12 +348,11 @@ impl Application for App {
             .push_maybe(skip_button)
             .push(widget::space::horizontal());
 
-        if let Some(page_i) = self.page_i.checked_sub(1) {
-            if self.pages.get_index(page_i).is_some() {
-                button_row = button_row.push(
-                    widget::button::standard(fl!("back")).on_press(Message::PageOpen(page_i)),
-                );
-            }
+        if let Some(page_i) = self.page_i.checked_sub(1)
+            && self.pages.get_index(page_i).is_some()
+        {
+            button_row = button_row
+                .push(widget::button::standard(fl!("back")).on_press(Message::PageOpen(page_i)));
         }
 
         if let Some(page_i) = self.page_i.checked_add(1) {

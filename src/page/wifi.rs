@@ -169,7 +169,7 @@ impl super::Page for Page {
                     let view_more: Option<Element<_>> = if self
                         .view_more_popup
                         .as_deref()
-                        .map_or(false, |id| id == network.ssid.as_ref())
+                        .is_some_and(|id| id == network.ssid.as_ref())
                     {
                         widget::popover(view_more_button.on_press(Message::ViewMore(None)))
                             .position(widget::popover::Position::Bottom)
@@ -366,7 +366,7 @@ pub enum Message {
 
 impl From<Message> for super::Message {
     fn from(message: Message) -> Self {
-        super::Message::WiFi(message).into()
+        super::Message::WiFi(message)
     }
 }
 
@@ -425,7 +425,7 @@ impl Page {
                         ssid,
                         network_type,
                         _tx,
-                        interface,
+                        _interface,
                     ) => {
                         if success || matches!(network_type, NetworkType::Open) {
                             self.connecting.remove(ssid.as_ref());
@@ -754,7 +754,10 @@ impl Page {
                     )
                     .collect()
                     .then(|id| {
-                        if id.get(0).is_some_and(|id| *id == SECURE_INPUT_WIFI.clone()) {
+                        if id
+                            .first()
+                            .is_some_and(|id| *id == SECURE_INPUT_WIFI.clone())
+                        {
                             Task::none()
                         } else {
                             cosmic::widget::text_input::focus(SECURE_INPUT_WIFI.clone())
@@ -861,19 +864,16 @@ fn connection_settings(page: &mut Page) -> Task<super::Message> {
             })
             // Reduce the settings list into a SSID->UUID map.
             .fold(BTreeMap::new(), |mut set, settings| async move {
-                if let Some(ref wifi) = settings.wifi {
-                    if let Some(ssid) = wifi
+                if let Some(ref wifi) = settings.wifi
+                    && let Some(ssid) = wifi
                         .ssid
                         .clone()
                         .and_then(|ssid| String::from_utf8(ssid).ok())
-                    {
-                        if let Some(ref connection) = settings.connection {
-                            if let Some(uuid) = connection.uuid.clone() {
-                                set.insert(ssid.into(), uuid.into());
-                                return set;
-                            }
-                        }
-                    }
+                    && let Some(ref connection) = settings.connection
+                    && let Some(uuid) = connection.uuid.clone()
+                {
+                    set.insert(ssid.into(), uuid.into());
+                    return set;
                 }
 
                 set

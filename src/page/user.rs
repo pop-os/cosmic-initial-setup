@@ -340,14 +340,7 @@ where
 }
 
 fn permission_was_denied(result: &zbus::Error) -> bool {
-    match result {
-        zbus::Error::MethodError(name, _, _)
-            if name.as_str() == "org.freedesktop.Accounts.Error.PermissionDenied" =>
-        {
-            true
-        }
-        _ => false,
-    }
+    matches!(result, zbus::Error::MethodError(name, _, _) if name.as_str() == "org.freedesktop.Accounts.Error.PermissionDenied")
 }
 
 // TODO: Should we allow deprecated methods?
@@ -372,14 +365,13 @@ fn get_encrypt_method() -> String {
     let reader = BufReader::new(login_defs);
 
     for line in reader.lines() {
-        if let Ok(line) = line {
-            if !line.trim().is_empty() {
-                if let Some(index) = line.find(|c: char| c.is_whitespace()) {
-                    let key = line[0..index].trim();
-                    if key == "ENCRYPT_METHOD" {
-                        value = line[(index + 1)..].trim().to_string();
-                    }
-                }
+        if let Ok(line) = line
+            && !line.trim().is_empty()
+            && let Some(index) = line.find(|c: char| c.is_whitespace())
+        {
+            let key = line[0..index].trim();
+            if key == "ENCRYPT_METHOD" {
+                value = line[(index + 1)..].trim().to_string();
             }
         }
     }
@@ -389,7 +381,7 @@ fn get_encrypt_method() -> String {
 fn username_valid(username: &str) -> bool {
     Regex::new("^[a-z][a-z0-9-]{0,30}$")
         .unwrap()
-        .is_match(&username)
+        .is_match(username)
 }
 
 fn password_valid(password: &str, password_confirm: &str) -> bool {
