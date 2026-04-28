@@ -1,14 +1,8 @@
-use crate::fl;
-use crate::page;
-use cosmic::{
-    Element, Task,
-    cosmic_config::{
-        self, Config, ConfigSet, CosmicConfigEntry, cosmic_config_derive::CosmicConfigEntry,
-    },
-    cosmic_theme,
-    iced::Alignment,
-    theme, widget,
-};
+use crate::{fl, page};
+use cosmic::cosmic_config::cosmic_config_derive::CosmicConfigEntry;
+use cosmic::cosmic_config::{self, Config, ConfigSet, CosmicConfigEntry};
+use cosmic::iced::Alignment;
+use cosmic::{Element, Task, cosmic_theme, theme, widget};
 use serde::{Deserialize, Serialize};
 
 static CITIES: &[u8] = include_bytes!("../../res/cities.bitcode-v0-6");

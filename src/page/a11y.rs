@@ -1,9 +1,8 @@
 use crate::{fl, page};
-use cosmic::Task;
 use cosmic::iced::core::text::Wrapping;
 use cosmic::iced::{Alignment, Length, alignment};
 use cosmic::widget::{segmented_button, text};
-use cosmic::{Element, widget};
+use cosmic::{Element, Task, widget};
 use cosmic_randr_shell::OutputKey;
 use cosmic_settings_a11y_manager_subscription::{
     self as cosmic_a11y_manager, AccessibilityEvent, AccessibilityRequest,

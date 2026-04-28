@@ -1,9 +1,6 @@
 use crate::fl;
-use cosmic::{
-    cosmic_theme,
-    iced::{Alignment, Length},
-    widget,
-};
+use cosmic::iced::{Alignment, Length};
+use cosmic::{cosmic_theme, widget};
 use std::any::Any;
 
 static SCREENSHOT: &[u8] = include_bytes!("../../res/new-apps.svg");

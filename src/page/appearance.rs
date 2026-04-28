@@ -1,14 +1,13 @@
-use cosmic::{
-    Element, Task,
-    cosmic_config::{Config, ConfigSet, CosmicConfigEntry},
-    cosmic_theme::{self, ThemeBuilder, ThemeMode},
-    iced::{Alignment, Length},
-    theme::{self, ThemeType},
-    widget,
-};
+use cosmic::cosmic_config::{Config, ConfigSet, CosmicConfigEntry};
+use cosmic::cosmic_theme::{self, ThemeBuilder, ThemeMode};
+use cosmic::iced::{Alignment, Length};
+use cosmic::theme::{self, ThemeType};
+use cosmic::{Element, Task, widget};
 use heck::ToTitleCase;
-use std::{collections::BTreeSet, sync::Arc};
-use std::{ffi::OsStr, io::Read};
+use std::collections::BTreeSet;
+use std::ffi::OsStr;
+use std::io::Read;
+use std::sync::Arc;
 
 use crate::{fl, page};
 

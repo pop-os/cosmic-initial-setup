@@ -1,8 +1,5 @@
-use cosmic::{
-    Element, cosmic_theme,
-    iced::{Alignment, Length},
-    theme, widget,
-};
+use cosmic::iced::{Alignment, Length};
+use cosmic::{Element, cosmic_theme, theme, widget};
 
 use crate::{fl, page};
 

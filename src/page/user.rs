@@ -2,22 +2,18 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 use crate::fl;
-use cosmic::{
-    Apply, Element,
-    dialog::file_chooser,
-    iced::Length,
-    widget::{self, icon},
-};
+use cosmic::dialog::file_chooser;
+use cosmic::iced::Length;
+use cosmic::widget::{self, icon};
+use cosmic::{Apply, Element};
 use pwhash::{bcrypt, md5_crypt, sha256_crypt, sha512_crypt};
 use regex::Regex;
-use std::{
-    collections::HashMap,
-    fs::File,
-    future::Future,
-    io::{BufRead, BufReader},
-    path::PathBuf,
-    sync::Arc,
-};
+use std::collections::HashMap;
+use std::fs::File;
+use std::future::Future;
+use std::io::{BufRead, BufReader};
+use std::path::PathBuf;
+use std::sync::Arc;
 use url::Url;
 use zbus_polkit::policykit1::CheckAuthorizationFlags;
 

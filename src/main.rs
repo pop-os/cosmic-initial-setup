@@ -4,14 +4,11 @@
 use std::any::TypeId;
 use std::path::Path;
 
-use cosmic::{
-    Application, Apply, Element,
-    app::{Core, Settings, Task},
-    cosmic_theme, executor,
-    iced::{Alignment, Length, Limits, Subscription},
-    theme, widget,
-};
-use futures::{SinkExt, Stream, StreamExt, channel::mpsc::Sender};
+use cosmic::app::{Core, Settings, Task};
+use cosmic::iced::{Alignment, Length, Limits, Subscription};
+use cosmic::{Application, Apply, Element, cosmic_theme, executor, theme, widget};
+use futures::channel::mpsc::Sender;
+use futures::{SinkExt, Stream, StreamExt};
 use indexmap::IndexMap;
 use tracing_subscriber::prelude::*;
 

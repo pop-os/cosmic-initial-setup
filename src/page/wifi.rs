@@ -4,24 +4,19 @@
 // TODO: This duplicates some of the libcosmic logic implemented in cosmic-settings' wifi page.
 
 use crate::fl;
-use std::{
-    collections::{BTreeMap, BTreeSet},
-    process::Stdio,
-    sync::{Arc, LazyLock},
-};
+use std::collections::{BTreeMap, BTreeSet};
+use std::process::Stdio;
+use std::sync::{Arc, LazyLock};
 
-use cosmic::{
-    Apply, Element, Task,
-    iced::core::text::Wrapping,
-    iced::widget::operation::focus_next,
-    iced::{Alignment, Length, alignment},
-    widget::{self, column, icon},
-};
+use cosmic::iced::core::text::Wrapping;
+use cosmic::iced::widget::operation::focus_next;
+use cosmic::iced::{Alignment, Length, alignment};
+use cosmic::widget::{self, column, icon};
+use cosmic::{Apply, Element, Task};
+use cosmic_settings_network_manager_subscription::available_wifi::{AccessPoint, NetworkType};
+use cosmic_settings_network_manager_subscription::current_networks::ActiveConnectionInfo;
 use cosmic_settings_network_manager_subscription::{
-    self as network_manager, NetworkManagerState,
-    available_wifi::{AccessPoint, NetworkType},
-    current_networks::ActiveConnectionInfo,
-    nm_secret_agent,
+    self as network_manager, NetworkManagerState, nm_secret_agent,
 };
 use eyre::Context;
 use futures::StreamExt;

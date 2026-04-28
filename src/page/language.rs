@@ -1,10 +1,6 @@
-use cosmic::{
-    Element, Task,
-    cosmic_config::{self, ConfigSet},
-    cosmic_theme,
-    iced::Alignment,
-    theme, widget,
-};
+use cosmic::cosmic_config::{self, ConfigSet};
+use cosmic::iced::Alignment;
+use cosmic::{Element, Task, cosmic_theme, theme, widget};
 use eyre::Context;
 use slotmap::{DefaultKey, Key, SlotMap};
 use std::collections::{BTreeMap, BTreeSet};

@@ -1,10 +1,7 @@
 use crate::fl;
 
-use cosmic::{
-    cosmic_theme,
-    iced::{Alignment, Length},
-    widget,
-};
+use cosmic::iced::{Alignment, Length};
+use cosmic::{cosmic_theme, widget};
 use kdl::{KdlDocument, KdlValue};
 use std::any::Any;
 use std::collections::{BTreeMap, VecDeque};
