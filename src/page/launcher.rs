@@ -1,12 +1,9 @@
-use cosmic::{
-    Element, cosmic_theme,
-    iced::{Alignment, Length},
-    theme, widget,
-};
+use cosmic::iced::{Alignment, Length};
+use cosmic::{Element, cosmic_theme, theme, widget};
 
 use crate::{fl, page};
 
-static LAUNCHER_SVG: &'static [u8] = include_bytes!("../../res/launcher.svg");
+static LAUNCHER_SVG: &[u8] = include_bytes!("../../res/launcher.svg");
 
 pub struct Page {
     handle: widget::svg::Handle,
@@ -34,7 +31,7 @@ impl page::Page for Page {
     }
 
     fn view(&self) -> Element<'_, page::Message> {
-        let cosmic_theme::Spacing { space_s, .. } = theme::active().cosmic().spacing;
+        let cosmic_theme::Spacing { space_s, .. } = theme::spacing();
 
         widget::column::with_children(vec![
             widget::text::body(fl!("launcher-page", "description"))

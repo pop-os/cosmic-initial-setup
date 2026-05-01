@@ -2,22 +2,18 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 use crate::fl;
-use cosmic::{
-    Apply, Element,
-    dialog::file_chooser,
-    iced::Length,
-    widget::{self, icon},
-};
+use cosmic::dialog::file_chooser;
+use cosmic::iced::Length;
+use cosmic::widget::{self, icon};
+use cosmic::{Apply, Element};
 use pwhash::{bcrypt, md5_crypt, sha256_crypt, sha512_crypt};
 use regex::Regex;
-use std::{
-    collections::HashMap,
-    fs::File,
-    future::Future,
-    io::{BufRead, BufReader},
-    path::PathBuf,
-    sync::Arc,
-};
+use std::collections::HashMap;
+use std::fs::File;
+use std::future::Future;
+use std::io::{BufRead, BufReader};
+use std::path::PathBuf;
+use std::sync::Arc;
 use url::Url;
 use zbus_polkit::policykit1::CheckAuthorizationFlags;
 
@@ -160,13 +156,13 @@ impl super::Page for Page {
             .on_input(|value| Message::Edit(EditorField::PasswordConfirm, value).into()),
         );
 
-        widget::column()
+        widget::column::with_capacity(6)
             .push(profile_image_selector)
             .push(full_name_input)
             .push(username_input)
             .push(password_input)
             .push(password_confirm_input)
-            .push(widget::vertical_space().height(cosmic::theme::spacing().space_s))
+            .push(widget::space::vertical().height(cosmic::theme::spacing().space_s))
             .spacing(cosmic::theme::spacing().space_s)
             .into()
     }
@@ -340,14 +336,7 @@ where
 }
 
 fn permission_was_denied(result: &zbus::Error) -> bool {
-    match result {
-        zbus::Error::MethodError(name, _, _)
-            if name.as_str() == "org.freedesktop.Accounts.Error.PermissionDenied" =>
-        {
-            true
-        }
-        _ => false,
-    }
+    matches!(result, zbus::Error::MethodError(name, _, _) if name.as_str() == "org.freedesktop.Accounts.Error.PermissionDenied")
 }
 
 // TODO: Should we allow deprecated methods?
@@ -372,14 +361,13 @@ fn get_encrypt_method() -> String {
     let reader = BufReader::new(login_defs);
 
     for line in reader.lines() {
-        if let Ok(line) = line {
-            if !line.trim().is_empty() {
-                if let Some(index) = line.find(|c: char| c.is_whitespace()) {
-                    let key = line[0..index].trim();
-                    if key == "ENCRYPT_METHOD" {
-                        value = line[(index + 1)..].trim().to_string();
-                    }
-                }
+        if let Ok(line) = line
+            && !line.trim().is_empty()
+            && let Some(index) = line.find(|c: char| c.is_whitespace())
+        {
+            let key = line[0..index].trim();
+            if key == "ENCRYPT_METHOD" {
+                value = line[(index + 1)..].trim().to_string();
             }
         }
     }
@@ -389,7 +377,7 @@ fn get_encrypt_method() -> String {
 fn username_valid(username: &str) -> bool {
     Regex::new("^[a-z][a-z0-9-]{0,30}$")
         .unwrap()
-        .is_match(&username)
+        .is_match(username)
 }
 
 fn password_valid(password: &str, password_confirm: &str) -> bool {

@@ -1,10 +1,7 @@
 use crate::fl;
 
-use cosmic::{
-    cosmic_theme,
-    iced::{Alignment, Length},
-    widget,
-};
+use cosmic::iced::{Alignment, Length};
+use cosmic::{cosmic_theme, widget};
 use kdl::{KdlDocument, KdlValue};
 use std::any::Any;
 use std::collections::{BTreeMap, VecDeque};
@@ -136,7 +133,7 @@ impl super::Page for Page {
             })
         }
 
-        self.layouts.sort_by(|a, b| a.id.cmp(&b.id));
+        self.layouts.sort_by_key(|a| a.id);
 
         cosmic::Task::none()
     }
@@ -152,7 +149,7 @@ impl super::Page for Page {
     fn view(&self) -> cosmic::Element<'_, super::Message> {
         let cosmic_theme::Spacing {
             space_s, space_m, ..
-        } = cosmic::theme::active().cosmic().spacing;
+        } = cosmic::theme::spacing();
 
         let description = widget::text::body(fl!("layout-page", "description"))
             .align_x(cosmic::iced::Alignment::Center)

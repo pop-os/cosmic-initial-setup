@@ -1,10 +1,6 @@
-use cosmic::{
-    Element, Task,
-    cosmic_config::{self, ConfigSet},
-    cosmic_theme,
-    iced::Alignment,
-    theme, widget,
-};
+use cosmic::cosmic_config::{self, ConfigSet};
+use cosmic::iced::Alignment;
+use cosmic::{Element, Task, cosmic_theme, theme, widget};
 use eyre::Context;
 use slotmap::{DefaultKey, Key, SlotMap};
 use std::collections::{BTreeMap, BTreeSet};
@@ -21,7 +17,7 @@ pub enum Message {
 
 impl From<Message> for super::Message {
     fn from(message: Message) -> Self {
-        super::Message::Language(message).into()
+        super::Message::Language(message)
     }
 }
 
@@ -212,10 +208,10 @@ impl super::Page for Page {
             let mut selected = DefaultKey::null();
 
             let current_lang = std::env::var("LANG").ok();
-            if let Some(lang) = current_lang.as_ref() {
-                if let Some(locale) = registry.locale(&lang) {
-                    selected = available_languages.insert(localized_locale(&locale, lang.clone()));
-                }
+            if let Some(lang) = current_lang.as_ref()
+                && let Some(locale) = registry.locale(lang)
+            {
+                selected = available_languages.insert(localized_locale(&locale, lang.clone()));
             }
 
             let output = String::from_utf8(output.stdout).unwrap_or_default();
@@ -248,7 +244,7 @@ impl super::Page for Page {
     }
 
     fn open(&mut self) -> cosmic::Task<page::Message> {
-        return widget::text_input::focus(self.search_id.clone());
+        widget::text_input::focus(self.search_id.clone())
     }
 
     fn completed(&self) -> bool {
@@ -258,7 +254,7 @@ impl super::Page for Page {
     fn view(&self) -> Element<'_, page::Message> {
         let cosmic_theme::Spacing {
             space_xxs, space_m, ..
-        } = theme::active().cosmic().spacing;
+        } = theme::spacing();
 
         let mut section = widget::settings::section();
 
@@ -280,13 +276,13 @@ impl super::Page for Page {
                                 .size(16)
                                 .into()
                         } else {
-                            widget::Space::with_width(16).into()
+                            widget::space::horizontal().width(16).into()
                         }])
                         .align_y(Alignment::Center)
                         .spacing(space_xxs),
                     ),
                 )
-                .on_press(Message::Select(id.clone()))
+                .on_press(Message::Select(id))
                 .class(if selected {
                     theme::Button::Link
                 } else {
@@ -302,16 +298,16 @@ impl super::Page for Page {
             .id(self.search_id.clone())
             .on_input(Message::Search);
 
-        if let Some(first) = first_opt {
-            if self.regex_opt.is_some() {
-                // Select first item if no item is selected and there is a search
-                search_input = search_input.on_submit(move |_| Message::Select(first.clone()));
-            }
+        if let Some(first) = first_opt
+            && self.regex_opt.is_some()
+        {
+            // Select first item if no item is selected and there is a search
+            search_input = search_input.on_submit(move |_| Message::Select(first));
         }
 
         let element: Element<_> = widget::column::with_children(vec![
             search_input.into(),
-            widget::Space::with_height(space_m).into(),
+            widget::space::vertical().height(space_m).into(),
             widget::scrollable(section).into(),
         ])
         .into();
@@ -384,7 +380,7 @@ impl Ord for SystemLocale {
 
 impl PartialOrd for SystemLocale {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        self.display_name.partial_cmp(&other.display_name)
+        Some(self.cmp(other))
     }
 }
 
