@@ -1,12 +1,8 @@
 use std::cmp;
 
-use cosmic::{
-    Element, Task,
-    cosmic_config::{self, ConfigGet, ConfigSet},
-    cosmic_theme,
-    iced::Alignment,
-    theme, widget,
-};
+use cosmic::cosmic_config::{self, ConfigGet, ConfigSet};
+use cosmic::iced::Alignment;
+use cosmic::{Element, Task, cosmic_theme, theme, widget};
 use cosmic_comp_config::{KeyboardConfig, XkbConfig};
 use slotmap::{DefaultKey, SlotMap};
 
@@ -30,7 +26,7 @@ pub enum Message {
 
 impl From<Message> for super::Message {
     fn from(message: Message) -> Self {
-        super::Message::Keyboard(message).into()
+        super::Message::Keyboard(message)
     }
 }
 
@@ -268,7 +264,7 @@ impl page::Page for Page {
     }
 
     fn open(&mut self) -> cosmic::Task<page::Message> {
-        return widget::text_input::focus(self.search_id.clone());
+        widget::text_input::focus(self.search_id.clone())
     }
 
     fn completed(&self) -> bool {
@@ -278,7 +274,7 @@ impl page::Page for Page {
     fn view(&self) -> Element<'_, page::Message> {
         let cosmic_theme::Spacing {
             space_xxs, space_m, ..
-        } = theme::active().cosmic().spacing;
+        } = theme::spacing();
 
         let mut list = widget::list_column();
 
@@ -297,7 +293,7 @@ impl page::Page for Page {
                                 .size(16)
                                 .into()
                         } else {
-                            widget::Space::with_width(16).into()
+                            widget::space::horizontal().width(16).into()
                         },
                     ])
                     .align_y(Alignment::Center)
@@ -323,7 +319,7 @@ impl page::Page for Page {
 
         let element: Element<_> = widget::column::with_children(vec![
             search_input.into(),
-            widget::Space::with_height(space_m).into(),
+            widget::space::vertical().height(space_m).into(),
             widget::scrollable(list).into(),
         ])
         .into();

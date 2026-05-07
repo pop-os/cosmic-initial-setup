@@ -1,19 +1,18 @@
-use cosmic::{
-    Element, Task,
-    cosmic_config::{Config, ConfigSet, CosmicConfigEntry},
-    cosmic_theme::{self, ThemeBuilder, ThemeMode},
-    iced::{Alignment, Length},
-    theme::{self, ThemeType},
-    widget,
-};
+use cosmic::cosmic_config::{Config, ConfigSet, CosmicConfigEntry};
+use cosmic::cosmic_theme::{self, ThemeBuilder, ThemeMode};
+use cosmic::iced::{Alignment, Length};
+use cosmic::theme::{self, ThemeType};
+use cosmic::{Element, Task, widget};
 use heck::ToTitleCase;
-use std::{collections::BTreeSet, sync::Arc};
-use std::{ffi::OsStr, io::Read};
+use std::collections::BTreeSet;
+use std::ffi::OsStr;
+use std::io::Read;
+use std::sync::Arc;
 
 use crate::{fl, page};
 
-static COSMIC_DARK_PNG: &'static [u8] = include_bytes!("../../res/cosmic-dark.png");
-static COSMIC_LIGHT_PNG: &'static [u8] = include_bytes!("../../res/cosmic-light.png");
+static COSMIC_DARK_PNG: &[u8] = include_bytes!("../../res/cosmic-dark.png");
+static COSMIC_LIGHT_PNG: &[u8] = include_bytes!("../../res/cosmic-light.png");
 
 fn dark_icon() -> widget::image::Handle {
     widget::image::Handle::from_bytes(COSMIC_DARK_PNG)
@@ -38,7 +37,7 @@ impl PartialEq for Theme {
 
 impl PartialOrd for Theme {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        self.name.partial_cmp(&other.name)
+        Some(self.cmp(other))
     }
 }
 
@@ -146,7 +145,7 @@ impl Page {
                 }
             }
 
-            themes.extend(extra_themes.into_iter());
+            themes.extend(extra_themes);
         }
 
         Self {
@@ -190,16 +189,16 @@ impl Page {
                     _ = theme.write_entry(theme_config);
                 }
 
-                if let Some(theme_mode_config) = &self.theme_mode_config {
-                    if let Err(why) = theme_mode_config.set("is_dark", selected_theme.is_dark) {
-                        tracing::warn!(why = why.to_string(), "failed to set theme mode");
-                    }
+                if let Some(theme_mode_config) = &self.theme_mode_config
+                    && let Err(why) = theme_mode_config.set("is_dark", selected_theme.is_dark)
+                {
+                    tracing::warn!(why = why.to_string(), "failed to set theme mode");
                 }
 
-                return cosmic::Task::done(page::Message::SetTheme(cosmic::Theme {
+                cosmic::Task::done(page::Message::SetTheme(cosmic::Theme {
                     theme_type: ThemeType::Custom(Arc::new(theme)),
                     ..cosmic::Theme::default()
-                }));
+                }))
             }
         }
     }
@@ -224,7 +223,7 @@ impl page::Page for Page {
             space_m,
             space_xl,
             ..
-        } = theme::active().cosmic().spacing;
+        } = theme::spacing();
 
         let mut grid = widget::grid().column_spacing(space_m).row_spacing(space_m);
         for (i, theme) in self.themes.iter().enumerate() {

@@ -1,15 +1,15 @@
 use crate::{fl, page};
-use cosmic::Task;
+use cosmic::iced::core::text::Wrapping;
 use cosmic::iced::{Alignment, Length, alignment};
-use cosmic::iced_core::text::Wrapping;
 use cosmic::widget::{segmented_button, text};
-use cosmic::{Element, widget};
+use cosmic::{Element, Task, widget};
 use cosmic_randr_shell::OutputKey;
 use cosmic_settings_a11y_manager_subscription::{
     self as cosmic_a11y_manager, AccessibilityEvent, AccessibilityRequest,
 };
 use cosmic_settings_accessibility_subscription as a11y_bus;
-use futures_util::{FutureExt, SinkExt};
+use futures::channel::mpsc::Sender;
+use futures::{FutureExt, SinkExt};
 use std::collections::BTreeMap;
 use std::sync::Arc;
 use tokio::sync::mpsc::UnboundedSender;
@@ -62,9 +62,9 @@ impl page::Page for Page {
                 Ok((tx, mut rx)) => {
                     self.a11y_wayland_thread = Some(tx);
 
-                    let task = cosmic::Task::stream(cosmic::iced_futures::stream::channel(
+                    let task = cosmic::Task::stream(cosmic::iced::stream::channel(
                         1,
-                        |mut sender| async move {
+                        |mut sender: Sender<page::Message>| async move {
                             while let Some(event) = rx.recv().await {
                                 let _ = sender
                                     .send(page::Message::A11y(Message::A11yEvent(event)))
@@ -170,15 +170,15 @@ impl page::Page for Page {
         if let Some(switcher) = display_switcher {
             widget::column::with_capacity(5)
                 .push(a11y_section)
-                .push(widget::vertical_space().height(spacing.space_xl))
+                .push(widget::space::vertical().height(spacing.space_xl))
                 .push(switcher)
-                .push(widget::vertical_space().height(spacing.space_xxs))
+                .push(widget::space::vertical().height(spacing.space_xxs))
                 .push(display_settings)
                 .into()
         } else {
             widget::column::with_capacity(3)
                 .push(a11y_section)
-                .push(widget::vertical_space().height(spacing.space_xl))
+                .push(widget::space::vertical().height(spacing.space_xl))
                 .push(display_settings.title(fl!("accessibility-page", "display-scaling")))
                 .into()
         }
@@ -201,7 +201,7 @@ impl Page {
 
     pub fn update(&mut self, message: Message) -> cosmic::Task<page::Message> {
         match message {
-            Message::A11yEvent(AccessibilityEvent::Bound(version)) => {
+            Message::A11yEvent(AccessibilityEvent::Bound(_version)) => {
                 // self.wayland_available = Some(version);
             }
 
@@ -209,7 +209,10 @@ impl Page {
                 self.magnifier_enabled = value;
             }
 
-            Message::A11yEvent(AccessibilityEvent::ScreenFilter { inverted, filter }) => {
+            Message::A11yEvent(AccessibilityEvent::ScreenFilter {
+                inverted: _,
+                filter: _,
+            }) => {
                 //     self.screen_inverted = inverted;
                 //     self.screen_filter_active = filter.is_some();
                 //     if let Some(filter) = filter {

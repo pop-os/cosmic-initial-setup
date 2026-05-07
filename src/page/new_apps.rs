@@ -1,12 +1,9 @@
 use crate::fl;
-use cosmic::{
-    cosmic_theme,
-    iced::{Alignment, Length},
-    widget,
-};
+use cosmic::iced::{Alignment, Length};
+use cosmic::{cosmic_theme, widget};
 use std::any::Any;
 
-static SCREENSHOT: &'static [u8] = include_bytes!("../../res/new-apps.svg");
+static SCREENSHOT: &[u8] = include_bytes!("../../res/new-apps.svg");
 
 pub struct Page {
     handle: widget::svg::Handle,
@@ -34,7 +31,7 @@ impl super::Page for Page {
     }
 
     fn view(&self) -> cosmic::Element<'_, super::Message> {
-        let cosmic_theme::Spacing { space_s, .. } = cosmic::theme::active().cosmic().spacing;
+        let cosmic_theme::Spacing { space_s, .. } = cosmic::theme::spacing();
 
         let description = widget::text::body(fl!("new-apps-page", "description"))
             .align_x(cosmic::iced::Alignment::Center)

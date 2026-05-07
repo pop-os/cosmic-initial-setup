@@ -1,4 +1,5 @@
-use cosmic::{Element, iced::Subscription, widget};
+use cosmic::iced::Subscription;
+use cosmic::{Element, widget};
 use indexmap::IndexMap;
 use std::any::{Any, TypeId};
 

@@ -4,24 +4,19 @@
 // TODO: This duplicates some of the libcosmic logic implemented in cosmic-settings' wifi page.
 
 use crate::fl;
-use std::{
-    collections::{BTreeMap, BTreeSet},
-    process::Stdio,
-    sync::{Arc, LazyLock},
-};
+use std::collections::{BTreeMap, BTreeSet};
+use std::process::Stdio;
+use std::sync::{Arc, LazyLock};
 
-use cosmic::{
-    Apply, Element, Task,
-    iced::{Alignment, Length, alignment},
-    iced_core::text::Wrapping,
-    iced_widget::focus_next,
-    widget::{self, column, icon},
-};
+use cosmic::iced::core::text::Wrapping;
+use cosmic::iced::widget::operation::focus_next;
+use cosmic::iced::{Alignment, Length, alignment};
+use cosmic::widget::{self, column, icon};
+use cosmic::{Apply, Element, Task};
+use cosmic_settings_network_manager_subscription::available_wifi::{AccessPoint, NetworkType};
+use cosmic_settings_network_manager_subscription::current_networks::ActiveConnectionInfo;
 use cosmic_settings_network_manager_subscription::{
-    self as network_manager, NetworkManagerState,
-    available_wifi::{AccessPoint, NetworkType},
-    current_networks::ActiveConnectionInfo,
-    nm_secret_agent,
+    self as network_manager, NetworkManagerState, nm_secret_agent,
 };
 use eyre::Context;
 use futures::StreamExt;
@@ -67,7 +62,7 @@ impl super::Page for Page {
 
     fn view(&self) -> Element<'_, super::Message> {
         let Some(NmState { ref state, .. }) = self.nm_state else {
-            return cosmic::widget::column().into();
+            return cosmic::widget::space().into();
         };
 
         let theme = cosmic::theme::active();
@@ -169,13 +164,13 @@ impl super::Page for Page {
                     let view_more: Option<Element<_>> = if self
                         .view_more_popup
                         .as_deref()
-                        .map_or(false, |id| id == network.ssid.as_ref())
+                        .is_some_and(|id| id == network.ssid.as_ref())
                     {
                         widget::popover(view_more_button.on_press(Message::ViewMore(None)))
                             .position(widget::popover::Position::Bottom)
                             .on_close(Message::ViewMore(None))
                             .popup({
-                                widget::column()
+                                widget::column::with_capacity(3)
                                     .push_maybe(is_connected.then(|| {
                                         popup_button(
                                             Message::Disconnect(network.ssid.clone()),
@@ -213,7 +208,7 @@ impl super::Page for Page {
 
                     let widget = widget::settings::item_row(vec![
                         identifier.into(),
-                        widget::horizontal_space().into(),
+                        widget::space::horizontal().into(),
                         controls.into(),
                     ]);
 
@@ -230,15 +225,10 @@ impl super::Page for Page {
             );
 
             if has_known || has_visible {
-                let mut networks = widget::column().spacing(spacing.space_l);
-
-                if has_known {
-                    networks = networks.push(known_networks);
-                }
-
-                if has_visible {
-                    networks = networks.push(visible_networks);
-                }
+                let networks = widget::column::with_capacity(2)
+                    .spacing(spacing.space_l)
+                    .push_maybe((has_known).then_some(known_networks))
+                    .push_maybe((has_visible).then_some(visible_networks));
 
                 view = view.push(widget::scrollable(networks));
             }
@@ -275,7 +265,7 @@ impl super::Page for Page {
                     widget::button::standard(fl!("cancel")).on_press(Message::CancelDialog.into());
 
                 let control: Element<_> = if let Some(identity) = identity {
-                    column::column()
+                    column::with_capacity(2)
                         .spacing(8)
                         .push(
                             widget::text_input::text_input(fl!("identity"), identity)
@@ -371,7 +361,7 @@ pub enum Message {
 
 impl From<Message> for super::Message {
     fn from(message: Message) -> Self {
-        super::Message::WiFi(message).into()
+        super::Message::WiFi(message)
     }
 }
 
@@ -430,7 +420,7 @@ impl Page {
                         ssid,
                         network_type,
                         _tx,
-                        interface,
+                        _interface,
                     ) => {
                         if success || matches!(network_type, NetworkType::Open) {
                             self.connecting.remove(ssid.as_ref());
@@ -754,12 +744,15 @@ impl Page {
             Message::FocusSecureInput => {
                 // retry until the widget is in the tree and focused or the dialog is removed.
                 if matches!(self.dialog, Some(WiFiDialog::Password { .. })) {
-                    return cosmic::iced_runtime::task::widget(
-                        cosmic::iced_core::widget::operation::focusable::find_focused(),
+                    return cosmic::iced::runtime::task::widget(
+                        cosmic::iced::core::widget::operation::focusable::find_focused(),
                     )
                     .collect()
                     .then(|id| {
-                        if id.get(0).is_some_and(|id| *id == SECURE_INPUT_WIFI.clone()) {
+                        if id
+                            .first()
+                            .is_some_and(|id| *id == SECURE_INPUT_WIFI.clone())
+                        {
                             Task::none()
                         } else {
                             cosmic::widget::text_input::focus(SECURE_INPUT_WIFI.clone())
@@ -866,19 +859,16 @@ fn connection_settings(page: &mut Page) -> Task<super::Message> {
             })
             // Reduce the settings list into a SSID->UUID map.
             .fold(BTreeMap::new(), |mut set, settings| async move {
-                if let Some(ref wifi) = settings.wifi {
-                    if let Some(ssid) = wifi
+                if let Some(ref wifi) = settings.wifi
+                    && let Some(ssid) = wifi
                         .ssid
                         .clone()
                         .and_then(|ssid| String::from_utf8(ssid).ok())
-                    {
-                        if let Some(ref connection) = settings.connection {
-                            if let Some(uuid) = connection.uuid.clone() {
-                                set.insert(ssid.into(), uuid.into());
-                                return set;
-                            }
-                        }
-                    }
+                    && let Some(ref connection) = settings.connection
+                    && let Some(uuid) = connection.uuid.clone()
+                {
+                    set.insert(ssid.into(), uuid.into());
+                    return set;
                 }
 
                 set

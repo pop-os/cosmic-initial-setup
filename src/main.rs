@@ -4,13 +4,10 @@
 use std::any::TypeId;
 use std::path::Path;
 
-use cosmic::{
-    Application, Apply, Element,
-    app::{Core, Settings, Task},
-    cosmic_theme, executor,
-    iced::{Alignment, Length, Limits, Subscription},
-    theme, widget,
-};
+use cosmic::app::{Core, Settings, Task};
+use cosmic::iced::{Alignment, Length, Limits, Subscription};
+use cosmic::{Application, Apply, Element, cosmic_theme, executor, theme, widget};
+use futures::channel::mpsc::Sender;
 use futures::{SinkExt, Stream, StreamExt};
 use indexmap::IndexMap;
 use tracing_subscriber::prelude::*;
@@ -27,11 +24,10 @@ const GNOME_SETUP_DONE_PATH: &str = ".config/gnome-initial-setup-done";
 /// Runs application with these settings
 #[rustfmt::skip]
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    if let Some(file_path) = option_env!("DISABLE_IF_EXISTS") {
-        if Path::new(file_path).exists() {
+    if let Some(file_path) = option_env!("DISABLE_IF_EXISTS")
+        && Path::new(file_path).exists() {
             return Ok(());
         }
-    }
 
     #[allow(deprecated)]
     let home_dir = std::env::home_dir().unwrap();
@@ -73,7 +69,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         page::AppMode::GnomeTransition
     } else {
         // If being run by the cosmic-initial-setup user, we are in OEM mode.
-        page::AppMode::NewInstall { create_user: pwd::Passwd::current_user().map_or(false, |current_user| current_user.name == "cosmic-initial-setup") }
+        page::AppMode::NewInstall { create_user: pwd::Passwd::current_user().is_some_and(|current_user| current_user.name == "cosmic-initial-setup") }
     };
 
     let mut settings = Settings::default();
@@ -300,7 +296,7 @@ impl Application for App {
                     tasks = tasks.chain(
                         cosmic::Task::future(async {
                             _ = std::process::Command::new("loginctl")
-                                .args(&["terminate-user", "cosmic-initial-setup"])
+                                .args(["terminate-user", "cosmic-initial-setup"])
                                 .status();
                         })
                         .discard(),
@@ -331,7 +327,7 @@ impl Application for App {
             space_l,
             space_xl,
             ..
-        } = theme::active().cosmic().spacing;
+        } = theme::spacing();
 
         let page = &self.pages[self.page_i];
 
@@ -347,14 +343,13 @@ impl Application for App {
         let mut button_row = widget::row::with_capacity(4)
             .spacing(space_xxs)
             .push_maybe(skip_button)
-            .push(widget::horizontal_space());
+            .push(widget::space::horizontal());
 
-        if let Some(page_i) = self.page_i.checked_sub(1) {
-            if self.pages.get_index(page_i).is_some() {
-                button_row = button_row.push(
-                    widget::button::standard(fl!("back")).on_press(Message::PageOpen(page_i)),
-                );
-            }
+        if let Some(page_i) = self.page_i.checked_sub(1)
+            && self.pages.get_index(page_i).is_some()
+        {
+            button_row = button_row
+                .push(widget::button::standard(fl!("back")).on_press(Message::PageOpen(page_i)));
         }
 
         if let Some(page_i) = self.page_i.checked_add(1) {
@@ -384,13 +379,13 @@ impl Application for App {
             .height(Length::Fill);
 
         widget::column::with_capacity(7)
-            .push(widget::Space::with_height(space_xl))
+            .push(widget::space::vertical().height(space_xl))
             .push(title)
-            .push(widget::Space::with_height(space_l))
+            .push(widget::space::vertical().height(space_l))
             .push(content)
-            .push(widget::Space::with_height(space_m))
+            .push(widget::space::vertical().height(space_m))
             .push(button_row)
-            .push(widget::Space::with_height(space_l))
+            .push(widget::space::vertical().height(space_l))
             .max_width(page.width())
             .width(page.width())
             .align_x(Alignment::Center)
@@ -418,7 +413,7 @@ impl Application for App {
 
 fn network_manager_stream() -> impl Stream<Item = Message> {
     use cosmic_settings_network_manager_subscription as network_manager;
-    cosmic::iced_futures::stream::channel(1, |mut output| async move {
+    cosmic::iced::stream::channel(1, |mut output: Sender<Message>| async move {
         let conn = zbus::Connection::system().await.unwrap();
 
         let (tx, mut rx) = futures::channel::mpsc::channel(1);

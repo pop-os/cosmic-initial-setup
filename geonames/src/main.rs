@@ -1,8 +1,6 @@
 use geonames::City;
-use std::{
-    fs,
-    io::{self, BufRead},
-};
+use std::fs;
+use std::io::{self, BufRead};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
