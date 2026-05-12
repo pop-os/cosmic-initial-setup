@@ -1,0 +1,12 @@
+next = Següent
+wifi = Wi-Fi
+skip = Omet
+type-to-search = Escriviu per a cercar…
+skip-setup-and-close = Omet la configuració inicial i tanca
+back = Enrere
+cancel = Cancel·lar
+finish = Finalitza
+identity = Identitat
+password = Contrasenya
+password-confirm = Confirmeu la contrasenya
+settings = Configuració
