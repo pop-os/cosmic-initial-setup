@@ -280,11 +280,7 @@ fn apply_layout(path: &Path) {
         }
     }
 
-    #[cfg(not(feature = "nixos"))]
-    let panel_process = "cosmic-panel";
-    #[cfg(feature = "nixos")]
-    let panel_process = ".cosmic-panel-wrapped";
     _ = std::process::Command::new("killall")
-        .arg(panel_process)
+        .arg("cosmic-panel")
         .status();
 }
