@@ -1,5 +1,5 @@
 use cosmic::cosmic_config::{self, ConfigSet};
-use cosmic::iced::Alignment;
+use cosmic::iced::{Alignment, Length};
 use cosmic::{Element, Task, cosmic_theme, theme, widget};
 use eyre::Context;
 use slotmap::{DefaultKey, Key, SlotMap};
@@ -296,6 +296,7 @@ impl super::Page for Page {
                         .spacing(space_xxs),
                     ),
                 )
+                .width(Length::Fill)
                 .on_press(Message::Select(id))
                 .class(if selected {
                     theme::Button::Link

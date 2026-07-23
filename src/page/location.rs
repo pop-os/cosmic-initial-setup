@@ -1,7 +1,7 @@
 use crate::{fl, page};
 use cosmic::cosmic_config::cosmic_config_derive::CosmicConfigEntry;
 use cosmic::cosmic_config::{self, Config, ConfigSet, CosmicConfigEntry};
-use cosmic::iced::Alignment;
+use cosmic::iced::{Alignment, Length};
 use cosmic::{Element, Task, cosmic_theme, theme, widget};
 use serde::{Deserialize, Serialize};
 
@@ -186,6 +186,7 @@ impl page::Page for Page {
                         .spacing(space_xxs),
                     ),
                 )
+                .width(Length::Fill)
                 .on_press(Message::Select(i))
                 .class(if selected {
                     theme::Button::Link

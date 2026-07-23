@@ -1,7 +1,7 @@
 use std::cmp;
 
 use cosmic::cosmic_config::{self, ConfigGet, ConfigSet};
-use cosmic::iced::Alignment;
+use cosmic::iced::{Alignment, Length};
 use cosmic::{Element, Task, cosmic_theme, theme, widget};
 use cosmic_comp_config::{KeyboardConfig, XkbConfig};
 use slotmap::{DefaultKey, SlotMap};
@@ -302,6 +302,7 @@ impl page::Page for Page {
 
                 //TODO: properly style this
                 let input_source = widget::button::custom(item)
+                    .width(Length::Fill)
                     .on_press(Message::Select(id))
                     .class(if selected {
                         theme::Button::Link
