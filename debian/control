@@ -35,3 +35,10 @@ Priority: extra
 Depends: casper
 Description: Disable COSMIC Initial Setup in casper
  Disable COSMIC Initial Setup when running in a live system with casper
+
+Package: cosmic-initial-setup-dracut
+Architecture: amd64 arm64
+Priority: extra
+Depends: dracut-core
+Description: Disable COSMIC Initial Setup in dracut
+ Disable COSMIC Initial Setup when running in a live system with dracut
