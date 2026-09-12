@@ -1,4 +1,4 @@
-cancel = Sefsex
+cancel = Semmet
 create-account-page = Rnu Amiḍan-ik·im
     .full-name = Isem ummid
     .user-name = Isem n useqdac
