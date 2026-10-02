@@ -66,6 +66,6 @@ users = Iseqdacen
     .admin = Anedbal
     .standard = Tizeɣt
 launcher-page = Arurad yerna d Amellil
-    .description = Sit ɣef tqeffalt Supery (neɣ Windows) akken ad tremdeḍ Amsekkar. Nadi sakin sit ɣef kcem akken ad teldiḍ asnas neɣ ad t-terreḍ ɣer-s. Tzemreḍ daɣen ad tneggzeḍ ɣer yiɣewwaṛen neɣ tiwuriwin n unagraw am useḥbes. Aru “?” i ulmad ɣef tmahilin leqqayen n umeskar.
+    .description = Sit ɣef tqeffalt Supery (neɣ Windows) akken ad tremdeḍ Amsekker. Nadi sakin sit ɣef kcem akken ad teldiḍ asnas neɣ ad t-terreḍ ɣer-s. Tzemreḍ daɣen ad tneggzeḍ ɣer yiɣewwaṛen neɣ tiwuriwin n unagraw am useḥbes. Aru “?” i ulmad ɣef tmahilin leqqayen n umsekker.
 new-shortcuts-page = Inegzumen n unasiw imaynuten
     .description = Seqdec Shift+Super+ineccaben, neɣ seqdec azuɣer s usewwaṛ, iwakken ad tesmuttiḍ isfuyla. Faṛes iwellihen n tmeẓri deg ufsar awurman n yesfuyla.
