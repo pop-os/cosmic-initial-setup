@@ -20,11 +20,46 @@ use network_manager::current_networks::ActiveConnectionInfo;
 use nm_secret_agent::SecretSender;
 use secure_string::SecureString;
 use std::collections::{BTreeMap, BTreeSet};
+use std::io::Read;
 use std::process::Stdio;
 use std::sync::{Arc, LazyLock};
 use tokio::sync::Mutex;
 
 pub static SECURE_INPUT_WIFI: LazyLock<widget::Id> = LazyLock::new(widget::Id::unique);
+
+/// Check if any device in /sys/class/net has a DEVTYPE=wlan uevent defined.
+pub fn device_exists() -> bool {
+    let mut buffer = String::new();
+    for device in std::fs::read_dir("/sys/class/net")
+        .into_iter()
+        .flatten()
+        .filter_map(Result::ok)
+    {
+        let device_path = device.path();
+        let uevent_path = device_path.join("uevent");
+        if !uevent_path.exists() {
+            continue;
+        }
+
+        let Ok(mut uevent) = std::fs::File::open(&uevent_path) else {
+            continue;
+        };
+
+        buffer.clear();
+        if uevent.read_to_string(&mut buffer).is_err() {
+            continue;
+        }
+
+        if buffer
+            .lines()
+            .any(|line| line.strip_prefix("DEVTYPE=") == Some("wlan"))
+        {
+            return true;
+        }
+    }
+
+    false
+}
 
 #[derive(Debug, Default)]
 pub struct Page {
