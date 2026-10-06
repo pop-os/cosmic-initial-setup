@@ -179,13 +179,10 @@ impl super::Page for Page {
         let is_admin = true;
 
         cosmic::Task::future(async move {
-            let Ok(conn) = zbus::Connection::system().await else {
-                return;
-            };
+            let conn = crate::zbus_system_connection();
+            let accounts = accounts_zbus::AccountsProxy::new(conn).await.unwrap();
 
-            let accounts = accounts_zbus::AccountsProxy::new(&conn).await.unwrap();
-
-            let user_result = request_permission_on_denial(&conn, || {
+            let user_result = request_permission_on_denial(conn, || {
                 accounts.create_user(&username, &full_name, if is_admin { 1 } else { 0 })
             })
             .await;
@@ -200,14 +197,16 @@ impl super::Page for Page {
             };
 
             let password_hashed = hash_password(&password);
-            match accounts_zbus::UserProxy::new(&conn, user_object_path).await {
+            match accounts_zbus::UserProxy::new(conn, user_object_path).await {
                 Ok(user) => {
                     _ = user.set_password(&password_hashed, "").await;
                     _ = user.set_icon_file(&icon_file).await;
                     _ = user.set_account_type(1).await;
 
                     // Ask the greeter to move account files to the new user's home directory.
-                    if let Ok(mut client) = crate::greeter::GreeterProxy::new(&conn).await {
+                    if let Ok(mut client) =
+                        crate::greeter::GreeterProxy::new(crate::zbus_system_connection()).await
+                    {
                         _ = client.initial_setup_end(username).await;
                     }
                 }
@@ -301,13 +300,13 @@ impl Page {
 
 async fn check_authorization(conn: &zbus::Connection) -> eyre::Result<()> {
     let proxy = zbus_polkit::policykit1::AuthorityProxy::new(conn).await?;
-    let subject = zbus_polkit::policykit1::Subject::new_for_owner(std::process::id(), None, None)?;
+    let subject = zbus_polkit::policykit1::Subject::new_for_pid(std::process::id(), None, None)?;
     proxy
         .check_authorization(
             &subject,
             USERS_ADMIN_POLKIT_POLICY_ID,
             &HashMap::new(),
-            CheckAuthorizationFlags::AllowUserInteraction.into(),
+            CheckAuthorizationFlags::ALLOW_USER_INTERACTION,
             "",
         )
         .await?;

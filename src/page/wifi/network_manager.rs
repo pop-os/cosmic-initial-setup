@@ -10,7 +10,6 @@ use std::time::Duration;
 
 use futures::channel::mpsc::{UnboundedReceiver, UnboundedSender, unbounded};
 use futures::{FutureExt, SinkExt, StreamExt};
-use nmrs::raw::zbus;
 use nmrs::raw::zvariant::{Dict, OwnedObjectPath, OwnedValue, Str, Value};
 use nmrs::{
     ActiveConnection, ConnectByUuidConfig, ConnectType, EapOptions, NetworkEvent, NetworkManager,
@@ -47,8 +46,8 @@ impl From<nmrs::ConnectionError> for Error {
     }
 }
 
-impl From<zbus::Error> for Error {
-    fn from(value: zbus::Error) -> Self {
+impl From<zbus5::Error> for Error {
+    fn from(value: zbus5::Error) -> Self {
         Self::Message(value.to_string())
     }
 }
@@ -897,7 +896,7 @@ async fn deactivate_by_uuid(nm: &NetworkManager, uuid: &str) -> Result<(), Error
     }
 
     let active_path = find_active_connection_path(nm, uuid).await?;
-    let proxy = zbus::Proxy::new(nm.dbus_connection(), NM_DEST, NM_PATH, NM_IFACE).await?;
+    let proxy = zbus5::Proxy::new(nm.dbus_connection(), NM_DEST, NM_PATH, NM_IFACE).await?;
     proxy
         .call_method("DeactivateConnection", &(active_path,))
         .await?;
@@ -911,7 +910,7 @@ async fn activate_connection(
     device_path: OwnedObjectPath,
     specific_path: OwnedObjectPath,
 ) -> Result<(), Error> {
-    let proxy = zbus::Proxy::new(nm.dbus_connection(), NM_DEST, NM_PATH, NM_IFACE).await?;
+    let proxy = zbus5::Proxy::new(nm.dbus_connection(), NM_DEST, NM_PATH, NM_IFACE).await?;
     proxy
         .call_method(
             "ActivateConnection",
@@ -925,11 +924,11 @@ async fn find_active_connection_path(
     nm: &NetworkManager,
     uuid: &str,
 ) -> Result<OwnedObjectPath, Error> {
-    let proxy = zbus::Proxy::new(nm.dbus_connection(), NM_DEST, NM_PATH, NM_IFACE).await?;
+    let proxy = zbus5::Proxy::new(nm.dbus_connection(), NM_DEST, NM_PATH, NM_IFACE).await?;
     let paths: Vec<OwnedObjectPath> = proxy.get_property("ActiveConnections").await?;
 
     for path in paths {
-        let active = zbus::Proxy::new(
+        let active = zbus5::Proxy::new(
             nm.dbus_connection(),
             NM_DEST,
             path.clone(),

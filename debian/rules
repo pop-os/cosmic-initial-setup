@@ -9,7 +9,8 @@ override_dh_auto_clean:
 	ischroot || (just clean-dist && just vendor)
 
 override_dh_auto_build:
-	just disable-if-exists="/cdrom/casper/filesystem.squashfs" build-vendored
+	test -e vendor.tar && just disable-if-exists="/cdrom/casper/filesystem.squashfs" build-vendored --features pop-os \
+	    || just disable-if-exists="/cdrom/casper/filesystem.squashfs" build-release --features pop-os
 
 override_dh_auto_install:
 	just rootdir=$(DESTDIR) install

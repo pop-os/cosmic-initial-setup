@@ -1,6 +1,3 @@
-set unstable
-
-# The cargo module contains cargo recipes shared by all cosmic projects.
 mod cargo 'cargo.just'
 
 name := 'cosmic-initial-setup'
@@ -9,10 +6,12 @@ rootdir := ''
 prefix := '/usr'
 
 # An optional file that when set will prevent initial-setup from loading
+
 disable-if-exists := ''
 export DISABLE_IF_EXISTS := env('DISABLE_IF_EXISTS', disable-if-exists)
 
 # Installation paths
+
 base-dir := absolute_path(clean(rootdir / prefix))
 cargo-target-dir := env('CARGO_TARGET_DIR', 'target')
 desktop-entry := appid + '.desktop'
@@ -26,34 +25,36 @@ polkit-rules-dst := base-dir / 'share' / 'polkit-1' / 'rules.d' / '20-cosmic-ini
 themes-dst := base-dir / 'share' / 'cosmic-themes'
 
 # Default recipe which runs `just cargo build-release`
-default: cargo::build-release
+default *args: (cargo::build-release args)
 
 # Build release binaries
-build-release: cargo::build-release
+build-release *args: (cargo::build-release args)
 
 # Build release binary from vendored sources
-build-vendored: cargo::build-vendored
+build-vendored *args: (cargo::build-vendored args)
 
 # Clean
 clean: cargo::clean
-    rm -rf {{layouts-dst}} {{themes-dst}} {{bin-dst}} {{icon-dst}} {{desktop-dst}} {{autostart-dst}} {{polkit-rules-dst}}
+    rm -rf {{ layouts-dst }} {{ themes-dst }} {{ bin-dst }} {{ icon-dst }} {{ desktop-dst }} {{ autostart-dst }} {{ polkit-rules-dst }}
 
 clean-dist: cargo::clean-dist
 
+run: cargo::run
+
 # Installs files
 install:
-    mkdir -p {{layouts-dst}} {{themes-dst}}
-    install -Dm0755 {{ cargo-target-dir / 'release' / name }} '{{bin-dst}}'
-    install -Dm0644 res/icon.svg '{{icon-dst}}'
-    install -Dm0644 {{ 'res' / desktop-entry }} '{{desktop-dst}}'
-    install -Dm0644 {{ 'res' / autostart-entry }} '{{autostart-dst}}'
-    install -Dm0644 res/20-cosmic-initial-setup.rules '{{polkit-rules-dst}}'
-    cd res/layouts; find . -type f -exec install -Dm0644 '{}' '{{layouts-dst}}/{}' \;
-    find res/themes -type f -exec install -Dm0644 '{}' '{{themes-dst}}' \;
+    mkdir -p {{ layouts-dst }} {{ themes-dst }}
+    install -Dm0755 {{ cargo-target-dir / 'release' / name }} '{{ bin-dst }}'
+    install -Dm0644 res/icon.svg '{{ icon-dst }}'
+    install -Dm0644 {{ 'res' / desktop-entry }} '{{ desktop-dst }}'
+    install -Dm0644 {{ 'res' / autostart-entry }} '{{ autostart-dst }}'
+    install -Dm0644 res/20-cosmic-initial-setup.rules '{{ polkit-rules-dst }}'
+    cd res/layouts; find . -type f -exec install -Dm0644 '{}' '{{ layouts-dst }}/{}' \;
+    find res/themes -type f -exec install -Dm0644 '{}' '{{ themes-dst }}' \;
 
 # Uninstalls installed files
 uninstall:
-    rm -rf {{desktop-dst}} {{polkit-rules-dst}} {{icon-dst}} {{themes-dst}} {{layouts-dst}} {{bin-dst}}
+    rm -rf {{ desktop-dst }} {{ polkit-rules-dst }} {{ icon-dst }} {{ themes-dst }} {{ layouts-dst }} {{ bin-dst }}
 
 # Vendor crate dependencies locally
 vendor: cargo::vendor
