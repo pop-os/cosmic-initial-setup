@@ -1,11 +1,9 @@
-[private]
-default:
-    @just --justfile cargo.just --list
+cargo-target-dir := env('CARGO_TARGET_DIR', 'target')
 
 # Compile with debug profile
 [no-cd]
 build-debug *args:
-    cargo build {{ args }}
+    cargo build {{args}}
 
 # Compile with release profile
 [no-cd]
@@ -18,7 +16,7 @@ build-vendored *args: vendor-extract (build-release '--frozen --offline' args)
 # Check for errors and linter warnings
 [no-cd]
 check *args:
-    cargo clippy --all-features {{ args }} -- -W clippy::pedantic
+    cargo clippy --all-features {{args}} -- -W clippy::pedantic
 
 # Runs a check with JSON message format for IDE integration
 [no-cd]
@@ -37,19 +35,19 @@ clean-dist: clean
 # Run the application for testing purposes
 [no-cd]
 run *args:
-    env RUST_LOG=debug RUST_BACKTRACE=full cargo run {{ args }}
+    cargo run {{args}}
 
 # Run `cargo test`
 [no-cd]
 test *args:
-    cargo test {{ args }}
+    cargo test {{args}}
 
 # Vendor Cargo dependencies locally
 [no-cd]
 vendor:
     #!/usr/bin/env bash
     mkdir -p .cargo
-    cargo vendor --locked --sync Cargo.toml | head -n -1 > .cargo/config.toml
+    cargo vendor --locked | head -n -1 > .cargo/config.toml
     echo 'directory = "vendor"' >> .cargo/config.toml
     echo >> .cargo/config.toml
     echo '[env]' >> .cargo/config.toml
