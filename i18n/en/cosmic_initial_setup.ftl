@@ -1,6 +1,10 @@
 back = Back
 cancel = Cancel
+disabled = Disabled
 finish = Finish
+frequency-daily = Daily
+frequency-weekly = Weekly
+frequency-monthly = Monthly
 identity = Identity
 next = Next
 password = Password
@@ -8,6 +12,18 @@ password-confirm = Confirm password
 settings = Settings
 skip = Skip
 skip-setup-and-close = Skip setup and close
+time-am = AM
+time-friday = Friday
+time-hour = Hour
+time-minute = Minute
+time-monday = Monday
+time-pm = PM
+time-saturday = Saturday
+time-sunday = Sunday
+time-thursday = Thursday
+time-tuesday = Tuesday
+time-wednesday = Wednesday
+time-weekdays = Weekdays
 type-to-search = Type to search…
 wifi = Wi-Fi
 
@@ -52,7 +68,7 @@ appearance-page = Personalize appearance
     .frosted-description = Applies to panels, applets, windows and system interfaces
     .effects-tip = You can further customize accent colors and the look of your desktop in Appearance settings.
     .tip = Tip:
-    
+
 # LayoutPage
 layout-page = Layout configuration
     .bottom-panel = Bottom panel
@@ -102,3 +118,9 @@ users = Users
     .desc = Authentication and user accounts.
     .admin = Admin
     .standard = Standard
+
+# Automatic updates page
+updates-page = System & application updates
+    .schedule = Automatic update schedule
+    .automatic-toggle = Enable automatic updates
+    .notifications-toggle = Update notifications

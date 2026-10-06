@@ -5,7 +5,7 @@ use std::collections::HashMap;
 use std::fmt;
 use std::sync::Arc;
 use tokio::sync::oneshot;
-use zbus::zvariant::{OwnedValue, Str};
+use zbus5::zvariant::{OwnedValue, Str};
 
 const SECRET_ID: &str = "com.system76.CosmicSettings.NetworkManager";
 
