@@ -26,20 +26,19 @@ polkit-rules-dst := base-dir / 'share' / 'polkit-1' / 'rules.d' / '20-cosmic-ini
 themes-dst := base-dir / 'share' / 'cosmic-themes'
 
 # Default recipe which runs `just cargo build-release`
-default:
-    @just cargo build-release
+default: cargo::build-release
 
-build-release:
-    @just cargo build-release
+# Build release binaries
+build-release: cargo::build-release
 
 # Build release binary from vendored sources
-build-vendored:
-    @just cargo build-vendored
+build-vendored: cargo::build-vendored
 
 # Clean
-clean:
-    @just cargo clean
+clean: cargo::clean
     rm -rf {{layouts-dst}} {{themes-dst}} {{bin-dst}} {{icon-dst}} {{desktop-dst}} {{autostart-dst}} {{polkit-rules-dst}}
+
+clean-dist: cargo::clean-dist
 
 # Installs files
 install:
@@ -52,20 +51,12 @@ install:
     cd res/layouts; find . -type f -exec install -Dm0644 '{}' '{{layouts-dst}}/{}' \;
     find res/themes -type f -exec install -Dm0644 '{}' '{{themes-dst}}' \;
 
-# Bump cargo version, create git commit, and create tag
-tag version:
-    sed -i '0,/^version/s/^version.*/version = "{{version}}"/' Cargo.toml
-    cargo check
-    cargo clean
-    dch -D noble -v {{version}}
-    git add Cargo.toml Cargo.lock debian/changelog
-    git commit -m 'release(debian): {{version}}'
-    git tag -a epoch-{{version}} -m ''
-
 # Uninstalls installed files
 uninstall:
     rm -rf {{desktop-dst}} {{polkit-rules-dst}} {{icon-dst}} {{themes-dst}} {{layouts-dst}} {{bin-dst}}
 
-# Vendor sources
-vendor:
-    just cargo vendor
+# Vendor crate dependencies locally
+vendor: cargo::vendor
+
+# Extracts vendored dependencies
+vendor-extract: cargo::vendor-extract

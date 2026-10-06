@@ -6,7 +6,7 @@ export DESTDIR = debian/tmp
 	dh $@
 
 override_dh_auto_clean:
-	ischroot || just vendor
+	ischroot || (just clean-dist && just vendor)
 
 override_dh_auto_build:
 	just disable-if-exists="/cdrom/casper/filesystem.squashfs" build-vendored

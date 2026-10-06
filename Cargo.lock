@@ -1140,7 +1140,7 @@ dependencies = [
 
 [[package]]
 name = "cosmic-initial-setup"
-version = "1.0.0"
+version = "1.10.0"
 dependencies = [
  "accounts-zbus",
  "cosmic-comp-config",
