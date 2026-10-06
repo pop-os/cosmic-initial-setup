@@ -1,13 +1,12 @@
 // Copyright 2023 System76 <info@system76.com>
 // SPDX-License-Identifier: GPL-3.0-only
 
-use std::any::TypeId;
-use std::path::Path;
-
 use cosmic::app::{Core, Settings, Task};
 use cosmic::iced::{Alignment, Length, Limits, Subscription};
 use cosmic::{Application, Apply, Element, cosmic_theme, executor, surface, theme, widget};
 use indexmap::IndexMap;
+use std::any::TypeId;
+use std::path::Path;
 use tracing_subscriber::prelude::*;
 
 mod greeter;
@@ -130,7 +129,7 @@ impl Application for App {
         let mut app = App {
             core,
             oem_mode: matches!(mode, page::AppMode::NewInstall { create_user: true }),
-            pages: page::pages(mode, true),
+            pages: page::pages(mode),
             page_i: 0,
         };
 

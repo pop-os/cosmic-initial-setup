@@ -25,12 +25,12 @@ pub enum AppMode {
 }
 
 #[inline]
-pub fn pages(mode: AppMode, wifi_available: bool) -> IndexMap<TypeId, Box<dyn Page>> {
+pub fn pages(mode: AppMode) -> IndexMap<TypeId, Box<dyn Page>> {
     let mut pages: IndexMap<TypeId, Box<dyn Page>> = IndexMap::new();
     pages.insert(TypeId::of::<a11y::Page>(), Box::new(a11y::Page::new()));
 
     if let AppMode::NewInstall { create_user } = mode {
-        if wifi_available {
+        if wifi::device_exists() {
             pages.insert(TypeId::of::<wifi::Page>(), Box::new(wifi::Page::default()));
         }
 
