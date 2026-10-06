@@ -8,14 +8,15 @@ rust-version = "1.93"
 cosmic-protocols = { git = "https://github.com/pop-os/cosmic-protocols" }
 cosmic-settings-accessibility-subscription = { git = "https://github.com/pop-os/cosmic-settings" }
 cosmic-settings-a11y-manager-subscription = { git = "https://github.com/pop-os/cosmic-settings" }
-nmrs = "3.5.2"
+nmrs = "3.5.7"
 crabtime = "1.1.4"
 eyre = "0.6.14"
 futures = "0.3.34"
 geonames = { path = "geonames" }
-gettext-rs = { version = "0.7.7", features = ["gettext-system"] }
+gettext-rs = { version = "0.8.0", features = ["gettext-system"] }
 heck = "0.5.0"
 # Internationalization
+xkb-data = "0.2.2"
 i18n-embed = { version = "0.16", features = [
     "fluent-system",
     "desktop-requester",
@@ -24,23 +25,24 @@ i18n-embed-fl = "0.10"
 indexmap = "2.14.2"
 itoa = "1.0.18"
 kdl = "6.5.0"
-num-derive = "0.4.2"
+num-derive = "0.5.1"
 num-traits = "0.2.19"
+pop-system-updater-zbus = { git = "https://github.com/pop-os/system-updater", branch = "updates", optional = true }
 pwd = "1.4.0"
 pwhash = "1.0.0"
 regex = "1"
 ron = "0.12"
 rust-embed = "8"
-secret-service = { version = "5.1.0", features = ["rt-tokio-crypto-rust"] }
+secret-service = { version = "5.2.0", features = ["rt-tokio-crypto-rust"] }
 secure-string = "0.3.0"
 serde = { version = "1.0.229", features = ["derive"] }
 slotmap = "1.1.1"
-tokio = { version = "1", features = ["sync"] }
+tokio.workspace = true
 tracing = "0.1.44"
 tracing-subscriber = "0.3.23"
 url = "2.5.8"
-xkb-data = "0.2.2"
-zbus = "5.19.0"
+zbus5 = { package = "zbus", version = "5.19.0" }
+zbus = "6.1.0"
 zbus_polkit = "5.1.0"
 
 [dependencies.accounts-zbus]
@@ -72,12 +74,13 @@ git = "https://github.com/pop-os/dbus-settings-bindings"
 git = "https://github.com/AerynOS/locales-rs"
 
 [features]
-default = ["a11y", "wgpu", "wayland"]
+default = ["a11y", "wgpu", "wayland", "pop-os"]
 a11y = ["libcosmic/a11y"]
-nixos = []
 wgpu = ["libcosmic/wgpu"]
 wayland = ["libcosmic/wayland", "libcosmic/multi-window"]
-
+# Distribution-specific features
+nixos = []
+pop-os = ["dep:pop-system-updater-zbus"]
 
 [profile.release-with-debug]
 inherits = "release"
@@ -88,6 +91,12 @@ lto = "thin"
 
 [workspace]
 members = ["geonames"]
+
+[workspace.package]
+rust-version = "1.93"
+
+[workspace.dependencies]
+tokio = { version = "1", features = ["sync"] }
 
 # [patch.'https://github.com/pop-os/libcosmic.git']
 # libcosmic = { path = "../libcosmic" }

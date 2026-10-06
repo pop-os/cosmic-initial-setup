@@ -7,6 +7,7 @@ use cosmic::{Application, Apply, Element, cosmic_theme, executor, surface, theme
 use indexmap::IndexMap;
 use std::any::TypeId;
 use std::path::Path;
+use std::sync::OnceLock;
 use tracing_subscriber::prelude::*;
 
 mod greeter;
@@ -17,6 +18,31 @@ mod page;
 
 const COSMIC_SETUP_DONE_PATH: &str = ".config/cosmic-initial-setup-done";
 const GNOME_SETUP_DONE_PATH: &str = ".config/gnome-initial-setup-done";
+
+pub static ZBUS_CONNECTION_SESSION: OnceLock<Option<zbus::Connection>> = OnceLock::new();
+pub static ZBUS_CONNECTION_SYSTEM: OnceLock<Option<zbus::Connection>> = OnceLock::new();
+pub static ZBUS5_CONNECTION_SESSION: OnceLock<Option<zbus5::Connection>> = OnceLock::new();
+pub static ZBUS5_CONNECTION_SYSTEM: OnceLock<Option<zbus5::Connection>> = OnceLock::new();
+
+/// Shared zbus session connection for reuse
+pub fn zbus_session_connection() -> &'static zbus::Connection {
+    ZBUS_CONNECTION_SESSION.get().unwrap().as_ref().unwrap()
+}
+
+/// Shared zbus system connection for reuse
+pub fn zbus_system_connection() -> &'static zbus::Connection {
+    ZBUS_CONNECTION_SYSTEM.get().unwrap().as_ref().unwrap()
+}
+
+/// Shared zbus session connection for reuse
+pub fn zbus5_session_connection() -> &'static zbus5::Connection {
+    ZBUS5_CONNECTION_SESSION.get().unwrap().as_ref().unwrap()
+}
+
+/// Shared zbus system connection for reuse
+pub fn zbus5_system_connection() -> &'static zbus5::Connection {
+    ZBUS5_CONNECTION_SYSTEM.get().unwrap().as_ref().unwrap()
+}
 
 /// Runs application with these settings
 #[rustfmt::skip]
@@ -125,6 +151,22 @@ impl Application for App {
         core.window.show_close = false;
         core.window.show_maximize = false;
         core.window.show_minimize = false;
+
+        futures::executor::block_on(async {
+            // Initialize dbus connections for shared reuse.
+
+            let (session5, system5, session, system) = futures::join!(
+                zbus5::Connection::session(),
+                zbus5::Connection::system(),
+                zbus::Connection::session(),
+                zbus::Connection::system(),
+            );
+
+            _ = ZBUS_CONNECTION_SESSION.set(session.ok());
+            _ = ZBUS_CONNECTION_SYSTEM.set(system.ok());
+            _ = ZBUS5_CONNECTION_SESSION.set(session5.ok());
+            _ = ZBUS5_CONNECTION_SYSTEM.set(system5.ok());
+        });
 
         let mut app = App {
             core,
@@ -255,6 +297,18 @@ impl Application for App {
                             .map(cosmic::Action::App);
                     }
                 }
+
+                page::Message::Updates(message) => {
+                    if let Some(page) = self.pages.get_mut(&TypeId::of::<page::updates::Page>()) {
+                        return page
+                            .as_any()
+                            .downcast_mut::<page::updates::Page>()
+                            .unwrap()
+                            .update(message)
+                            .map(cosmic::Action::App);
+                    }
+                }
+
                 page::Message::Surface(action) => {
                     return cosmic::task::message(cosmic::Action::Surface(action));
                 }
