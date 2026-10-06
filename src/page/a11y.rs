@@ -143,7 +143,7 @@ impl page::Page for Page {
                 |option| Message::Scale(option).into(),
                 cosmic::iced::window::Id::RESERVED,
                 |e| page::Message::A11y(Message::Surface(e)),
-                |a| crate::Message::PageMessage(a),
+                |a| a.into(),
             ),
         );
 
@@ -414,7 +414,7 @@ pub enum Message {
     /// Status of scale adjust command.
     ScaleAdjustResult(ScaleAdjustResult),
     /// Handling of internal messages
-    Surface(surface::Action),
+    Surface(surface::Action<crate::Message>),
     /// Screen reader DBus events.
     A11yBus(a11y_bus::Response),
     /// Enable the screen reader.

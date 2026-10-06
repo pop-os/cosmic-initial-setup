@@ -343,7 +343,9 @@ fn permission_was_denied(result: &zbus::Error) -> bool {
 fn hash_password(password_plain: &str) -> String {
     match get_encrypt_method().as_str() {
         "SHA512" => sha512_crypt::hash(password_plain).unwrap(),
+        #[allow(deprecated)]
         "SHA256" => sha256_crypt::hash(password_plain).unwrap(),
+        #[allow(deprecated)]
         "MD5" => md5_crypt::hash(password_plain).unwrap(),
         _ => bcrypt::hash(password_plain).unwrap(),
     }
