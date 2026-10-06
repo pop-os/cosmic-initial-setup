@@ -7,8 +7,6 @@ use std::path::Path;
 use cosmic::app::{Core, Settings, Task};
 use cosmic::iced::{Alignment, Length, Limits, Subscription};
 use cosmic::{Application, Apply, Element, cosmic_theme, executor, surface, theme, widget};
-use futures::channel::mpsc::Sender;
-use futures::{SinkExt, Stream, StreamExt};
 use indexmap::IndexMap;
 use tracing_subscriber::prelude::*;
 
@@ -89,7 +87,7 @@ pub enum Message {
     PageMessage(page::Message),
     PageOpen(usize),
     /// Handling of internal messages
-    Surface(surface::Action),
+    Surface(surface::Action<Message>),
 }
 
 /// The [`App`] stores application-specific state.
@@ -98,7 +96,6 @@ pub struct App {
     pages: IndexMap<TypeId, Box<dyn Page + 'static>>,
     page_i: usize,
     oem_mode: bool,
-    wifi_exists: bool,
 }
 
 /// Implement [`Application`] to integrate with COSMIC.
@@ -133,9 +130,8 @@ impl Application for App {
         let mut app = App {
             core,
             oem_mode: matches!(mode, page::AppMode::NewInstall { create_user: true }),
-            pages: page::pages(mode),
+            pages: page::pages(mode, true),
             page_i: 0,
-            wifi_exists: true, // TODO: Detect
         };
 
         let tasks = app
@@ -158,9 +154,7 @@ impl Application for App {
         match message {
             Message::None => {}
             Message::Surface(a) => {
-                return cosmic::task::message(cosmic::Action::Cosmic(
-                    cosmic::app::Action::Surface(a),
-                ));
+                return cosmic::task::message(cosmic::Action::Surface(a));
             }
             Message::PageMessage(page_message) => match page_message {
                 page::Message::SetTheme(theme) => {
@@ -259,14 +253,11 @@ impl Application for App {
                             .downcast_mut::<page::wifi::Page>()
                             .unwrap()
                             .update(message)
-                            .map(Message::PageMessage)
                             .map(cosmic::Action::App);
                     }
                 }
                 page::Message::Surface(action) => {
-                    return cosmic::task::message(cosmic::Action::Cosmic(
-                        cosmic::app::Action::Surface(action),
-                    ));
+                    return cosmic::task::message(cosmic::Action::Surface(action));
                 }
             },
 
@@ -406,46 +397,16 @@ impl Application for App {
     }
 
     fn subscription(&self) -> Subscription<Self::Message> {
-        let mut subscriptions = vec![
+        let subscriptions = vec![
             // Make the screen reader toggleable.
             cosmic_settings_accessibility_subscription::subscription().map(|m| {
                 Message::PageMessage(page::Message::A11y(page::a11y::Message::A11yBus(m)))
             }),
+            self.pages[self.page_i]
+                .subscription()
+                .map(Self::Message::from),
         ];
-
-        // Listen for WiFi devices if a WiFi device was found.
-        if self.wifi_exists {
-            subscriptions.push(Subscription::run(network_manager_stream));
-        }
 
         Subscription::batch(subscriptions)
     }
-}
-
-fn network_manager_stream() -> impl Stream<Item = Message> {
-    use cosmic_settings_network_manager_subscription as network_manager;
-    cosmic::iced::stream::channel(1, |mut output: Sender<Message>| async move {
-        let conn = zbus::Connection::system().await.unwrap();
-
-        let (tx, mut rx) = futures::channel::mpsc::channel(1);
-
-        let watchers = std::pin::pin!(async move {
-            futures::join!(
-                network_manager::watch(conn.clone(), tx.clone()),
-                network_manager::active_conns::watch(conn.clone(), tx.clone()),
-                network_manager::wireless_enabled::watch(conn.clone(), tx.clone()),
-                network_manager::watch_connections_changed(conn, tx)
-            );
-        });
-
-        let forwarder = std::pin::pin!(async move {
-            while let Some(message) = rx.next().await {
-                _ = output
-                    .send(page::Message::WiFi(page::wifi::Message::NetworkManager(message)).into())
-                    .await;
-            }
-        });
-
-        futures::future::select(watchers, forwarder).await;
-    })
 }
