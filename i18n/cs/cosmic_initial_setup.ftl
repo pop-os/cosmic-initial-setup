@@ -20,7 +20,7 @@ accessibility-page = Nastavení přístupnosti
     .magnifier-description =
         Nebo použijte tyto klávesové zkratky:
         Super + = pro přiblížení, Super + - pro oddálení,
-        Super + rolování kolečkem myši
+        Super + posouvání kolečkem myši
 # SelectLanguagePage
 select-language-page = Vyberte jazyk
 # SelectKeyboardLayoutPage
