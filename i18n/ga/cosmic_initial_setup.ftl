@@ -19,7 +19,7 @@ accessibility-page = Socrú inrochtaineachta
     .magnifier = Formhéadaitheoir
     .magnifier-description =
         Nó bain úsáid as aicearraí méarchláir:
-        Super + = le zúmáil isteach, Super + - le zúmáil amach,
+        Super + = le súmáil isteach, Super + - le súmáil amach,
         Super + scrollaigh le do luch
 select-language-page = Roghnaigh teanga
 keyboard-layout-page = Roghnaigh leagan amach an mhéarchláir

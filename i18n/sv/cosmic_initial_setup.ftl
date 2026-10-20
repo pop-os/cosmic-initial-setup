@@ -18,15 +18,15 @@ accessibility-page = Tillgänglighetskonfiguration
     .interface-size = Gränssnittsstorlek
     .magnifier = Förstoringsglas
     .magnifier-description =
-        Eller använd skrivbordsgenvägar:
+        Eller använd tangentbordsgenvägar:
         Super + = för att zooma in, Super + - för att zooma ut,
         Super + rulla med musen
 select-language-page = Välj ett språk
 keyboard-layout-page = Välj tangentbordslayout
 create-account-page = Skapa ditt konto
-    .full-name = Hela namnet
+    .full-name = Fullständigt namn
     .user-name = Användarnamn
-    .user-name-note = Detta kommer att användas för att namnge din hem-mapp, och kan inte ändras.
+    .user-name-note = Detta kommer att användas för att namnge din hemmapp, och kan inte ändras.
     .dialog-add = Lägg till
     .profile-add = Välj profilbild
     .invalid-username = Ogiltigt användarnamn.
@@ -35,15 +35,15 @@ timezone-and-location-page = Tidzon och plats
     .search-the-closest-major-city = Sök efter närmsta stora stad...
     .geonames-attribution = Listan är sorterad efter stadens folkmängd. Data: geonames.org (licensierad CC-BY-4.0).
 appearance-page = Anpassa utseende
-    .description = Du kan ytterligare anpassa accentfärger och utseendet av ditt skrivbord i Utseende-inställningarna.
+    .description = Du kan ytterligare anpassa accentfärger och utseendet på ditt skrivbord i Utseende-inställningarna.
     .effects = Effekter
     .frosted-glass = Frostat glas
     .frosted-description = Tillämpas på paneler, miniprogram, fönster och systemgränssnitt
     .effects-tip = Du kan dessutom anpassa accentfärger och skrivbordets utseende i Utseende-inställningar.
     .tip = Tips:
-layout-page = Layout-konfiguration
-    .bottom-panel = Botten-panel
-    .top-panel-and-dock = Top-panel och docka
+layout-page = Layoutkonfiguration
+    .bottom-panel = Panel längst ned
+    .top-panel-and-dock = Panel högst upp och docka
     .description = Flytta panelen eller docka till valfri kant, ändra deras storlek, och automatiskt dölj dem i Inställningar.
 new-apps-page = Nya systemprogram
     .description = Njut av en mängd nya systemprogram som kommer med skrivbordsmiljön COSMIC. Inklusive Inställningar, COSMIC Butik, Filer, Textredigerare, och Terminal.
@@ -51,10 +51,10 @@ new-shortcuts-page = Nya tangentbordsgenvägar
     .description = Använd Shift + Super + pilar, eller dra med musen, för att flytta fönster. Använd visuella indikationer när du använder automatisk fönsterkakling.
 workflow-page = Arbetsytor för ditt arbetsflöde
     .description =
-        Flyt eller automatisk kakla fönster per arbetsyta via kaklings-miniprogrammet
+        Låt fönster flyta eller kakla dem automatiskt per arbetsyta med kaklingsminiprogrammet.
         Du kan välja vertikala eller horisontella arbetsytor. Du kan även fästa arbetsytor för att göra dem statiska.
 launcher-page = Snabb och effektiv
-    .description = Tryck på Super- (eller Windows-) tangenten för att aktivera programstartaren. Sök och tryck Enter för att öppna ett program eller växla till det. Du kan också hoppa till inställningar eller systemfunktioner som försätt i vänteläge. Skriv "?" för att lära om programstartarens avancerade funktioner.
+    .description = Tryck på Super- (eller Windows-) tangenten för att aktivera programstartaren. Sök och tryck Enter för att öppna ett program eller växla till det. Du kan också hoppa till inställningar eller systemfunktioner som "Försätt i vänteläge". Skriv "?" för att lära dig mer om programstartarens avancerade funktioner.
 wireless-page = Bli ansluten
     .explain = När du är ansluten kommer du att erhålla de senaste system- och säkerhetsuppdateringarna.
     .airplane-mode = Flygplansläge är på.
@@ -63,7 +63,7 @@ wireless-page = Bli ansluten
     .connecting = Ansluter…
     .disconnect = Koppla från
     .forget = Glöm
-    .no-networks = Inga närverk har hittats.
+    .no-networks = Inga nätverk har hittats.
     .known-networks = Kända nätverk
     .visible-networks = Synliga nätverk
 auth-dialog = Autentisering krävs
