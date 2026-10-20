@@ -1,3 +1,9 @@
+cosmic-initial-setup (1.11.0) noble; urgency=medium
+
+  * Epoch 1.11.0 version update
+
+ -- Michael Murphy <michael@mmurphy.dev>  Mon, 19 Oct 2026 17:12:47 +0200
+
 cosmic-initial-setup (1.10.0) noble; urgency=medium
 
   * epoch-1.10.0 tag
