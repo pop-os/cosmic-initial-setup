@@ -18,9 +18,9 @@ accessibility-page = Nastavení přístupnosti
     .interface-size = Velikost rozhraní
     .magnifier = Lupa
     .magnifier-description =
-        Nebo použijte tyto klávesové zkratky:
+        Nebo použijte klávesové zkratky:
         Super + = pro přiblížení, Super + - pro oddálení,
-        Super + rolování kolečkem myši
+        Super + posouvání kolečkem myši
 # SelectLanguagePage
 select-language-page = Vyberte jazyk
 # SelectKeyboardLayoutPage
@@ -40,11 +40,11 @@ timezone-and-location-page = Časové pásmo a poloha
     .geonames-attribution = Seznam je řazen podle počtu obyvatel jednotlivých měst. Data: geonames.org (licence CC-BY-4.0).
 # AppearancePage
 appearance-page = Přizpůsobení vzhledu
-    .description = Další možnosti přizpůsobení barev a plochy najdete v nastavení v sekci Vzhled.
+    .description = Další možnosti přizpůsobení barev a plochy najdete v nastavení, v sekci Vzhled.
     .effects = Efekty
     .frosted-glass = Ledové sklo
     .frosted-description = Použít efekt pro panely, applety, okna a systémová rozhraní
-    .effects-tip = Další možnosti přizpůsobení barev a plochy najdete v nastavení v sekci Vzhled.
+    .effects-tip = Další možnosti přizpůsobení barev a plochy najdete v nastavení, v sekci Vzhled.
     .tip = Tip:
 # LayoutPage
 layout-page = Nastavení rozložení
