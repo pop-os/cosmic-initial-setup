@@ -52,7 +52,8 @@ branch = "zbus6"
 git = "https://github.com/pop-os/cosmic-comp"
 
 [dependencies.cosmic-theme-bundle-config]
-path = "../cosmic-settings/theme-bundle-config"
+git = "https://github.com/pop-os/cosmic-settings"
+branch = "bundles"
 
 [dependencies.cosmic-randr-shell]
 git = "https://github.com/pop-os/cosmic-randr"
