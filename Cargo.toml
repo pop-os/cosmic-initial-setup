@@ -14,7 +14,6 @@ eyre = "0.6.14"
 futures = "0.3.34"
 geonames = { path = "geonames" }
 gettext-rs = { version = "0.7.7", features = ["gettext-system"] }
-heck = "0.5.0"
 # Internationalization
 i18n-embed = { version = "0.16", features = [
     "fluent-system",
@@ -29,7 +28,6 @@ num-traits = "0.2.19"
 pwd = "1.4.0"
 pwhash = "1.0.0"
 regex = "1"
-ron = "0.12"
 rust-embed = "8"
 secret-service = { version = "5.1.0", features = ["rt-tokio-crypto-rust"] }
 secure-string = "0.3.0"
@@ -48,6 +46,9 @@ git = "https://github.com/pop-os/dbus-settings-bindings"
 
 [dependencies.cosmic-comp-config]
 git = "https://github.com/pop-os/cosmic-comp"
+
+[dependencies.cosmic-theme-bundle-config]
+path = "../cosmic-settings/theme-bundle-config"
 
 [dependencies.cosmic-randr-shell]
 git = "https://github.com/pop-os/cosmic-randr"
@@ -89,15 +90,14 @@ lto = "thin"
 [workspace]
 members = ["geonames"]
 
-# [patch.'https://github.com/pop-os/libcosmic.git']
-# libcosmic = { path = "../libcosmic" }
-# cosmic-config = { path = "../libcosmic/cosmic-config" }
-# cosmic-theme = { path = "../libcosmic/cosmic-theme" }
-# iced_futures = { path = "../libcosmic/iced/futures" }
-# libcosmic = { git = "https://github.com/pop-os/libcosmic//", branch = "theme-v2" }
-# cosmic-config = { git = "https://github.com/pop-os/libcosmic//", branch = "theme-v2" }
-# cosmic-theme = { git = "https://github.com/pop-os/libcosmic//", branch = "theme-v2" }
-# iced_futures = { git = "https://github.com/pop-os/libcosmic//", branch = "theme-v2" }
+[patch.'https://github.com/pop-os/libcosmic.git']
+libcosmic = { path = "../libcosmic" }
+cosmic-config = { path = "../libcosmic/cosmic-config" }
+cosmic-theme = { path = "../libcosmic/cosmic-theme" }
+iced_futures = { path = "../libcosmic/iced/futures" }
+
+[patch.'https://github.com/pop-os/cosmic-bg']
+cosmic-bg-config = { path = "../cosmic-bg/config" }
 
 [patch.'https://github.com/pop-os/cosmic-protocols']
 cosmic-protocols = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "c0cff4d" }

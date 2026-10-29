@@ -23,7 +23,6 @@ desktop-dst := base-dir / 'share' / 'applications' / desktop-entry
 icon-dst := base-dir / 'share' / 'icons' / 'hicolor' / 'scalable' / 'apps' / appid + '.svg'
 layouts-dst := base-dir / 'share' / 'cosmic-layouts'
 polkit-rules-dst := base-dir / 'share' / 'polkit-1' / 'rules.d' / '20-cosmic-initial-setup.rules'
-themes-dst := base-dir / 'share' / 'cosmic-themes'
 
 # Default recipe which runs `just cargo build-release`
 default: cargo::build-release
@@ -36,24 +35,23 @@ build-vendored: cargo::build-vendored
 
 # Clean
 clean: cargo::clean
-    rm -rf {{layouts-dst}} {{themes-dst}} {{bin-dst}} {{icon-dst}} {{desktop-dst}} {{autostart-dst}} {{polkit-rules-dst}}
+    rm -rf {{layouts-dst}} {{bin-dst}} {{icon-dst}} {{desktop-dst}} {{autostart-dst}} {{polkit-rules-dst}}
 
 clean-dist: cargo::clean-dist
 
 # Installs files
 install:
-    mkdir -p {{layouts-dst}} {{themes-dst}}
+    mkdir -p {{layouts-dst}}
     install -Dm0755 {{ cargo-target-dir / 'release' / name }} '{{bin-dst}}'
     install -Dm0644 res/icon.svg '{{icon-dst}}'
     install -Dm0644 {{ 'res' / desktop-entry }} '{{desktop-dst}}'
     install -Dm0644 {{ 'res' / autostart-entry }} '{{autostart-dst}}'
     install -Dm0644 res/20-cosmic-initial-setup.rules '{{polkit-rules-dst}}'
     cd res/layouts; find . -type f -exec install -Dm0644 '{}' '{{layouts-dst}}/{}' \;
-    find res/themes -type f -exec install -Dm0644 '{}' '{{themes-dst}}' \;
 
 # Uninstalls installed files
 uninstall:
-    rm -rf {{desktop-dst}} {{polkit-rules-dst}} {{icon-dst}} {{themes-dst}} {{layouts-dst}} {{bin-dst}}
+    rm -rf {{desktop-dst}} {{polkit-rules-dst}} {{icon-dst}} {{layouts-dst}} {{bin-dst}}
 
 # Vendor crate dependencies locally
 vendor: cargo::vendor
