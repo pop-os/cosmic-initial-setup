@@ -1,6 +1,4 @@
-use zbus::proxy;
-
-#[proxy(
+#[zbus::proxy(
     interface = "com.system76.CosmicGreeter",
     default_service = "com.system76.CosmicGreeter",
     default_path = "/com/system76/CosmicGreeter"

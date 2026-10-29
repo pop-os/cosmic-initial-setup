@@ -179,13 +179,10 @@ impl super::Page for Page {
         let is_admin = true;
 
         cosmic::Task::future(async move {
-            let Ok(conn) = zbus::Connection::system().await else {
-                return;
-            };
+            let conn = crate::zbus5_system_connection();
+            let accounts = accounts_zbus::AccountsProxy::new(conn).await.unwrap();
 
-            let accounts = accounts_zbus::AccountsProxy::new(&conn).await.unwrap();
-
-            let user_result = request_permission_on_denial(&conn, || {
+            let user_result = request_permission_on_denial(conn, || {
                 accounts.create_user(&username, &full_name, if is_admin { 1 } else { 0 })
             })
             .await;
@@ -200,14 +197,16 @@ impl super::Page for Page {
             };
 
             let password_hashed = hash_password(&password);
-            match accounts_zbus::UserProxy::new(&conn, user_object_path).await {
+            match accounts_zbus::UserProxy::new(conn, user_object_path).await {
                 Ok(user) => {
                     _ = user.set_password(&password_hashed, "").await;
                     _ = user.set_icon_file(&icon_file).await;
                     _ = user.set_account_type(1).await;
 
                     // Ask the greeter to move account files to the new user's home directory.
-                    if let Ok(mut client) = crate::greeter::GreeterProxy::new(&conn).await {
+                    if let Ok(mut client) =
+                        crate::greeter::GreeterProxy::new(crate::zbus_system_connection()).await
+                    {
                         _ = client.initial_setup_end(username).await;
                     }
                 }
@@ -299,7 +298,7 @@ impl Page {
     }
 }
 
-async fn check_authorization(conn: &zbus::Connection) -> eyre::Result<()> {
+async fn check_authorization(conn: &zbus5::Connection) -> eyre::Result<()> {
     let proxy = zbus_polkit::policykit1::AuthorityProxy::new(conn).await?;
     let subject = zbus_polkit::policykit1::Subject::new_for_owner(std::process::id(), None, None)?;
     proxy
@@ -315,12 +314,12 @@ async fn check_authorization(conn: &zbus::Connection) -> eyre::Result<()> {
 }
 
 async fn request_permission_on_denial<T, Fun, Fut>(
-    conn: &zbus::Connection,
+    conn: &zbus5::Connection,
     action: Fun,
-) -> zbus::Result<T>
+) -> zbus5::Result<T>
 where
     Fun: Fn() -> Fut,
-    Fut: Future<Output = zbus::Result<T>>,
+    Fut: Future<Output = zbus5::Result<T>>,
 {
     match action().await {
         Ok(value) => Ok(value),
@@ -335,8 +334,8 @@ where
     }
 }
 
-fn permission_was_denied(result: &zbus::Error) -> bool {
-    matches!(result, zbus::Error::MethodError(name, _, _) if name.as_str() == "org.freedesktop.Accounts.Error.PermissionDenied")
+fn permission_was_denied(result: &zbus5::Error) -> bool {
+    matches!(result, zbus5::Error::MethodError(name, _, _) if name.as_str() == "org.freedesktop.Accounts.Error.PermissionDenied")
 }
 
 // TODO: Should we allow deprecated methods?

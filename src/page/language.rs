@@ -162,13 +162,11 @@ impl super::Page for Page {
 
     fn init(&mut self) -> cosmic::Task<page::Message> {
         let refresh = async || -> eyre::Result<PageRefresh> {
-            let conn = zbus::Connection::system()
-                .await
-                .wrap_err("zbus system connection error")?;
+            let conn = crate::zbus5_system_connection();
 
             let registry = locales_rs::Registry::new().wrap_err("failed to get locale registry")?;
 
-            let system_locales: BTreeMap<String, SystemLocale> = locale1::locale1Proxy::new(&conn)
+            let system_locales: BTreeMap<String, SystemLocale> = locale1::locale1Proxy::new(conn)
                 .await
                 .wrap_err("locale1 proxy connect error")?
                 .locale()
@@ -334,11 +332,7 @@ impl super::Page for Page {
 pub async fn set_locale(lang: String, region: String) -> eyre::Result<()> {
     tracing::debug!("setting locale lang={lang}, region={region}");
 
-    let conn = zbus::Connection::system()
-        .await
-        .wrap_err("failed to connect to system D-Bus")?;
-
-    let proxy = locale1::locale1Proxy::new(&conn)
+    let proxy = locale1::locale1Proxy::new(crate::zbus5_system_connection())
         .await
         .wrap_err("failed to create locale1 D-Bus proxy")?;
 

@@ -12,6 +12,8 @@ pub mod layout;
 pub mod location;
 pub mod new_apps;
 pub mod new_shortcuts;
+#[cfg(feature = "pop-os")]
+pub mod updates;
 pub mod user;
 pub mod wifi;
 pub mod workflow;
@@ -54,6 +56,12 @@ pub fn pages(mode: AppMode) -> IndexMap<TypeId, Box<dyn Page>> {
             TypeId::of::<location::Page>(),
             Box::new(location::Page::new()),
         );
+
+        #[cfg(feature = "pop-os")]
+        pages.insert(
+            TypeId::of::<updates::Page>(),
+            Box::new(updates::Page::new()),
+        );
     }
 
     pages.insert(
@@ -93,14 +101,15 @@ pub fn pages(mode: AppMode) -> IndexMap<TypeId, Box<dyn Page>> {
 
 #[derive(Clone, Debug)]
 pub enum Message {
+    A11y(a11y::Message),
     Appearance(appearance::Message),
     Keyboard(keyboard::Message),
     Language(language::Message),
     Layout(layout::Message),
     Location(location::Message),
     SetTheme(cosmic::Theme),
+    Updates(updates::Message),
     User(user::Message),
-    A11y(a11y::Message),
     WiFi(wifi::Message),
     /// Handling of internal messages
     Surface(surface::Action<crate::Message>),
