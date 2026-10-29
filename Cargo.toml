@@ -31,7 +31,6 @@ pop-system-updater-zbus = { git = "https://github.com/pop-os/system-updater", op
 pwd = "1.4.0"
 pwhash = "1.0.0"
 regex = "1"
-ron = "0.12"
 rust-embed = "8"
 secret-service = { version = "5.2.0", features = ["rt-tokio-crypto-rust"] }
 secure-string = "0.3.0"
@@ -51,6 +50,9 @@ branch = "zbus6"
 
 [dependencies.cosmic-comp-config]
 git = "https://github.com/pop-os/cosmic-comp"
+
+[dependencies.cosmic-theme-bundle-config]
+path = "../cosmic-settings/theme-bundle-config"
 
 [dependencies.cosmic-randr-shell]
 git = "https://github.com/pop-os/cosmic-randr"
