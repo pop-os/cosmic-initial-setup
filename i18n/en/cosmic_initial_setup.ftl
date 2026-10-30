@@ -50,7 +50,7 @@ appearance-page = Personalize appearance
     .effects = Effects
     .frosted-glass = Frosted glass
     .frosted-description = Applies to panels, applets, windows and system interfaces
-    .effects-tip = You can further customize accent colors and the look of your desktop in Appearance settings.
+    .effects-tip = You can find more themes in Appearance settings and further customize them
     .tip = Tip:
     
 # LayoutPage

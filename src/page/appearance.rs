@@ -80,6 +80,17 @@ impl Page {
         let themes: Vec<_> = bundle::system_bundles()
             .unwrap_or_default()
             .into_iter()
+            .filter(|bundle| {
+                matches!(
+                    bundle.slug.as_str(),
+                    "cosmic-dark"
+                        | "cosmic-light"
+                        | "dunes-dark"
+                        | "dunes-light"
+                        | "mirror-grove-dark"
+                        | "mirror-grove-light"
+                )
+            })
             .filter_map(load_theme)
             .collect();
 
