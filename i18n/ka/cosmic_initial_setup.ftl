@@ -1,0 +1,14 @@
+back = უკან
+cancel = გაუქმება
+finish = დასრულება
+identity = იდენტიფიკატორი
+next = შემდეგი
+password = პაროლი
+password-confirm = პაროლის დადასტურება
+settings = მორგება
+skip = გამოტოვება
+skip-setup-and-close = მორგების გამოტოვება და დახურვა
+type-to-search = მოსაძებნად აკრიფეთ…
+wifi = Wi-Fi
+select-language-page = ენის არჩევა
+keyboard-layout-page = კლავიატურის განლაგების არჩევა
