@@ -16,7 +16,7 @@ accessibility-page = Configurações de acessibilidade
     .scale-options = Mais opções de escala
     .screen-reader = Leitor de tela
     .interface-size = Tamanho da interface
-    .magnifier = Ampliador de tela
+    .magnifier = Lupa
     .magnifier-description =
         Ou use teclas de atalho:
         Super + = para aumentar o zoom, Super + - para diminuir o zoom,
