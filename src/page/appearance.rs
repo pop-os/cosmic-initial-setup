@@ -14,6 +14,9 @@ use std::sync::Arc;
 
 use crate::{fl, page};
 
+#[cfg(not(feature = "nixos"))]
+use crate::paths::THEMES_DIR;
+
 static COSMIC_DARK_PNG: &[u8] = include_bytes!("../../res/cosmic-dark.png");
 static COSMIC_LIGHT_PNG: &[u8] = include_bytes!("../../res/cosmic-light.png");
 
@@ -103,7 +106,7 @@ impl Page {
         #[cfg(feature = "nixos")]
         let themes_dir_path = "/run/current-system/sw/share/cosmic-themes/";
         #[cfg(not(feature = "nixos"))]
-        let themes_dir_path = "/usr/share/cosmic-themes/";
+        let themes_dir_path = &*THEMES_DIR;
         if let Ok(directory) = std::fs::read_dir(themes_dir_path) {
             let mut extra_themes = BTreeSet::new();
             let mut buffer = Vec::with_capacity(8 * 1024);
