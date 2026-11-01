@@ -1,5 +1,9 @@
 use crate::fl;
 
+use crate::paths::COSMIC_CONFIG_DIR;
+#[cfg(not(feature = "nixos"))]
+use crate::paths::LAYOUTS_DIR;
+
 use cosmic::iced::{Alignment, Length};
 use cosmic::{cosmic_theme, widget};
 use kdl::{KdlDocument, KdlValue};
@@ -65,7 +69,7 @@ impl super::Page for Page {
         #[cfg(feature = "nixos")]
         let layouts_dir_path = "/run/current-system/sw/share/cosmic-layouts/";
         #[cfg(not(feature = "nixos"))]
-        let layouts_dir_path = "/usr/share/cosmic-layouts/";
+        let layouts_dir_path = &*LAYOUTS_DIR;
         let Ok(layouts_dir) = std::fs::read_dir(layouts_dir_path) else {
             return cosmic::Task::none();
         };
@@ -267,10 +271,7 @@ fn apply_layout(path: &Path) {
                 continue;
             };
 
-            let config_dest_path = std::env::home_dir()
-                .unwrap()
-                .join(".config/cosmic")
-                .join(config_name);
+            let config_dest_path = COSMIC_CONFIG_DIR.join(config_name);
 
             // Delete any existing config
             _ = std::fs::remove_dir_all(&config_dest_path);

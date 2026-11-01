@@ -12,12 +12,12 @@ use tracing_subscriber::prelude::*;
 
 mod greeter;
 mod localize;
+pub mod paths;
+
+use crate::paths::{COSMIC_SETUP_DONE_PATH, GNOME_SETUP_DONE_PATH};
 
 use self::page::Page;
 mod page;
-
-const COSMIC_SETUP_DONE_PATH: &str = ".config/cosmic-initial-setup-done";
-const GNOME_SETUP_DONE_PATH: &str = ".config/gnome-initial-setup-done";
 
 pub static ZBUS_CONNECTION_SESSION: OnceLock<Option<zbus::Connection>> = OnceLock::new();
 pub static ZBUS_CONNECTION_SYSTEM: OnceLock<Option<zbus::Connection>> = OnceLock::new();
@@ -52,10 +52,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             return Ok(());
         }
 
-    #[allow(deprecated)]
-    let home_dir = std::env::home_dir().unwrap();
-
-    if home_dir.join(COSMIC_SETUP_DONE_PATH).exists() {
+    if COSMIC_SETUP_DONE_PATH.exists() {
         return Ok(());
     }
 
@@ -88,7 +85,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     localize::localize();
 
     // Decide which pages to display.
-    let mode = if home_dir.join(GNOME_SETUP_DONE_PATH).exists() {
+    let mode = if GNOME_SETUP_DONE_PATH.exists() {
         page::AppMode::GnomeTransition
     } else {
         // If being run by the cosmic-initial-setup user, we are in OEM mode.
@@ -327,9 +324,7 @@ impl Application for App {
 
             Message::Finish => {
                 let mark_initial_setup_finish = cosmic::Task::future(async {
-                    #[allow(deprecated)]
-                    let home = std::env::home_dir().unwrap();
-                    _ = std::fs::File::create(home.join(COSMIC_SETUP_DONE_PATH));
+                    _ = std::fs::File::create(&*COSMIC_SETUP_DONE_PATH);
                 })
                 .discard();
 
