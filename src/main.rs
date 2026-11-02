@@ -284,6 +284,7 @@ impl Application for App {
                     }
                 }
 
+                #[cfg(target_os = "linux")]
                 page::Message::WiFi(message) => {
                     if let Some(page) = self.pages.get_mut(&TypeId::of::<page::wifi::Page>()) {
                         return page
@@ -342,6 +343,7 @@ impl Application for App {
                     .collect::<Vec<_>>()
                     .apply(Task::batch);
 
+                #[cfg(target_os = "linux")]
                 if self.oem_mode {
                     // Automatically log out from the OEM mode after tasks are finished.
                     tasks = tasks.chain(
