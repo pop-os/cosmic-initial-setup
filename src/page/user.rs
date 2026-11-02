@@ -1,7 +1,7 @@
 // Copyright 2025 System76 <info@system76.com>
 // SPDX-License-Identifier: GPL-3.0-only
 
-use crate::fl;
+use crate::{fl, paths::DEFAULT_ICON_FILE};
 use cosmic::dialog::file_chooser;
 use cosmic::iced::Length;
 use cosmic::widget::{self, icon};
@@ -17,7 +17,6 @@ use std::sync::Arc;
 use url::Url;
 use zbus_polkit::policykit1::CheckAuthorizationFlags;
 
-const DEFAULT_ICON_FILE: &str = "/usr/share/pixmaps/faces/pop-robot.png";
 const USERS_ADMIN_POLKIT_POLICY_ID: &str = "com.system76.CosmicSettings.Users.Admin";
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -49,13 +48,13 @@ pub struct Page {
 impl Default for Page {
     fn default() -> Self {
         Self {
-            default_icon: icon::from_path(PathBuf::from(DEFAULT_ICON_FILE)),
+            default_icon: icon::from_path(DEFAULT_ICON_FILE.clone()),
             password_label: fl!("password"),
             password_confirm_label: fl!("password-confirm"),
             username_label: fl!("create-account-page", "user-name"),
             fullname_label: fl!("create-account-page", "full-name"),
             profile_icon: None,
-            profile_icon_path: DEFAULT_ICON_FILE.into(),
+            profile_icon_path: DEFAULT_ICON_FILE.clone(),
             username: String::new(),
             full_name: String::new(),
             password: String::new(),
@@ -174,7 +173,7 @@ impl super::Page for Page {
         let icon_file = self
             .profile_icon_path
             .to_str()
-            .unwrap_or(DEFAULT_ICON_FILE)
+            .unwrap_or(DEFAULT_ICON_FILE.to_str().unwrap())
             .to_owned();
         let is_admin = true;
 

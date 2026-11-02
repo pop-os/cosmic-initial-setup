@@ -28,6 +28,7 @@ use tokio::sync::Mutex;
 pub static SECURE_INPUT_WIFI: LazyLock<widget::Id> = LazyLock::new(widget::Id::unique);
 
 /// Check if any device in /sys/class/net has a DEVTYPE=wlan uevent defined.
+#[cfg(target_os = "linux")]
 pub fn device_exists() -> bool {
     let mut buffer = String::new();
     for device in std::fs::read_dir("/sys/class/net")

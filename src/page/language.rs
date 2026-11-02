@@ -162,31 +162,8 @@ impl super::Page for Page {
 
     fn init(&mut self) -> cosmic::Task<page::Message> {
         let refresh = async || -> eyre::Result<PageRefresh> {
-            let conn = zbus::Connection::system()
-                .await
-                .wrap_err("zbus system connection error")?;
-
             let registry = locales_rs::Registry::new().wrap_err("failed to get locale registry")?;
-
-            let system_locales: BTreeMap<String, SystemLocale> = locale1::locale1Proxy::new(&conn)
-                .await
-                .wrap_err("locale1 proxy connect error")?
-                .locale()
-                .await
-                .wrap_err("could not get locale from locale1")?
-                .into_iter()
-                .filter_map(|expression| {
-                    let mut fields = expression.split('=');
-                    let var = fields.next()?;
-                    let lang_code = fields.next()?;
-                    let locale = registry.locale(lang_code)?;
-
-                    Some((
-                        var.to_owned(),
-                        localized_locale(&locale, lang_code.to_owned()),
-                    ))
-                })
-                .collect();
+            let system_locales = system_locales(&registry).await?;
 
             let config = cosmic::cosmic_config::Config::new("com.system76.CosmicSettings", 1).ok();
 
@@ -330,7 +307,75 @@ impl super::Page for Page {
     }
 }
 
+#[cfg(target_os = "linux")]
+async fn system_locales(
+    registry: &locales_rs::Registry,
+) -> eyre::Result<BTreeMap<String, SystemLocale>> {
+    let conn = zbus::Connection::system()
+        .await
+        .wrap_err("zbus system connection error")?;
+    let locales = locale1::locale1Proxy::new(&conn)
+        .await
+        .wrap_err("locale1 proxy connect error")?
+        .locale()
+        .await
+        .wrap_err("could not get locale from locale1")?
+        .into_iter()
+        .filter_map(|expression| {
+            let mut fields = expression.split('=');
+            let var = fields.next()?;
+            let lang_code = fields.next()?;
+            let locale = registry.locale(lang_code)?;
+
+            Some((
+                var.to_owned(),
+                localized_locale(&locale, lang_code.to_owned()),
+            ))
+        })
+        .collect();
+    Ok(locales)
+}
+
+#[cfg(any(
+    target_os = "dragonfly",
+    target_os = "freebsd",
+    target_os = "netbsd",
+    target_os = "openbsd"
+))]
+async fn system_locales(
+    registry: &locales_rs::Registry,
+) -> eyre::Result<BTreeMap<String, SystemLocale>> {
+    const ENV_VARS: &[&str] = &[
+        "LC_ALL",
+        "LANG",
+        "LC_ADDRESS",
+        "LC_COLLATE",
+        "LC_CTYPE",
+        "LC_IDENTIFICATION",
+        "LC_MEASUREMENT",
+        "LC_MESSAGES",
+        "LC_MONETARY",
+        "LC_NAME",
+        "LC_NUMERIC",
+        "LC_PAPER",
+        "LC_TELEPHONE",
+        "LC_TIME",
+    ];
+
+    let locales = ENV_VARS
+        .iter()
+        .filter_map(|&v| {
+            let lang_code = std::env::var(v).ok()?;
+            let locale = registry.locale(&lang_code)?;
+            Some((v.to_owned(), localized_locale(&locale, lang_code)))
+        })
+        .collect();
+
+    Ok(locales)
+}
+
 /// Sets the system locale using D-Bus instead of localectl for OpenRC compatibility.
+#[cfg(target_os = "linux")]
 pub async fn set_locale(lang: String, region: String) -> eyre::Result<()> {
     tracing::debug!("setting locale lang={lang}, region={region}");
 
@@ -351,6 +396,53 @@ pub async fn set_locale(lang: String, region: String) -> eyre::Result<()> {
         .wrap_err("failed to set locale via D-Bus")?;
 
     tracing::debug!("successfully set locale via D-Bus");
+    Ok(())
+}
+
+/// Sets the user's locale.
+///
+/// Unlike the Linux version, this only sets the user's locale rather than the system locale.
+/// Setting the system locale would involve parsing /etc/login.conf then writing to it with
+/// superuser privileges.
+///
+/// * https://docs.freebsd.org/en/books/handbook/l10n/
+/// * https://man.freebsd.org/cgi/man.cgi?login.conf(5)
+#[cfg(any(
+    target_os = "dragonfly",
+    target_os = "freebsd",
+    target_os = "netbsd",
+    target_os = "openbsd"
+))]
+pub async fn set_locale(lang: String, region: String) -> eyre::Result<()> {
+    tracing::debug!("setting locale lang={lang}, region={region}");
+
+    let login_conf = std::env::home_dir()
+        .map(|p| p.join(".login_conf"))
+        .ok_or_else(|| eyre::eyre!("Missing home directory"))?;
+    eyre::ensure!(
+        !login_conf.exists(),
+        "Refusing to overwrite existing {}",
+        login_conf.display()
+    );
+
+    // Produces:
+    // me:\
+    // :charset=UTF-8:\
+    // :lang=<locale>:\
+    // :setenv=LC_TIME=<locale>:
+    let contents =
+        format!("me:\\\n\t:charset=UTF-8:\\\n\t:lang={lang}:\\\n\t:setenv=LC_TIME={region}:\n");
+    tokio::fs::write(&login_conf, contents)
+        .await
+        .wrap_err("failed to write ~/.login_conf")?;
+
+    let status = tokio::process::Command::new("/usr/sbin/cap_mkdb")
+        .arg(login_conf)
+        .status()
+        .await
+        .wrap_err("failed to run /usr/sbin/cap_mkdb")?;
+    eyre::ensure!(status.success(), "cap_mkdb failed with status: {status}");
+
     Ok(())
 }
 
