@@ -8,7 +8,6 @@ rust-version = "1.93"
 cosmic-protocols = { git = "https://github.com/pop-os/cosmic-protocols" }
 cosmic-settings-accessibility-subscription = { git = "https://github.com/pop-os/cosmic-settings" }
 cosmic-settings-a11y-manager-subscription = { git = "https://github.com/pop-os/cosmic-settings" }
-nmrs = "3.5.2"
 crabtime = "1.1.4"
 eyre = "0.6.14"
 futures = "0.3.34"
@@ -31,8 +30,6 @@ pwhash = "1.0.0"
 regex = "1"
 ron = "0.12"
 rust-embed = "8"
-secret-service = { version = "5.1.0", features = ["rt-tokio-crypto-rust"] }
-secure-string = "0.3.0"
 serde = { version = "1.0.229", features = ["derive"] }
 slotmap = "1.1.1"
 tokio = { version = "1", features = ["sync"] }
@@ -52,6 +49,12 @@ git = "https://github.com/pop-os/cosmic-comp"
 [dependencies.cosmic-randr-shell]
 git = "https://github.com/pop-os/cosmic-randr"
 
+[target.'cfg(target_os = "linux")'.dependencies]
+locale1 = { git = "https://github.com/pop-os/dbus-settings-bindings" }
+nmrs = "3.5.2"
+secret-service = { version = "5.1.0", features = ["rt-tokio-crypto-rust"] }
+secure-string = "0.3.0"
+
 [dependencies.libcosmic]
 git = "https://github.com/pop-os/libcosmic.git"
 default-features = false
@@ -64,9 +67,6 @@ features = [
     "xdg-portal",
     "markdown",
 ]
-
-[dependencies.locale1]
-git = "https://github.com/pop-os/dbus-settings-bindings"
 
 [dependencies.locales-rs]
 git = "https://github.com/AerynOS/locales-rs"
