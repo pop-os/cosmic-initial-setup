@@ -44,6 +44,18 @@ fn load_theme(bundle: bundle::Bundle) -> Option<Theme> {
     })
 }
 
+fn live_frosted_glass(is_dark: bool) -> bool {
+    let config = if is_dark {
+        CosmicTheme::dark_config()
+    } else {
+        CosmicTheme::light_config()
+    };
+    config
+        .ok()
+        .and_then(|config| config.get::<bool>("frosted_windows").ok())
+        .unwrap_or(false)
+}
+
 #[derive(Clone, Debug)]
 pub enum Message {
     Select(usize),
@@ -95,6 +107,7 @@ impl Page {
             .collect();
 
         let theme_mode = ThemeMode::default();
+        let frosted_glass = live_frosted_glass(theme_mode.is_dark);
         let live_name = if theme_mode.is_dark {
             CosmicTheme::dark_config()
                 .ok()
@@ -121,7 +134,7 @@ impl Page {
             light_theme_builder_config: ThemeBuilder::light_config().ok(),
             themes,
             selected,
-            frosted_glass: false,
+            frosted_glass,
         }
     }
 
