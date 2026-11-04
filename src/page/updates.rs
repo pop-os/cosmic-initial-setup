@@ -6,7 +6,7 @@ use cosmic::iced::alignment::Vertical;
 use cosmic::{Apply, Element, surface, widget};
 use pop_system_updater_zbus::client::ClientProxy;
 use pop_system_updater_zbus::client::notification::ClientProxy as NotificationClientProxy;
-use pop_system_updater_zbus::{Frequency, Interval, Schedule, client};
+use pop_system_updater_zbus::{Interval, Schedule, client};
 use std::any::Any;
 use std::sync::Arc;
 use std::unreachable;
@@ -15,7 +15,6 @@ use std::unreachable;
 pub enum Message {
     SetAutomaticUpdates(bool),
     SetSchedule(Schedule),
-    SetNotificationFrequency(Option<Frequency>),
     /// Handling of internal messages
     Surface(surface::Action<crate::Message>),
     SystemUpdateClient(ClientProxy<'static>, NotificationClientProxy<'static>),
@@ -81,32 +80,6 @@ impl Page {
                     let mut client = client.clone();
                     tokio::task::spawn(async move {
                         _ = client.auto_update_set(enable).await;
-                    });
-                }
-            }
-
-            Message::SetNotificationFrequency(frequency) => {
-                match frequency {
-                    Some(frequency) => {
-                        self.notification_config.enabled = true;
-                        self.notification_config.notification_frequency = frequency;
-                    }
-                    None => self.notification_config.enabled = false,
-                }
-
-                if let Some((_, client)) = self.clients.as_ref() {
-                    let mut client = client.clone();
-                    tokio::task::spawn(async move {
-                        match frequency {
-                            Some(frequency) => {
-                                _ = client.notifications_enabled(true).await;
-                                _ = client.set_notification_frequency(frequency).await;
-                            }
-
-                            None => {
-                                _ = client.notifications_enabled(false).await;
-                            }
-                        }
                     });
                 }
             }
@@ -209,30 +182,6 @@ impl super::Page for Page {
     fn view(&self) -> Element<'_, super::Message> {
         let theme = cosmic::theme::active();
         let spacing = &theme.cosmic().spacing;
-
-        let notification_dropdown = widget::dropdown::popup_dropdown(
-            &self.frequency_labels,
-            Some(if !self.notification_config.enabled {
-                0
-            } else {
-                match self.notification_config.notification_frequency {
-                    Frequency::Daily => 1,
-                    Frequency::Weekly => 2,
-                    Frequency::Monthly => 3,
-                }
-            }),
-            |selected| {
-                super::Message::from(Message::SetNotificationFrequency(match selected {
-                    1 => Some(Frequency::Daily),
-                    2 => Some(Frequency::Weekly),
-                    3 => Some(Frequency::Monthly),
-                    _ => None,
-                }))
-            },
-            cosmic::iced::window::Id::RESERVED,
-            |a| Message::Surface(a).into(),
-            crate::Message::from,
-        );
 
         let automatic_updates_toggle =
             widget::settings::item::builder(crate::fl!("updates-page", "automatic-toggle"))
@@ -379,12 +328,7 @@ impl super::Page for Page {
                 .control(control)
         });
 
-        let update_notification_frequency =
-            widget::settings::item::builder(crate::fl!("updates-page", "notifications-toggle"))
-                .control(notification_dropdown);
-
         let settings = cosmic::widget::settings::section::section()
-            .add(update_notification_frequency)
             .add(automatic_updates_toggle)
             .add_maybe(update_schedule);
 
