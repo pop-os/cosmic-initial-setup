@@ -39,7 +39,7 @@ clean: cargo::clean
 
 clean-dist: cargo::clean-dist
 
-run: cargo::run
+run *args: (cargo::run args)
 
 # Installs files
 install:
