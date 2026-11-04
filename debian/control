@@ -25,6 +25,7 @@ Depends:
     apt-config-icons-large,
     apt-config-icons-large-hidpi,
     cosmic-icons,
+    cosmic-theme-bundles,
     ${misc:Depends},
     ${shlibs:Depends}
 Description: COSMIC Initial Setup
