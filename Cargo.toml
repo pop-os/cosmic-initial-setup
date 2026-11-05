@@ -27,7 +27,7 @@ itoa = "1.0.18"
 kdl = "6.5.0"
 num-derive = "0.5.1"
 num-traits = "0.2.19"
-pop-system-updater-zbus = { git = "https://github.com/pop-os/system-updater", branch = "updates", optional = true }
+pop-system-updater-zbus = { git = "https://github.com/pop-os/system-updater", optional = true }
 pwd = "1.4.0"
 pwhash = "1.0.0"
 regex = "1"
