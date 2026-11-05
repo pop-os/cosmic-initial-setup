@@ -109,3 +109,7 @@ tokio = { version = "1", features = ["sync"] }
 # cosmic-config = { git = "https://github.com/pop-os/libcosmic//", branch = "theme-v2" }
 # cosmic-theme = { git = "https://github.com/pop-os/libcosmic//", branch = "theme-v2" }
 # iced_futures = { git = "https://github.com/pop-os/libcosmic//", branch = "theme-v2" }
+
+[patch.'https://github.com/pop-os/cosmic-protocols']
+cosmic-protocols = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "c0cff4d" }
+cosmic-client-toolkit = { git = "https://github.com/pop-os/cosmic-protocols//", rev = "c0cff4d" }
