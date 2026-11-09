@@ -46,14 +46,12 @@ zbus_polkit = "6.0.0"
 
 [dependencies.accounts-zbus]
 git = "https://github.com/pop-os/dbus-settings-bindings"
-branch = "zbus6"
 
 [dependencies.cosmic-comp-config]
 git = "https://github.com/pop-os/cosmic-comp"
 
 [dependencies.cosmic-theme-bundle-config]
 git = "https://github.com/pop-os/cosmic-settings"
-branch = "bundles"
 
 [dependencies.cosmic-randr-shell]
 git = "https://github.com/pop-os/cosmic-randr"
@@ -73,7 +71,6 @@ features = [
 
 [dependencies.locale1-zbus]
 git = "https://github.com/pop-os/dbus-settings-bindings"
-branch = "zbus6"
 
 [dependencies.locales-rs]
 git = "https://github.com/AerynOS/locales-rs"
