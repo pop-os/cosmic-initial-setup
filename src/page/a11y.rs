@@ -346,12 +346,15 @@ impl Page {
     /// Set the scale of each display.
     fn set_scale(&mut self, option: usize, scale_adjust: u32) -> Task<page::Message> {
         tracing::debug!("setting scale {option} with {scale_adjust}");
+        let Some(&output_id) = self.displays.active_data::<OutputKey>() else {
+            return Task::none();
+        };
         self.scale = option;
         self.interface_adjusted_scale = scale_adjust;
 
         self.list
             .outputs
-            .get_mut(*self.displays.active_data::<OutputKey>().unwrap())
+            .get_mut(output_id)
             .and_then(|output| {
                 let current = &self.list.modes[output.current?];
                 let scale = (option * 25 + 50) as u32 + self.interface_adjusted_scale.min(20);
