@@ -91,8 +91,16 @@ impl Page {
             Message::Select(selected) => {
                 if let Some(locale) = self.available_languages.get(selected) {
                     let lang = locale.lang_code.clone();
+                    let region = match (&self.region, &self.language) {
+                        (Some(region), Some(language))
+                            if region.lang_code != language.lang_code =>
+                        {
+                            region.lang_code.clone()
+                        }
+                        _ => lang.clone(),
+                    };
                     tokio::spawn(async move {
-                        if let Err(why) = set_locale(lang.clone(), lang).await {
+                        if let Err(why) = set_locale(lang, region).await {
                             tracing::error!(?why, "failed to set locale via D-Bus");
                         }
                     });
