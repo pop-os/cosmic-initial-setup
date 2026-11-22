@@ -1,20 +1,22 @@
 back = Terug
 next = Volgende
 finish = Voltooien
-skip-setup-and-close = Setup overslaan en sluiten
-accessibility-page = Welkom
-    .scale-options = Extra schalingsopties
-    .screen-reader = Schermverteller
+skip-setup-and-close = Set-up overslaan en sluiten
+accessibility-page = Toegankelijkheidsinstellingen
+    .display-scaling = Vensterschaling
+    .scale = Vensterschaling
+    .scale-options = Aanvullende schalingsopties
+    .screen-reader = Schermlezer
     .interface-size = Interface-grootte
     .magnifier = Vergrootglas
     .magnifier-description =
-        Of gebruik de sneltoetsen:
-        Super + = om in te zoomen, Super + - om uit te zoomen.
-        Of gebruik: Super + scrollwiel om met je muis te zoomen
+        Of gebruik de toetsencombinaties:
+        Super + = om in te zoemen, Super + - om uit te zoemen,
+        Super + scrollwiel van je muis
 # LocationPage
-timezone-and-location-page = Tijdzone en Locatie
-    .search-the-closest-major-city = Naar de dichtsbijzijnde grote stad zoeken…
-    .geonames-attribution = De lijst is op stadsbevolkingsgrootte gesorteerd. Data van: geonames.org (onder CC-BY-4.0-licentie).
+timezone-and-location-page = Tijdzone en locatie
+    .search-the-closest-major-city = Zoeken naar de dichtstbijzijnde grote stad…
+    .geonames-attribution = De lijst is gesorteerd op bevolkingsgrootte. Gegevens: geonames.org (licentie CC-BY-4.0).
 # AppearancePage
 appearance-page = Weergave personaliseren
     .description = Je kan accentkleuren en het uiterlijk van je desktop verder aanpassen in de weergave instellingen.
@@ -36,7 +38,7 @@ settings = Instellingen
 skip = Overslaan
 type-to-search = Typ om te zoeken…
 wifi = Wifi
-select-language-page = Kies een taal
+select-language-page = Taal selecteren
 keyboard-layout-page = Toetsenbordindeling selecteren
 new-apps-page = Nieuwe systeemtoepassingen
     .description = Dankzij de COSMIC-bureaubladomgeving kunt u gebruik maken van een reeks nieuwe systeemtoepassingen, zoals Instellingen, COSMIC-Shop, -Bestanden, -Tekstbewerker, en COSMIC-Terminal.
@@ -52,3 +54,26 @@ users = Gebruikers
     .desc = Authenticatie en gebruikersaccounts
     .admin = Beheerder
     .standard = Standaard
+create-account-page = Gebruikersaccount aanmaken
+    .full-name = Eigennaam
+    .user-name = Gebruikersnaam
+    .user-name-note = Deze gebruikersnaam wordt tevens gebruikt voor uw persoonlijke map en kan achteraf niet meer worden gewijzigd.
+    .dialog-add = Toevoegen
+    .profile-add = Profielfoto kiezen
+    .invalid-username = Ongeldige gebruikersnaam
+    .password-mismatch = Wachtwoord en -bevestiging komen niet overeen
+disabled = Uitgeschakeld
+frequency-daily = Dagelijks
+frequency-weekly = Wekelijks
+frequency-monthly = Maandelijks
+time-am = a.m.
+time-friday = Vrijdag
+time-hour = Uur
+time-minute = Minuut
+time-monday = Maandag
+time-pm = p.m.
+time-saturday = Zaterdag
+time-sunday = Zondag
+time-thursday = Donderdag
+time-tuesday = Dinsdag
+time-wednesday = Woensdag
