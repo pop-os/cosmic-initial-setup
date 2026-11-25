@@ -15,6 +15,7 @@ pub mod new_shortcuts;
 #[cfg(feature = "pop-os")]
 pub mod updates;
 pub mod user;
+#[cfg(target_os = "linux")]
 pub mod wifi;
 pub mod workflow;
 
@@ -32,6 +33,7 @@ pub fn pages(mode: AppMode) -> IndexMap<TypeId, Box<dyn Page>> {
     pages.insert(TypeId::of::<a11y::Page>(), Box::new(a11y::Page::new()));
 
     if let AppMode::NewInstall { create_user } = mode {
+        #[cfg(target_os = "linux")]
         if wifi::device_exists() {
             pages.insert(TypeId::of::<wifi::Page>(), Box::new(wifi::Page::default()));
         }
@@ -111,6 +113,7 @@ pub enum Message {
     #[cfg(feature = "pop-os")]
     Updates(updates::Message),
     User(user::Message),
+    #[cfg(target_os = "linux")]
     WiFi(wifi::Message),
     /// Handling of internal messages
     Surface(surface::Action<crate::Message>),

@@ -105,16 +105,38 @@ impl Page {
                     }
 
                     tokio::spawn(async move {
-                        _ = tokio::process::Command::new("timedatectl")
-                            .args(["set-timezone", &timezone])
-                            .status()
-                            .await;
+                        if let Err(e) = set_timezone(&timezone).await {
+                            tracing::warn!(%e, "failed to set timezone");
+                        }
                     });
                 }
             }
         }
         Task::none()
     }
+}
+
+#[cfg(target_os = "linux")]
+async fn set_timezone(timezone: &str) -> eyre::Result<()> {
+    let status = tokio::process::Command::new("timedatectl")
+        .args(["set-timezone", timezone])
+        .status()
+        .await?;
+    eyre::ensure!(
+        status.success(),
+        "timedatectl exited with an error: {status}"
+    );
+    Ok(())
+}
+
+#[cfg(target_os = "freebsd")]
+async fn set_timezone(timezone: &str) -> eyre::Result<()> {
+    let status = tokio::process::Command::new("pkexec")
+        .args(["/usr/sbin/tzsetup", "-s", timezone])
+        .status()
+        .await?;
+    eyre::ensure!(status.success(), "tzsetup exited with an error: {status}");
+    Ok(())
 }
 
 impl page::Page for Page {
