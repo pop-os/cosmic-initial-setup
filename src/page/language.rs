@@ -166,15 +166,29 @@ impl super::Page for Page {
 
             let registry = locales_rs::Registry::new().wrap_err("failed to get locale registry")?;
 
-            let system_locales: BTreeMap<String, SystemLocale> =
+            // Without a locale1 provider (non-systemd/s6 or OpenRC), fall back to
+            // the locale configuration files and the environment instead of
+            // aborting the whole page refresh.
+            let locale_expressions: Vec<String> = match async {
                 locale1_zbus::locale1Proxy::new(conn)
                     .await
                     .wrap_err("locale1 proxy connect error")?
                     .locale()
                     .await
-                    .wrap_err("could not get locale from locale1")?
-                    .into_iter()
-                    .filter_map(|expression| {
+                    .wrap_err("could not get locale from locale1")
+            }
+            .await
+            {
+                Ok(expressions) => expressions,
+                Err(why) => {
+                    tracing::warn!(?why, "locale1 unavailable, using locale config files");
+                    fallback_locale_expressions()
+                }
+            };
+
+            let system_locales: BTreeMap<String, SystemLocale> = locale_expressions
+                .into_iter()
+                .filter_map(|expression| {
                         let mut fields = expression.split('=');
                         let var = fields.next()?;
                         let lang_code = fields.next()?;
@@ -329,23 +343,131 @@ impl super::Page for Page {
     }
 }
 
-/// Sets the system locale using D-Bus instead of localectl for OpenRC compatibility.
+/// Reads locale settings from config files and the environment when locale1
+/// is not available (s6/OpenRC systems).
+fn fallback_locale_expressions() -> Vec<String> {
+    fn add_expr(
+        expr: &str,
+        seen: &mut std::collections::BTreeSet<String>,
+        out: &mut Vec<String>,
+    ) {
+        let expr = expr
+            .trim()
+            .trim_start_matches("export ")
+            .trim_matches('"')
+            .trim_matches('\'');
+        let mut fields = expr.splitn(2, '=');
+        if let (Some(var), Some(val)) = (fields.next(), fields.next()) {
+            let var = var.trim();
+            let val = val.trim().trim_matches('"').trim_matches('\'');
+            if !var.is_empty() && !val.is_empty() && seen.insert(var.to_owned()) {
+                out.push(format!("{var}={val}"));
+            }
+        }
+    }
+
+    let mut seen = std::collections::BTreeSet::new();
+    let mut out = Vec::new();
+
+    for path in ["/etc/locale.conf", "/etc/default/locale"] {
+        if let Ok(content) = std::fs::read_to_string(path) {
+            for line in content.lines() {
+                let line = line.trim();
+                if line.is_empty() || line.starts_with('#') {
+                    continue;
+                }
+                add_expr(line, &mut seen, &mut out);
+            }
+        }
+    }
+
+    if let Ok(home) = std::env::var("HOME") {
+        for path in [
+            format!("{home}/.config/locale.conf"),
+            format!("{home}/.config/environment.d/90-locale.conf"),
+        ] {
+            if let Ok(content) = std::fs::read_to_string(&path) {
+                for line in content.lines() {
+                    let line = line.trim();
+                    if line.is_empty() || line.starts_with('#') {
+                        continue;
+                    }
+                    add_expr(line, &mut seen, &mut out);
+                }
+            }
+        }
+    }
+
+    for var in [
+        "LC_ALL", "LANG", "LC_ADDRESS", "LC_IDENTIFICATION", "LC_MEASUREMENT", "LC_MONETARY",
+        "LC_NAME", "LC_NUMERIC", "LC_PAPER", "LC_TELEPHONE", "LC_TIME",
+    ] {
+        if !seen.contains(var) {
+            if let Ok(val) = std::env::var(var) {
+                if !val.is_empty() {
+                    add_expr(&format!("{var}={val}"), &mut seen, &mut out);
+                }
+            }
+        }
+    }
+
+    out
+}
+
+fn shell_escape(s: &str) -> String {
+    format!("'{}'", s.replace('\'', "'\"'\"'"))
+}
+
+/// Sets the system locale via locale1 D-Bus, with a config-file fallback for
+/// systems without systemd (s6/OpenRC).
 pub async fn set_locale(lang: String, region: String) -> eyre::Result<()> {
     tracing::debug!("setting locale lang={lang}, region={region}");
-
-    let proxy = locale1_zbus::locale1Proxy::new(crate::zbus_system_connection())
-        .await
-        .wrap_err("failed to create locale1 D-Bus proxy")?;
 
     let locale_settings = build_locale_settings(&lang, &region);
     let locale_strs: Vec<&str> = locale_settings.iter().map(|s| s.as_str()).collect();
 
-    proxy
-        .set_locale(&locale_strs, true)
-        .await
-        .wrap_err("failed to set locale via D-Bus")?;
+    if let Ok(proxy) = locale1_zbus::locale1Proxy::new(crate::zbus_system_connection()).await {
+        if proxy.set_locale(&locale_strs, true).await.is_ok() {
+            tracing::debug!("successfully set locale via D-Bus");
+            return Ok(());
+        }
+    }
 
-    tracing::debug!("successfully set locale via D-Bus");
+    // Sources /etc/locale.conf from /etc/profile.d/locale.sh,
+    // so keep the "export" prefix used there. Try sudo, then doas.
+    let content = locale_settings
+        .iter()
+        .map(|s| format!("export {s}\n"))
+        .collect::<String>();
+    let escaped = shell_escape(&content);
+    let cmd = format!(
+        "if command -v sudo >/dev/null 2>&1; then printf %s {0} | sudo tee /etc/locale.conf >/dev/null; elif command -v doas >/dev/null 2>&1; then printf %s {0} | doas tee /etc/locale.conf >/dev/null; else exit 1; fi",
+        escaped
+    );
+    let wrote_system = std::process::Command::new("/bin/sh")
+        .arg("-c")
+        .arg(&cmd)
+        .status()
+        .map(|s| s.success())
+        .unwrap_or(false);
+
+    if wrote_system {
+        tracing::debug!("set_locale: wrote /etc/locale.conf");
+        return Ok(());
+    }
+
+    if let Ok(home) = std::env::var("HOME") {
+        let path = format!("{home}/.config/locale.conf");
+        if let Some(parent) = std::path::Path::new(&path).parent() {
+            let _ = std::fs::create_dir_all(parent);
+        }
+        if std::fs::write(&path, &content).is_ok() {
+            tracing::debug!("set_locale: wrote {path}");
+            return Ok(());
+        }
+    }
+
+    tracing::warn!("set_locale: could not persist locale via D-Bus or config files");
     Ok(())
 }
 
